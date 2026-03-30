@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 final class Auth
 {
-    private const string COOKIE_NAME = 'auth_token';
-    private const int COOKIE_LIFETIME = 7 * 24 * 60 * 60;
+    public const COOKIE_NAME = 'auth_token';
+    private const COOKIE_LIFETIME = 7 * 24 * 60 * 60;
 
     public static function signIn(string $email, string $password): bool
     {

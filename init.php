@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once 'config.php';
+require_once 'helpers.php';
 
 
 spl_autoload_register(function (string $class): void {
@@ -10,8 +11,6 @@ spl_autoload_register(function (string $class): void {
         SERVER_PATH,
         COMPONENTS_PATH,
     ];
-
-    var_dump($directories);
 
     foreach ($directories as $directory) {
         $file = $directory . '/' . $class . '.php';

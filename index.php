@@ -9,6 +9,7 @@ $user = Auth::getUser();
 <!doctype html>
 <html lang="sr">
 <head>
+    <link rel="stylesheet" href="./styles/globals.css">
     <meta charset="UTF-8">
     <title>Početna</title>
 </head>
@@ -27,7 +28,7 @@ $user = Auth::getUser();
         <li>Email: <?php echo htmlspecialchars((string)$user['email']); ?></li>
     </ul>
 
-    <form action="/WebProgramiranjeProjekat/logout.php" method="post">
+    <form action="<?php echo Helpers::getPathForRedirect('logout.php') ?>" method="post">
         <button type="submit">Odjavi se</button>
     </form>
 
@@ -35,7 +36,7 @@ $user = Auth::getUser();
 
     <p>Niste ulogovani.</p>
 
-    <a href="/WebProgramiranjeProjekat/login.php">Prijavi se</a>
+    <a href="./pages/login.php">Prijavi se</a>
 
 <?php endif; ?>
 

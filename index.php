@@ -1,9 +1,3 @@
-<?php
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -19,12 +13,12 @@ error_reporting(E_ALL);
 
 require __DIR__ . "/server/db.php";
 
-//phpinfo();
-
-$db = new DB();
-
-//$test = $db->table('users')
+$users = db()->users->findMany(['where' => ['id' => ['gt' => 2]]]);
 
 ?>
+
+<pre>
+    <?php var_dump($users) ?>
+</pre>
 </body>
 </html>

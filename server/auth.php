@@ -3,7 +3,7 @@
 final class Auth
 {
     private const COOKIE_NAME = 'auth_token';
-    private const COOKIE_LIFETIME = 60 * 60 * 24 * 7;
+    private const COOKIE_LIFETIME = 7 * 24 * 60 * 60;
     
     public static function signIn(string $email, string $password): bool
     {

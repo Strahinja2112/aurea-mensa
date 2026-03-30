@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/server/db_config.php';
-require_once __DIR__ . '/server/db.php';
-require_once __DIR__ . '/server/auth.php';
+require_once __DIR__ . '/init.php';
 
 $user = Auth::getUser();
 ?>

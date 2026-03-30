@@ -76,9 +76,6 @@ final class Database
         ],
     ];
     
-    /**
-     * Privatni constructor (ključ za singleton)
-     */
     private function __construct()
     {
         $dsn = sprintf(
@@ -106,24 +103,16 @@ final class Database
         $this->reservationLogs = new TableQuery($this->pdo, 'reservation_logs', $this->schema['reservation_logs']);
     }
     
-    /**
-     * Zabranjujemo clone
-     */
     private function __clone()
     {
+        throw new Exception("Cannot clone singleton");
     }
     
-    /**
-     * Zabranjujemo unserialize
-     */
     public function __wakeup()
     {
         throw new Exception("Cannot unserialize singleton");
     }
     
-    /**
-     * Jedini način da dobiješ instancu
-     */
     public static function getNewOrExistingInstance(): Database
     {
         if (self::$instance === null) {
@@ -384,27 +373,6 @@ final class TableQuery
     }
     
     /**
-     * Supported:
-     * [
-     *   'email' => 'ana@ordo.com',
-     *   'is_active' => 1,
-     *   'OR' => [
-     *     ['first_name' => 'Ana'],
-     *     ['first_name' => 'Petar']
-     *   ],
-     *   'AND' => [
-     *     ['role_id' => 2],
-     *     ['is_active' => 1]
-     *   ]
-     * ]
-     *
-     * Also supports operators:
-     * [
-     *   'id' => ['gt' => 5],
-     *   'email' => ['contains' => 'ordo'],
-     *   'role_id' => ['in' => [1, 2, 3]]
-     * ]
-     *
      * @param array<string, mixed> $where
      * @param array<string, mixed> $params
      */
@@ -488,8 +456,10 @@ final class TableQuery
     }
     
     /**
+     * @param string $column
      * @param mixed $value
      * @param array<string, mixed> $params
+     * @return string
      */
     private function parseColumnCondition(string $column, mixed $value, array &$params): string
     {

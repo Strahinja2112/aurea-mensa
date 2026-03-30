@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/init.php';
+require_once 'init.php';
 
 $user = Auth::getUser();
 ?>

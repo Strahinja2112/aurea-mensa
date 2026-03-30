@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 define('ROOT', dirname(__DIR__));
 
-define('APP_DIR', 'WebProgramiranjeProjekat');
+const APP_DIR = 'web-restaurant-app';
 
-define('BASE_URL', '/' . APP_DIR);
+const BASE_URL = ROOT . '/' . APP_DIR;
 
-define('SERVER_PATH', ROOT . '/server');
-define('COMPONENTS_PATH', ROOT . '/components');
-define('STYLES_PATH', ROOT . '/styles');
+const SERVER_PATH = BASE_URL . '/server';
+const COMPONENTS_PATH = BASE_URL . '/components';
+const STYLES_PATH = BASE_URL . '/styles';

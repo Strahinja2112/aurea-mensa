@@ -1,0 +1,10 @@
+{
+  "name": "webprogramiranjeprojekat",
+  "private": true,
+  "scripts": {
+    "dev": "browser-sync start --proxy \"localhost\" --startPath \"web-restaurant-app\" --files \"**/*.php, **/*.css, **/*.js\""
+  },
+  "devDependencies": {
+    "browser-sync": "^2.29.3"
+  }
+}

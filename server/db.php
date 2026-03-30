@@ -16,6 +16,7 @@ final class Database
     private PDO $pdo;
     
     public TableQuery $roles;
+    public TableQuery $authSessions;
     public TableQuery $users;
     public TableQuery $passwordResets;
     public TableQuery $restaurantTables;
@@ -28,6 +29,13 @@ final class Database
      */
     private array $schema = [
         'roles' => ['id', 'name'],
+        'auth_sessions' => [
+            'id',
+            'user_id',
+            'token_hash',
+            'expires_at',
+            'created_at',
+        ],
         'users' => [
             'id',
             'email',
@@ -95,6 +103,7 @@ final class Database
         );
         
         $this->roles = new TableQuery($this->pdo, 'roles', $this->schema['roles']);
+        $this->authSessions = new TableQuery($this->pdo, 'auth_sessions', $this->schema['auth_sessions']);
         $this->users = new TableQuery($this->pdo, 'users', $this->schema['users']);
         $this->passwordResets = new TableQuery($this->pdo, 'password_resets', $this->schema['password_resets']);
         $this->restaurantTables = new TableQuery($this->pdo, 'restaurant_tables', $this->schema['restaurant_tables']);
@@ -322,6 +331,30 @@ final class TableQuery
         $statement->execute($params);
         
         return $this->findFirst(['where' => $where]);
+    }
+    
+    /**
+     * @param array{
+     *     where: array<string, mixed>
+     * } $args
+     */
+    public function deleteMany(array $args): int
+    {
+        $where = $args['where'] ?? [];
+        
+        if ($where === []) {
+            throw new InvalidArgumentException('deleteMany requires where.');
+        }
+        
+        $params = [];
+        $whereSql = $this->buildWhere($where, $params);
+        
+        $sql = "DELETE FROM `{$this->table}`{$whereSql}";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        
+        return $stmt->rowCount();
     }
     
     /**

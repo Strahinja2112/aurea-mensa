@@ -1,24 +1,45 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./styles/globals.css">
-    <title><?php echo "Restoran" ?></title>
-</head>
-<body>
 <?php
 
-require __DIR__ . "/server/db.php";
+declare(strict_types=1);
 
-$users = db()->users->findMany(['where' => ['id' => ['gt' => 2]]]);
+require_once __DIR__ . '/server/db_config.php';
+require_once __DIR__ . '/server/db.php';
+require_once __DIR__ . '/server/auth.php';
 
+$user = Auth::getUser();
 ?>
+<!doctype html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <title>Početna</title>
+</head>
+<body>
 
-<pre>
-    <?php var_dump($users) ?>
-</pre>
+<h1>Ordo Mensarum</h1>
+
+<?php if ($user !== null): ?>
+
+    <p>Ulogovani ste kao:</p>
+
+    <ul>
+        <li>ID: <?php echo (int)$user['id']; ?></li>
+        <li>Ime: <?php echo htmlspecialchars((string)$user['first_name']); ?></li>
+        <li>Prezime: <?php echo htmlspecialchars((string)$user['last_name']); ?></li>
+        <li>Email: <?php echo htmlspecialchars((string)$user['email']); ?></li>
+    </ul>
+
+    <form action="/WebProgramiranjeProjekat/logout.php" method="post">
+        <button type="submit">Odjavi se</button>
+    </form>
+
+<?php else: ?>
+
+    <p>Niste ulogovani.</p>
+
+    <a href="/WebProgramiranjeProjekat/login.php">Prijavi se</a>
+
+<?php endif; ?>
+
 </body>
 </html>

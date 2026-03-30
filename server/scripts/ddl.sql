@@ -2,9 +2,12 @@
 -- DATABASE: Restaurant
 -- =====================================================
 
-DROP DATABASE IF EXISTS Restaurant;
-CREATE DATABASE Restaurant CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE Restaurant;
+DROP
+    DATABASE IF EXISTS Restaurant;
+CREATE
+    DATABASE Restaurant CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE
+    Restaurant;
 
 -- =====================================================
 -- ROLES
@@ -39,6 +42,16 @@ CREATE TABLE users
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles (id)
+);
+
+CREATE TABLE auth_sessions
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT      NOT NULL,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    expires_at DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 -- =====================================================

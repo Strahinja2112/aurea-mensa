@@ -1,13 +1,28 @@
 -- =====================================================
+-- RESET DATABASE
+-- =====================================================
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE reservation_logs;
+TRUNCATE TABLE reservation_tables;
+TRUNCATE TABLE reservations;
+TRUNCATE TABLE password_resets;
+TRUNCATE TABLE users;
+TRUNCATE TABLE restaurant_tables;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- =====================================================
 -- USERS
 -- =====================================================
 
 INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, is_active)
 VALUES
-    ('admin@ordo.com', '$2y$10$adminhash', 'Admin', 'Adminović', '0600000001', 4, TRUE),
-    ('radnik@ordo.com', '$2y$10$staffhash', 'Marko', 'Marković', '0600000002', 3, TRUE),
-    ('ana@ordo.com', '$2y$10$userhash', 'Ana', 'Nikolić', '0600000003', 2, TRUE),
-    ('petar@ordo.com', '$2y$10$userhash', 'Petar', 'Petrović', '0600000004', 2, TRUE);
+    ('admin@ordo.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Admin', 'Adminović', '0600000001', 4, TRUE),
+    ('radnik@ordo.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Marko', 'Marković', '0600000002', 3, TRUE),
+    ('ana@ordo.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Ana', 'Nikolić', '0600000003', 2, TRUE),
+    ('petar@ordo.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Petar', 'Petrović', '0600000004', 2, TRUE);
 
 -- =====================================================
 -- RESTAURANT TABLES

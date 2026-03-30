@@ -7,15 +7,26 @@ final class Auth
     public const COOKIE_NAME = 'auth_token';
     private const COOKIE_LIFETIME = 7 * 24 * 60 * 60;
 
+    public static function registerNewUser()
+    {
+
+    }
+
     public static function signIn(string $email, string $password): bool
     {
         $user = db()->users->findFirst([
             'where' => ['email' => $email],
         ]);
 
-        if (!$user) return false;
-        if (!(int)$user['is_active']) return false;
-        if (!password_verify($password, $user['password_hash'])) return false;
+        if (!$user) {
+            return false;
+        }
+        if (!(int)$user['is_active']) {
+            return false;
+        }
+        if (!password_verify($password, $user['password_hash'])) {
+            return false;
+        }
 
         self::createSession((int)$user['id']);
 

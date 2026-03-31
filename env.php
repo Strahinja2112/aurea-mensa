@@ -9,4 +9,12 @@ class Env
     public static string $MAILTRAP_API_KEY;
 }
 
-Env::$MAILTRAP_API_KEY = $env['MAILTRAP_API_KEY'];
+try {
+    Env::$MAILTRAP_API_KEY = $env['MAILTRAP_API_KEY'];
+    if (!Env::$MAILTRAP_API_KEY) {
+        throw new Exception('Mailtrap API key is missing');
+    }
+} catch (Exception $exception) {
+    echo $exception->getMessage();
+    exit;
+}

@@ -27,11 +27,9 @@ final class Mailer
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->CharSet = 'UTF-8';
 
-            // Recipients
             $mail->setFrom('no-reply@restoran.rs', 'Restoran Rezervacije');
             $mail->addAddress($to);
 
-            // Content
             $mail->isHTML(false);
             $mail->Subject = $subject;
             $mail->Body = $body;
@@ -46,7 +44,7 @@ final class Mailer
 
     public static function sendActivationEmail(string $email, string $token): bool
     {
-        $link = "http://localhost/" . APP_DIR . "/activate.php?token=" . $token;
+        $link = BASE_PATH . "/pages/activate.php?token=" . $token;
         $subject = "Aktivacija vašeg naloga - Restoran";
         $body = "
             <h1>Dobrodošli!</h1>

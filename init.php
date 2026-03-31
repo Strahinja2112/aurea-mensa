@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-require_once 'config.php';
-require_once 'helpers.php';
+require 'config.php';
+require 'helpers.php';
+require 'env.php';
 
 spl_autoload_register(function (string $class): void {
     $directories = [
@@ -11,7 +12,7 @@ spl_autoload_register(function (string $class): void {
         Helpers::getFullPath('server', 'classes'),
         Helpers::getFullPath('components'),
     ];
-    
+
     foreach ($directories as $directory) {
         $file = $directory . '/' . $class . '.php';
 

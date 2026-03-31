@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/server/db_config.php';
-require_once __DIR__ . '/server/Database.php';
-require_once __DIR__ . '/server/Auth.php';
+require_once '../../helpers.php';
+require_once Helpers::getFullPath('server', 'classes', 'Auth.php');
 
 Auth::signOut();
 
-header('Location: /login.php');
+header("Location: /index.php");
+
 exit;

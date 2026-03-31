@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+define('ROOT', dirname(__DIR__));
+
+const APP_DIR = 'web-restaurant-app';
+
+const BASE_PATH = ROOT . DIRECTORY_SEPARATOR . APP_DIR;
+
 final class Helpers
 {
     /**
@@ -25,5 +31,11 @@ final class Helpers
     public static function getFullPath(string ...$segments): string
     {
         return self::joinPaths(BASE_PATH, ...$segments);
+    }
+
+    // TODO: ovo valja zavrsiti kad dodjes kuci
+    public static function getRelativePageLocation(string ...$segments): string
+    {
+
     }
 }

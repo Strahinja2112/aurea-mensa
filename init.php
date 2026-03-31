@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-require 'config.php';
 require 'helpers.php';
 require 'env.php';
 

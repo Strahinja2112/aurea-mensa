@@ -1,0 +1,29 @@
+# Dependency management
+/vendor/
+/node_modules/ # if using front-end tools like NPM
+
+# Build artifacts and caches
+/build/
+*.phar
+*.sublime-project
+*.sublime-workspace
+.phpunit.result.cache
+.php_cs.cache
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Temporary and log files
+*.log
+*.sql
+*.sqlite
+*~
+*.swp
+*.tmp
+
+# Framework-specific examples (uncomment or add as needed)
+# /storage/
+# /bootstrap/cache/

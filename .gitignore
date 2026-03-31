@@ -24,6 +24,8 @@ Thumbs.db
 *.swp
 *.tmp
 
+.env
+
 # Framework-specific examples (uncomment or add as needed)
 # /storage/
 # /bootstrap/cache/

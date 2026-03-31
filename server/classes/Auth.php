@@ -9,7 +9,6 @@ final class Auth
 
     public static function registerNewUser(array $data): array
     {
-        // 1. Provera da li korisnik već postoji
         $existing = db()->users->findFirst([
             'where' => ['email' => $data['email']]
         ]);
@@ -18,7 +17,6 @@ final class Auth
             throw new Exception("Korisnik sa ovom email adresom već postoji.");
         }
 
-        // 2. Pronalaženje ID-a za 'USER' rolu (podrazumevana za registraciju)
         $role = db()->roles->findFirst([
             'where' => ['name' => 'USER']
         ]);
@@ -27,11 +25,9 @@ final class Auth
             throw new Exception("Sistemska greška: Rola nije pronađena.");
         }
 
-        // 3. Početak transakcije (bitno jer radimo u dve tabele)
         db()->beginTransaction();
 
         try {
-            // Unos korisnika (is_active je DEFAULT FALSE po tvom DDL-u)
             $user = db()->users->create([
                 'data' => [
                     'email' => $data['email'],
@@ -43,7 +39,6 @@ final class Auth
                 ]
             ]);
 
-            // 4. Generisanje aktivacionog tokena
             $token = bin2hex(random_bytes(32));
             db()->passwordResets->create([
                 'data' => [
@@ -53,7 +48,6 @@ final class Auth
                 ]
             ]);
 
-            // 5. Slanje emaila
             $mailSent = Mailer::sendActivationEmail($user['email'], $token);
 
             if (!$mailSent) {
@@ -62,7 +56,6 @@ final class Auth
 
             db()->commit();
             return $user;
-
         } catch (Exception $e) {
             db()->rollBack();
             throw $e;

@@ -6,6 +6,7 @@ require_once 'init.php';
 
 $user = Auth::getUser();
 ?>
+
 <!doctype html>
 <html lang="sr">
 <head>
@@ -28,7 +29,7 @@ $user = Auth::getUser();
         <li>Email: <?php echo htmlspecialchars((string)$user['email']); ?></li>
     </ul>
 
-    <form action="<?php echo Helpers::getPathForRedirect('logout.php') ?>" method="post">
+    <form action="<?php echo Helpers::getFullPath('logout.php') ?>" method="post">
         <button type="submit">Odjavi se</button>
     </form>
 
@@ -37,6 +38,7 @@ $user = Auth::getUser();
     <p>Niste ulogovani.</p>
 
     <a href="./pages/login.php">Prijavi se</a>
+    <a href="./pages/register.php">Registruj se</a>
 
 <?php endif; ?>
 

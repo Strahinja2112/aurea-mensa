@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/graham-campbell" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpoption" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony" />

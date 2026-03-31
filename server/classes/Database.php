@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/db_config.php';
+require_once BASE_PATH . '/server/db_config.php';
 
 function db(): Database
 {
@@ -12,9 +12,9 @@ function db(): Database
 final class Database
 {
     private static ?Database $instance = null;
-    
+
     private PDO $pdo;
-    
+
     public TableQuery $roles;
     public TableQuery $authSessions;
     public TableQuery $users;
@@ -23,7 +23,7 @@ final class Database
     public TableQuery $reservations;
     public TableQuery $reservationTables;
     public TableQuery $reservationLogs;
-    
+
     /**
      * @var array<string, list<string>>
      */
@@ -83,7 +83,7 @@ final class Database
             'created_at',
         ],
     ];
-    
+
     private function __construct()
     {
         $dsn = sprintf(
@@ -91,7 +91,7 @@ final class Database
             Config::DB_HOST,
             Config::DB_NAME
         );
-        
+
         $this->pdo = new PDO(
             $dsn,
             Config::DB_USER,
@@ -101,7 +101,7 @@ final class Database
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             ]
         );
-        
+
         $this->roles = new TableQuery($this->pdo, 'roles', $this->schema['roles']);
         $this->authSessions = new TableQuery($this->pdo, 'auth_sessions', $this->schema['auth_sessions']);
         $this->users = new TableQuery($this->pdo, 'users', $this->schema['users']);
@@ -111,41 +111,41 @@ final class Database
         $this->reservationTables = new TableQuery($this->pdo, 'reservation_tables', $this->schema['reservation_tables']);
         $this->reservationLogs = new TableQuery($this->pdo, 'reservation_logs', $this->schema['reservation_logs']);
     }
-    
+
     private function __clone()
     {
         throw new Exception("Cannot clone singleton");
     }
-    
+
     public function __wakeup()
     {
         throw new Exception("Cannot unserialize singleton");
     }
-    
+
     public static function getNewOrExistingInstance(): Database
     {
         if (self::$instance === null) {
             self::$instance = new Database();
         }
-        
+
         return self::$instance;
     }
-    
+
     public function pdo(): PDO
     {
         return $this->pdo;
     }
-    
+
     public function beginTransaction(): bool
     {
         return $this->pdo->beginTransaction();
     }
-    
+
     public function commit(): bool
     {
         return $this->pdo->commit();
     }
-    
+
     public function rollBack(): bool
     {
         return $this->pdo->rollBack();
@@ -156,12 +156,12 @@ final class TableQuery
 {
     private PDO $pdo;
     private string $table;
-    
+
     /**
      * @var list<string>
      */
     private array $columns;
-    
+
     /**
      * @param list<string> $columns
      */
@@ -171,7 +171,7 @@ final class TableQuery
         $this->table = $table;
         $this->columns = $columns;
     }
-    
+
     /**
      * @param array{
      *     where?: array<string, mixed>,
@@ -191,10 +191,10 @@ final class TableQuery
             'take' => 1,
             'skip' => $args['skip'] ?? 0,
         ]);
-        
+
         return $rows[0] ?? null;
     }
-    
+
     /**
      * @param array{
      *     where?: array<string, mixed>,
@@ -209,22 +209,22 @@ final class TableQuery
     {
         $select = $this->buildSelect($args['select'] ?? null);
         $params = [];
-        
+
         $whereSql = $this->buildWhere($args['where'] ?? [], $params);
         $orderSql = $this->buildOrderBy($args['orderBy'] ?? []);
         $limitSql = $this->buildLimitOffset($args['take'] ?? null, $args['skip'] ?? 0);
-        
+
         $sql = "SELECT {$select} FROM `{$this->table}`{$whereSql}{$orderSql}{$limitSql}";
-        
+
         $statement = $this->pdo->prepare($sql);
         $statement->execute($params);
-        
+
         /** @var list<array<string, mixed>> $rows */
         $rows = $statement->fetchAll();
-        
+
         return $rows;
     }
-    
+
     /**
      * @param array{
      *     where?: array<string, mixed>
@@ -234,17 +234,17 @@ final class TableQuery
     {
         $params = [];
         $whereSql = $this->buildWhere($args['where'] ?? [], $params);
-        
+
         $sql = "SELECT COUNT(*) AS total FROM `{$this->table}`{$whereSql}";
-        
+
         $statement = $this->pdo->prepare($sql);
         $statement->execute($params);
-        
+
         $result = $statement->fetch();
-        
+
         return (int)($result['total'] ?? 0);
     }
-    
+
     /**
      * @param array{
      *     data: array<string, mixed>
@@ -254,37 +254,37 @@ final class TableQuery
     public function create(array $args): array
     {
         $data = $args['data'] ?? [];
-        
+
         if ($data === []) {
             throw new InvalidArgumentException('create requires data.');
         }
-        
+
         $this->assertValidColumns(array_keys($data));
-        
+
         $columns = array_keys($data);
         $columnSql = implode(', ', array_map(fn(string $column): string => "`{$column}`", $columns));
         $placeholderSql = implode(', ', array_map(fn(string $column): string => ":{$column}", $columns));
-        
+
         $sql = "INSERT INTO `{$this->table}` ({$columnSql}) VALUES ({$placeholderSql})";
-        
+
         $statement = $this->pdo->prepare($sql);
         $statement->execute($data);
-        
+
         $lastInsertId = $this->pdo->lastInsertId();
-        
+
         if ($lastInsertId !== '' && $lastInsertId !== '0' && in_array('id', $this->columns, true)) {
             $created = $this->findFirst([
                 'where' => ['id' => (int)$lastInsertId],
             ]);
-            
+
             if ($created !== null) {
                 return $created;
             }
         }
-        
+
         return $data;
     }
-    
+
     /**
      * @param array{
      *     where: array<string, mixed>,
@@ -296,43 +296,43 @@ final class TableQuery
     {
         $where = $args['where'] ?? [];
         $data = $args['data'] ?? [];
-        
+
         if ($where === []) {
             throw new InvalidArgumentException('update requires where.');
         }
-        
+
         if ($data === []) {
             throw new InvalidArgumentException('update requires data.');
         }
-        
+
         $this->assertValidColumns(array_keys($data));
-        
+
         $params = [];
         $setParts = [];
-        
+
         foreach ($data as $column => $value) {
             $paramName = 'set_' . $column;
             $setParts[] = "`{$column}` = :{$paramName}";
             $params[$paramName] = $value;
         }
-        
+
         $whereSql = $this->buildWhere($where, $params);
         $setSql = implode(', ', $setParts);
-        
+
         $existing = $this->findFirst(['where' => $where]);
-        
+
         if ($existing === null) {
             return null;
         }
-        
+
         $sql = "UPDATE `{$this->table}` SET {$setSql}{$whereSql} LIMIT 1";
-        
+
         $statement = $this->pdo->prepare($sql);
         $statement->execute($params);
-        
+
         return $this->findFirst(['where' => $where]);
     }
-    
+
     /**
      * @param array{
      *     where: array<string, mixed>
@@ -341,22 +341,22 @@ final class TableQuery
     public function deleteMany(array $args): int
     {
         $where = $args['where'] ?? [];
-        
+
         if ($where === []) {
             throw new InvalidArgumentException('deleteMany requires where.');
         }
-        
+
         $params = [];
         $whereSql = $this->buildWhere($where, $params);
-        
+
         $sql = "DELETE FROM `{$this->table}`{$whereSql}";
-        
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
-        
+
         return $stmt->rowCount();
     }
-    
+
     /**
      * @param array{
      *     where: array<string, mixed>
@@ -366,28 +366,28 @@ final class TableQuery
     public function delete(array $args): ?array
     {
         $where = $args['where'] ?? [];
-        
+
         if ($where === []) {
             throw new InvalidArgumentException('delete requires where.');
         }
-        
+
         $existing = $this->findFirst(['where' => $where]);
-        
+
         if ($existing === null) {
             return null;
         }
-        
+
         $params = [];
         $whereSql = $this->buildWhere($where, $params);
-        
+
         $sql = "DELETE FROM `{$this->table}`{$whereSql} LIMIT 1";
-        
+
         $statement = $this->pdo->prepare($sql);
         $statement->execute($params);
-        
+
         return $existing;
     }
-    
+
     /**
      * @param list<string>|null $select
      */
@@ -396,15 +396,15 @@ final class TableQuery
         if ($select === null || $select === []) {
             return '*';
         }
-        
+
         $this->assertValidColumns($select);
-        
+
         return implode(', ', array_map(
             fn(string $column): string => "`{$column}`",
             $select
         ));
     }
-    
+
     /**
      * @param array<string, mixed> $where
      * @param array<string, mixed> $params
@@ -414,12 +414,12 @@ final class TableQuery
         if ($where === []) {
             return '';
         }
-        
+
         $sql = $this->parseConditionGroup($where, $params);
-        
+
         return $sql === '' ? '' : ' WHERE ' . $sql;
     }
-    
+
     /**
      * @param array<string, mixed> $conditions
      * @param array<string, mixed> $params
@@ -427,67 +427,67 @@ final class TableQuery
     private function parseConditionGroup(array $conditions, array &$params): string
     {
         $parts = [];
-        
+
         foreach ($conditions as $key => $value) {
             if ($key === 'AND') {
                 if (!is_array($value)) {
                     throw new InvalidArgumentException('AND must be an array.');
                 }
-                
+
                 $andParts = [];
-                
+
                 foreach ($value as $item) {
                     if (!is_array($item)) {
                         throw new InvalidArgumentException('Each AND item must be an array.');
                     }
-                    
+
                     $parsed = $this->parseConditionGroup($item, $params);
-                    
+
                     if ($parsed !== '') {
                         $andParts[] = '(' . $parsed . ')';
                     }
                 }
-                
+
                 if ($andParts !== []) {
                     $parts[] = implode(' AND ', $andParts);
                 }
-                
+
                 continue;
             }
-            
+
             if ($key === 'OR') {
                 if (!is_array($value)) {
                     throw new InvalidArgumentException('OR must be an array.');
                 }
-                
+
                 $orParts = [];
-                
+
                 foreach ($value as $item) {
                     if (!is_array($item)) {
                         throw new InvalidArgumentException('Each OR item must be an array.');
                     }
-                    
+
                     $parsed = $this->parseConditionGroup($item, $params);
-                    
+
                     if ($parsed !== '') {
                         $orParts[] = '(' . $parsed . ')';
                     }
                 }
-                
+
                 if ($orParts !== []) {
                     $parts[] = '(' . implode(' OR ', $orParts) . ')';
                 }
-                
+
                 continue;
             }
-            
+
             $this->assertValidColumns([$key]);
             $parts[] = $this->parseColumnCondition($key, $value, $params);
         }
-        
+
         return implode(' AND ', $parts);
     }
-    
+
     /**
      * @param string $column
      * @param mixed $value
@@ -498,105 +498,105 @@ final class TableQuery
     {
         if (!is_array($value)) {
             $paramName = $this->nextParamName($column, $params);
-            
+
             if ($value === null) {
                 return "`{$column}` IS NULL";
             }
-            
+
             $params[$paramName] = $value;
-            
+
             return "`{$column}` = :{$paramName}";
         }
-        
+
         $parts = [];
-        
+
         foreach ($value as $operator => $operatorValue) {
             $paramName = $this->nextParamName($column . '_' . $operator, $params);
-            
+
             switch ($operator) {
                 case 'equals':
                     if ($operatorValue === null) {
                         $parts[] = "`{$column}` IS NULL";
                         break;
                     }
-                    
+
                     $params[$paramName] = $operatorValue;
                     $parts[] = "`{$column}` = :{$paramName}";
                     break;
-                
+
                 case 'not':
                     if ($operatorValue === null) {
                         $parts[] = "`{$column}` IS NOT NULL";
                         break;
                     }
-                    
+
                     $params[$paramName] = $operatorValue;
                     $parts[] = "`{$column}` != :{$paramName}";
                     break;
-                
+
                 case 'gt':
                     $params[$paramName] = $operatorValue;
                     $parts[] = "`{$column}` > :{$paramName}";
                     break;
-                
+
                 case 'gte':
                     $params[$paramName] = $operatorValue;
                     $parts[] = "`{$column}` >= :{$paramName}";
                     break;
-                
+
                 case 'lt':
                     $params[$paramName] = $operatorValue;
                     $parts[] = "`{$column}` < :{$paramName}";
                     break;
-                
+
                 case 'lte':
                     $params[$paramName] = $operatorValue;
                     $parts[] = "`{$column}` <= :{$paramName}";
                     break;
-                
+
                 case 'contains':
                     $params[$paramName] = '%' . (string)$operatorValue . '%';
                     $parts[] = "`{$column}` LIKE :{$paramName}";
                     break;
-                
+
                 case 'startsWith':
                     $params[$paramName] = (string)$operatorValue . '%';
                     $parts[] = "`{$column}` LIKE :{$paramName}";
                     break;
-                
+
                 case 'endsWith':
                     $params[$paramName] = '%' . (string)$operatorValue;
                     $parts[] = "`{$column}` LIKE :{$paramName}";
                     break;
-                
+
                 case 'in':
                     if (!is_array($operatorValue) || $operatorValue === []) {
                         throw new InvalidArgumentException("Operator 'in' for {$column} must be a non-empty array.");
                     }
-                    
+
                     $inPlaceholders = [];
-                    
+
                     foreach ($operatorValue as $index => $item) {
                         $inParam = $this->nextParamName($column . '_in_' . $index, $params);
                         $params[$inParam] = $item;
                         $inPlaceholders[] = ':' . $inParam;
                     }
-                    
+
                     $parts[] = "`{$column}` IN (" . implode(', ', $inPlaceholders) . ")";
                     break;
-                
+
                 default:
                     throw new InvalidArgumentException("Unsupported operator '{$operator}' for column '{$column}'.");
             }
         }
-        
+
         if ($parts === []) {
             throw new InvalidArgumentException("Invalid condition for column '{$column}'.");
         }
-        
+
         return '(' . implode(' AND ', $parts) . ')';
     }
-    
+
     /**
      * @param array<string, 'ASC'|'DESC'> $orderBy
      */
@@ -605,41 +605,41 @@ final class TableQuery
         if ($orderBy === []) {
             return '';
         }
-        
+
         $this->assertValidColumns(array_keys($orderBy));
-        
+
         $parts = [];
-        
+
         foreach ($orderBy as $column => $direction) {
             $normalizedDirection = strtoupper($direction);
-            
+
             if ($normalizedDirection !== 'ASC' && $normalizedDirection !== 'DESC') {
                 throw new InvalidArgumentException("Invalid order direction for {$column}");
             }
-            
+
             $parts[] = "`{$column}` {$normalizedDirection}";
         }
-        
+
         return ' ORDER BY ' . implode(', ', $parts);
     }
-    
+
     private function buildLimitOffset(?int $take, int $skip): string
     {
         if ($take === null) {
             return '';
         }
-        
+
         if ($take < 1) {
             throw new InvalidArgumentException('take must be greater than 0.');
         }
-        
+
         if ($skip < 0) {
             throw new InvalidArgumentException('skip must be 0 or greater.');
         }
-        
+
         return " LIMIT {$take} OFFSET {$skip}";
     }
-    
+
     /**
      * @param list<string> $columns
      */
@@ -653,7 +653,7 @@ final class TableQuery
             }
         }
     }
-    
+
     /**
      * @param array<string, mixed> $params
      */
@@ -662,12 +662,12 @@ final class TableQuery
         $base = preg_replace('/[^a-zA-Z0-9_]/', '_', $base) ?? 'param';
         $name = $base;
         $index = 1;
-        
+
         while (array_key_exists($name, $params)) {
             $name = $base . '_' . $index;
             $index++;
         }
-        
+
         return $name;
     }
 }

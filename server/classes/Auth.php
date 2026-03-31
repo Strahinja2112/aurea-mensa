@@ -7,9 +7,66 @@ final class Auth
     public const COOKIE_NAME = 'auth_token';
     private const COOKIE_LIFETIME = 7 * 24 * 60 * 60;
 
-    public static function registerNewUser()
+    public static function registerNewUser(array $data): array
     {
+        // 1. Provera da li korisnik već postoji
+        $existing = db()->users->findFirst([
+            'where' => ['email' => $data['email']]
+        ]);
 
+        if ($existing) {
+            throw new Exception("Korisnik sa ovom email adresom već postoji.");
+        }
+
+        // 2. Pronalaženje ID-a za 'USER' rolu (podrazumevana za registraciju)
+        $role = db()->roles->findFirst([
+            'where' => ['name' => 'USER']
+        ]);
+
+        if (!$role) {
+            throw new Exception("Sistemska greška: Rola nije pronađena.");
+        }
+
+        // 3. Početak transakcije (bitno jer radimo u dve tabele)
+        db()->beginTransaction();
+
+        try {
+            // Unos korisnika (is_active je DEFAULT FALSE po tvom DDL-u)
+            $user = db()->users->create([
+                'data' => [
+                    'email' => $data['email'],
+                    'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT),
+                    'first_name' => $data['first_name'] ?? null,
+                    'last_name' => $data['last_name'] ?? null,
+                    'phone' => $data['phone'] ?? null,
+                    'role_id' => $role['id'],
+                ]
+            ]);
+
+            // 4. Generisanje aktivacionog tokena
+            $token = bin2hex(random_bytes(32));
+            db()->passwordResets->create([
+                'data' => [
+                    'user_id' => $user['id'],
+                    'token' => $token,
+                    'expires_at' => date('Y-m-d H:i:s', strtotime('+24 hours'))
+                ]
+            ]);
+
+            // 5. Slanje emaila
+            $mailSent = Mailer::sendActivationEmail($user['email'], $token);
+
+            if (!$mailSent) {
+                throw new Exception("Greška prilikom slanja aktivacionog emaila.");
+            }
+
+            db()->commit();
+            return $user;
+
+        } catch (Exception $e) {
+            db()->rollBack();
+            throw $e;
+        }
     }
 
     public static function signIn(string $email, string $password): bool

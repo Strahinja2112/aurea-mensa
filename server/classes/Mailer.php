@@ -5,9 +5,11 @@ declare(strict_types=1);
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-require BASE_PATH . '/vendor/phpmailer/phpmailer/src/Exception.php';
-require BASE_PATH . '/vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require BASE_PATH . '/vendor/phpmailer/phpmailer/src/SMTP.php';
+require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/Exception.php';
+require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/SMTP.php';
+
+require_once BASE_PATH . '/env.php';
 
 final class Mailer
 {
@@ -16,14 +18,13 @@ final class Mailer
         $mail = new PHPMailer(true);
 
         try {
-            // Server settings - ovde unesi svoje SMTP podatke
             $mail->isSMTP();
-            $mail->Host = 'smtp.example.com'; // Npr. smtp.gmail.com
+            $mail->Host = Env::$MAILTRAP_DOMAIN;
+            $mail->Port = Env::$MAILTRAP_PORT;
             $mail->SMTPAuth = true;
-            $mail->Username = 'pavicevicstrahinja99@gmail.com';
-            $mail->Password = 'nekalozinka';
+            $mail->Username = Env::$MAILTRAP_USERNAME;
+            $mail->Password = Env::$MAILTRAP_PASSWORD;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
             $mail->CharSet = 'UTF-8';
 
             // Recipients
@@ -31,13 +32,14 @@ final class Mailer
             $mail->addAddress($to);
 
             // Content
-            $mail->isHTML(true);
+            $mail->isHTML(false);
             $mail->Subject = $subject;
             $mail->Body = $body;
 
             return $mail->send();
         } catch (Exception $e) {
-            // U produkciji loguj grešku: error_log($mail->ErrorInfo);
+            var_dump($mail->ErrorInfo);
+            var_dump($e->getMessage());
             return false;
         }
     }

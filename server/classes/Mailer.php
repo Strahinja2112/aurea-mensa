@@ -5,9 +5,9 @@ declare(strict_types=1);
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-require_once BASE_PATH . '/_modules/PHPMailer/src/Exception.php';
-require_once BASE_PATH . '/_modules/PHPMailer/src/PHPMailer.php';
-require_once BASE_PATH . '/_modules/PHPMailer/src/SMTP.php';
+require BASE_PATH . '/vendor/phpmailer/phpmailer/src/Exception.php';
+require BASE_PATH . '/vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require BASE_PATH . '/vendor/phpmailer/phpmailer/src/SMTP.php';
 
 final class Mailer
 {

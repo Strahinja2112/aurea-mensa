@@ -29,7 +29,7 @@ main {
     padding: 45px;
     width: 100%;
     max-width: 550px;
-    border-radius: 25px;
+    border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
@@ -58,7 +58,7 @@ main {
     background: rgba(255, 255, 255, 0.1) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: #FFFFFF !important;
-    border-radius: 12px;
+    border-radius: 6px;
     padding: 14px;
     transition: all 0.3s ease;
 }
@@ -110,11 +110,6 @@ main {
     text-decoration: none;
     border-bottom: 1px solid rgba(160, 196, 255, 0.3);
     transition: all 0.3s ease;
-}
-
-.login-link-text a:hover {
-    color: #f8f9fa;
-    border-bottom-color: #f8f9fa;
 }
 
 .text-end.mb-4.login-link-text {

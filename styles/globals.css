@@ -191,7 +191,7 @@ section {
 
 #mainNavbar {
     padding-block: 30px;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(20px);
     transition: all 500ms;
 }
 

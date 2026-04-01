@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
-            <h2 id="title">Kreiraj svoj nalog</h2>
+            <h2 id="title">Kreirajte vaš nalog</h2>
 
             <?php if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">

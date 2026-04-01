@@ -8,7 +8,7 @@ const BASE_PATH = ROOT . DIRECTORY_SEPARATOR . APP_DIR;
 
 final class Helpers
 {
-    public const WEBSITE_NAME = "Neko Ime";
+    public const WEBSITE_NAME = "Aurea Mensa";
     
     /**
      * Joins path segments using system directory separator.
@@ -76,6 +76,7 @@ final class Helpers
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>{$pageTitle} | {$siteName}</title>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
                 {$cssLinks}
             </head>

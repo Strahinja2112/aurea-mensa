@@ -2,8 +2,8 @@
 $user = Auth::getUser();
 ?>
 
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-transparent border-bottom">
-    <div class="container d-flex justify-content-between align-items-center">
+<nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-light bg-transparent border-bottom">
+    <div class="container-fluid container-lg d-flex justify-content-between align-items-center">
         <div class="logo my-12">
             <a href="#">
                 <div><?php echo Helpers::WEBSITE_NAME ?></div>
@@ -35,16 +35,20 @@ $user = Auth::getUser();
             <div class="d-flex gap-2">
                 <?php if ($user): ?>
                     <a href="/profile" class="btn btn-outline-dark btn-lg">
+                        <i class="fa-solid fa-user me-2"></i>
                         Profile
                     </a>
                     <a href="/logout" class="btn btn-dark btn-lg">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i>
                         Logout
                     </a>
                 <?php else: ?>
                     <a href="/login" class="btn btn-outline-dark btn-lg">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>
                         Login
                     </a>
                     <a href="/register" class="btn btn-dark btn-lg">
+                        <i class="fa-solid fa-user-plus me-2"></i>
                         Register
                     </a>
                 <?php endif; ?>
@@ -52,3 +56,21 @@ $user = Auth::getUser();
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const navbar = document.getElementById("mainNavbar");
+
+        window.addEventListener("scroll", () => {
+
+            if (window.scrollY > 50) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+
+        });
+
+    });
+</script>

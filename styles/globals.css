@@ -15,7 +15,8 @@ body {
 
 main {
     flex-grow: 1;
-    margin-top: 150px;
+    padding-top: 150px;
+    border: 10px solid black;
 }
 
 div {
@@ -184,6 +185,20 @@ section {
     color: #FFFFFF;
 }
 
+#mainNavbar {
+    padding-block: 40px;
+    transition: all 500ms;
+}
+
+#mainNavbar.scrolled {
+    padding-block: 20px;
+    background: black !important;
+}
+
+#mainNavbar.scrolled * {
+    color: white !important;
+}
+
 .logo {
     -webkit-transform: translateY(3px);
     -moz-transform: translateY(3px);
@@ -194,9 +209,7 @@ section {
 
 .logo a {
     display: block;
-    padding-right: 20px;
     color: black;
-    padding-block: 40px;
 }
 
 .logo a > div:first-child {

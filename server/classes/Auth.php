@@ -38,6 +38,8 @@ final class Auth
                     'last_name' => $data['last_name'] ?? null,
                     'phone' => $data['phone'] ?? null,
                     'role_id' => $role['id'],
+                    // TODO: OVO ZA SAD NEK STOJI OVAKO DOK NE BUDE GOTOVA VERIFIKACIJA
+                    'email_confirmed' => 1
                 ]
             ]);
 
@@ -73,7 +75,7 @@ final class Auth
         if (!$user) {
             return false;
         }
-        if (!(int)$user['is_active']) {
+        if (!(int)$user['email_confirmed']) {
             return false;
         }
         if (!password_verify($password, $user['password_hash'])) {
@@ -105,7 +107,7 @@ final class Auth
         return db()->users->findFirst([
             'where' => [
                 'id' => $session['user_id'],
-                'is_active' => 1,
+                'email_confirmed' => 1,
             ],
         ]);
     }

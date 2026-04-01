@@ -6,6 +6,12 @@ require '../../init.php';
 $error = null;
 $success = null;
 
+if (Auth::isSignedIn()) {
+    header("Location: ../../index.php");
+    exit;
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $data = [
@@ -75,7 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label class="form-label">Lozinka</label>
-                    <input type="password" name="password" class="form-control custom-input" placeholder="Unesite lozinku" required>
+                    <input type="password" name="password" class="form-control custom-input"
+                           placeholder="Unesite lozinku" required>
                 </div>
 
                 <div class="register-btn-wrapper">
@@ -92,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <div class="text-center mt-4 login-link-text">
-                <p>Već imate nalog? <a href="login.php">Prijavite se</a></p>
+                <p>Već imate nalog? <a href="../login">Prijavite se</a></p>
             </div>
         </div>
     </div>

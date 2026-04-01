@@ -1,11 +1,11 @@
 <?php
 $user = Auth::getUser();
 $navLinks = [
-    'index.php' => 'Home',
-    'menu.php' => 'Menu',
-    'reservations.php' => 'Reservations',
-    'about.php' => 'About',
-    'contact.php' => 'Contact'
+        'index.php' => 'Home',
+        'menu.php' => 'Menu',
+        'reservations.php' => 'Reservations',
+        'about.php' => 'About',
+        'contact.php' => 'Contact'
 ];
 
 $relativePath = Helpers::getRelativePath('pages/');
@@ -29,7 +29,7 @@ $relativePath = Helpers::getRelativePath('pages/');
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <?php foreach ($navLinks as $file => $name): ?>
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase ls-1 px-lg-3 mt-3 py-lg-0"
+                        <a class="nav-link fs-5 ls-1 px-lg-3 mt-3 mt-lg-0 py-lg-0"
                            href="<?= $relativePath . $file ?>">
                             <?= $name ?>
                         </a>
@@ -40,7 +40,7 @@ $relativePath = Helpers::getRelativePath('pages/');
                 <?php if ($user): ?>
                     <a href="<?= $relativePath . 'profile' ?>" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-user me-2"></i>
-                        Profile
+                        Profil
                     </a>
                     <a href="<?= $relativePath . 'logout' ?>" class="btn btn-light btn-lg">
                         <i class="fa-solid fa-right-from-bracket me-2"></i>
@@ -53,7 +53,7 @@ $relativePath = Helpers::getRelativePath('pages/');
                     </a>
                     <a href="<?= $relativePath . 'register' ?>" class="btn btn-light btn-lg">
                         <i class="fa-solid fa-user-plus me-2"></i>
-                        Register
+                        Registracija
                     </a>
                 <?php endif; ?>
             </div>

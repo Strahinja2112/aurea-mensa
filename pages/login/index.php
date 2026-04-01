@@ -4,13 +4,19 @@ declare(strict_types=1);
 require '../../init.php';
 
 $error = null;
+$relativePath = Helpers::getRelativePath();
+
+if (Auth::isSignedIn()) {
+    header("Location: ../../index.php");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
     if (Auth::signIn($email, $password)) {
-        header('Location: ../index.php');
+        header("Location: ../../index.php");
         exit;
     } else {
         $error = "Neispravni podaci ili nalog nije aktiviran.";
@@ -39,16 +45,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form id="loginForm" method="POST" action="">
                 <div class="form-group">
                     <label class="form-label">Email adresa</label>
-                    <input type="email" name="email" class="form-control custom-input" placeholder="marko@primer.com" required>
+                    <input type="email" name="email" class="form-control custom-input" placeholder="marko@primer.com"
+                           required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Lozinka</label>
-                    <input type="password" name="password" class="form-control custom-input" placeholder="Vaša lozinka" required>
+                    <input type="password" name="password" class="form-control custom-input" placeholder="Vaša lozinka"
+                           required>
                 </div>
 
                 <div class="text-end mb-4 login-link-text">
-                    <a href="forgot-password.php" style="font-size: 14px;">Zaboravili ste lozinku?</a>
+                    <a href="../forgot-password" style="font-size: 14px;">Zaboravili ste lozinku?</a>
                 </div>
 
                 <div class="register-btn-wrapper">
@@ -65,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <div class="text-center mt-4 login-link-text">
-                <p>Nemate nalog? <a href="register.php">Registrujte se ovde</a></p>
+                <p>Nemate nalog? <a href="../register">Registrujte se ovde</a></p>
             </div>
         </div>
     </div>

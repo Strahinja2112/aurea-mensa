@@ -40,7 +40,7 @@ final class Database
             'last_name',
             'phone',
             'role_id',
-            'is_active',
+            'email_confirmed',
             'created_at',
         ],
         'password_resets' => [

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-$env = parse_ini_file(BASE_PATH . '/.env', true);
-
 class Env
 {
     public static string $MAILTRAP_API_KEY;
@@ -14,6 +12,12 @@ class Env
 }
 
 try {
+    $env = parse_ini_file(BASE_PATH . '/.env', true);
+    
+    if (!$env) {
+        throw new Exception(".env file is missing!");
+    }
+    
     Env::$MAILTRAP_API_KEY = $env['MAILTRAP_API_KEY'];
     if (!Env::$MAILTRAP_API_KEY) {
         throw new Exception('Mailtrap API key is missing');

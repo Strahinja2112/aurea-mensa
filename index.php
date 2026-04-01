@@ -1,46 +1,14 @@
 <?php
-
-declare(strict_types=1);
-
-require_once 'init.php';
-
-$user = Auth::getUser();
+require 'init.php';
 ?>
 
 <!doctype html>
-<html lang="sr">
-<head>
-    <link rel="stylesheet" href="./styles/globals.css">
-    <meta charset="UTF-8">
-    <title>Početna</title>
-</head>
-<body>
-
-<h1>Ordo Mensarum</h1>
-
-<?php if ($user !== null): ?>
-
-    <p>Ulogovani ste kao:</p>
-
-    <ul>
-        <li>ID: <?php echo (int)$user['id']; ?></li>
-        <li>Ime: <?php echo htmlspecialchars((string)$user['first_name']); ?></li>
-        <li>Prezime: <?php echo htmlspecialchars((string)$user['last_name']); ?></li>
-        <li>Email: <?php echo htmlspecialchars((string)$user['email']); ?></li>
-    </ul>
-
-    <form action="<?php echo Helpers::getFullPath('logout.php') ?>" method="post">
-        <button type="submit">Odjavi se</button>
-    </form>
-
-<?php else: ?>
-
-    <p>Niste ulogovani.</p>
-
-    <a href="./pages/login.php">Prijavi se</a>
-    <a href="./pages/register.php">Registruj se</a>
-
-<?php endif; ?>
-
+<html lang="en">
+<?php Helpers::renderHead("Home") ?>
+<body class="bg-black">
+    <?php include Helpers::getFullPath("components", "header.php") ?>
+    <main>
+    </main>
+    <?php include Helpers::getFullPath("components", "footer.php") ?>
 </body>
 </html>

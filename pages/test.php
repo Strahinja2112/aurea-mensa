@@ -1,7 +1,13 @@
 <?php
 
 include '../init.php';
+?>
 
-//$result = Mailer::send("pavicevicstrahinja99@gmail.com", "Subject", "Body");
-//
-//var_dump($result);
+
+<!doctype html>
+<html lang="en">
+<?php Helpers::renderHead("Test") ?>
+<body>
+
+</body>
+</html>

@@ -1,4 +1,8 @@
 {
+    "scripts": {
+        "dev": "browser-sync start --proxy \"localhost\" --startPath \"web-restaurant-app\" --files \"**/*.php, **/*.css, **/*.js\"",
+        "env": "echo MAILTRAP_API_KEY=\"\">.env && echo MAILTRAP_DOMAIN=\"\">>.env && echo MAILTRAP_PASSWORD=\"\">>.env && echo MAILTRAP_USERNAME=\"\">>.env && echo MAILTRAP_PORT=\"\">>.env"
+    },
     "require": {
         "phpmailer/phpmailer": "^7.0",
         "vlucas/phpdotenv": "^5.6"

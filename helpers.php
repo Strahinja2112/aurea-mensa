@@ -26,28 +26,33 @@ final class Helpers
     {
         return self::joinPaths(BASE_PATH, ...$segments);
     }
-    
+
     /**
      * Calculates the relative path from the current page to the project root.
-     * Essential for linking assets like CSS/JS in different subdirectories.
+     * Optionally appends additional segments to the path.
      */
-    public static function getRelativePath(): string
+    public static function getRelativePath(string ...$segments): string
     {
-        // Get the directory of the file that is currently being executed
         $currentDir = realpath(dirname($_SERVER['SCRIPT_FILENAME']));
         $rootDir = realpath(BASE_PATH);
-        
-        // Remove the root path from the current directory path
+
         $relativePart = str_replace($rootDir, '', $currentDir);
         $relativePart = trim($relativePart, DIRECTORY_SEPARATOR);
-        
-        if ($relativePart === '') {
-            return './';
+
+        $base = '';
+
+        if ($relativePart !== '') {
+            $depth = count(explode(DIRECTORY_SEPARATOR, $relativePart));
+            $base = str_repeat('../', $depth);
+        } else {
+            $base = './';
         }
-        
-        // Count levels and add '../' for each level deep
-        $depth = count(explode(DIRECTORY_SEPARATOR, $relativePart));
-        return str_repeat('../', $depth);
+
+        if (empty($segments)) {
+            return $base;
+        }
+
+        return $base . implode('/', $segments);
     }
     
     /**

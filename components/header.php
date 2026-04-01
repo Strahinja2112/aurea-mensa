@@ -15,7 +15,7 @@ $relativePath = Helpers::getRelativePath('pages/');
 <nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-dark ">
     <div class="container-fluid container-lg d-flex justify-content-between align-items-center">
         <div class="logo">
-            <a href="#">
+            <a href="<?= Helpers::getRelativePath() . 'index.php' ?>">
                 <div><?php echo Helpers::WEBSITE_NAME ?></div>
                 <div>restoran</div>
             </a>
@@ -67,7 +67,6 @@ $relativePath = Helpers::getRelativePath('pages/');
         const navbar = document.getElementById("mainNavbar");
 
         window.addEventListener("scroll", () => {
-
             if (window.scrollY > 50) {
                 navbar.classList.add("scrolled");
             } else {

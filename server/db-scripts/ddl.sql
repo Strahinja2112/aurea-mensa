@@ -31,15 +31,15 @@ VALUES ('GUEST'),
 
 CREATE TABLE users
 (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    email         VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    first_name    VARCHAR(100),
-    last_name     VARCHAR(100),
-    phone         VARCHAR(30),
-    role_id       INT          NOT NULL,
-    is_active     BOOLEAN   DEFAULT FALSE,
-    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    email           VARCHAR(255) NOT NULL UNIQUE,
+    password_hash   VARCHAR(255) NOT NULL,
+    first_name      VARCHAR(100),
+    last_name       VARCHAR(100),
+    phone           VARCHAR(30),
+    role_id         INT          NOT NULL,
+    email_confirmed BOOLEAN   DEFAULT FALSE,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles (id)
 );

@@ -54,37 +54,46 @@ final class Helpers
 
         return $base . implode('/', $segments);
     }
-    
-    /**
-     * Includes the standard head elements, dynamically resolving asset paths.
-     * Usage: Helpers::renderHead("Home Page");
-     */
-    public static function renderHead(string $pageTitle, array $extraCss = []): void
+
+    public static function loadLocalCssFile(string $file): string
     {
-        $relativePath = self::getRelativePath();
-        $siteName = self::WEBSITE_NAME;
-        
-        // Osnovni CSS fajlovi koji idu na svaku stranicu
-        $defaultCss = ["globals.css", "landing.css", "responsive.css"];
-        
-        // Spajamo podrazumevane sa dodatnim CSS fajlovima ako ih proslediš
-        $allCss = array_merge($defaultCss, $extraCss);
-        
-        $cssLinks = "";
-        foreach ($allCss as $fileName) {
-            $fullPath = $relativePath . "styles/" . $fileName;
-            $cssLinks .= "<link rel=\"stylesheet\" href=\"{$fullPath}\">\n    ";
+        $localPath = dirname($_SERVER['SCRIPT_FILENAME']) . DIRECTORY_SEPARATOR . $file;
+
+        if (file_exists($localPath)) {
+            return $file;
         }
-        
+
+        return self::getRelativePath('styles', $file);
+    }
+
+    public static function renderHead(string $pageTitle, array $localCss = [], array $extraGlobalCss = []): void
+    {
+        $siteName = self::WEBSITE_NAME;
+
+        $defaultGlobalCss = ["globals.css", "landing.css", "responsive.css"];
+        $allGlobalCss = array_merge($defaultGlobalCss, $extraGlobalCss);
+
+        $cssLinks = "";
+
+        foreach ($allGlobalCss as $file) {
+            $url = self::getRelativePath('styles', $file);
+            $cssLinks .= "<link rel=\"stylesheet\" href=\"{$url}\">\n    ";
+        }
+
+        foreach ($localCss as $file) {
+            $url = self::loadLocalCssFile($file);
+            $cssLinks .= "<link rel=\"stylesheet\" href=\"{$url}\">\n    ";
+        }
+
         echo <<<HTML
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>{$pageTitle} | {$siteName}</title>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-                {$cssLinks}
-            </head>
-        HTML;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{$pageTitle} | {$siteName}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        {$cssLinks}
+    </head>
+    HTML;
     }
 }

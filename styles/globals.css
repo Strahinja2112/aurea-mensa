@@ -14,6 +14,10 @@ body {
     color: #a5a5a5;
 }
 
+.font-serif {
+    font-family: serif !important;
+}
+
 main {
     flex-grow: 1;
     /*padding-top: 140px;*/
@@ -186,7 +190,7 @@ section {
 }
 
 #mainNavbar {
-    padding-block: 40px;
+    padding-block: 30px;
     backdrop-filter: blur(5px);
     transition: all 500ms;
 }
@@ -194,14 +198,6 @@ section {
 #mainNavbar.scrolled {
     padding-block: 20px;
     background: rgb(0, 0, 0, .5) !important;
-}
-
-.logo {
-    -webkit-transform: translateY(3px);
-    -moz-transform: translateY(3px);
-    -ms-transform: translateY(3px);
-    -o-transform: translateY(3px);
-    transform: translateY(3px);
 }
 
 .logo a {

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require "Database.php";
+
 final class Auth
 {
     public const COOKIE_NAME = 'auth_token';

@@ -2,9 +2,9 @@
 $user = Auth::getUser();
 ?>
 
-<nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-light bg-transparent border-bottom">
+<nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-dark ">
     <div class="container-fluid container-lg d-flex justify-content-between align-items-center">
-        <div class="logo my-12">
+        <div class="logo">
             <a href="#">
                 <div><?php echo Helpers::WEBSITE_NAME ?></div>
                 <div>restaurant</div>
@@ -34,20 +34,20 @@ $user = Auth::getUser();
             </ul>
             <div class="d-flex gap-2">
                 <?php if ($user): ?>
-                    <a href="/profile" class="btn btn-outline-dark btn-lg">
+                    <a href="/profile" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-user me-2"></i>
                         Profile
                     </a>
-                    <a href="/logout" class="btn btn-dark btn-lg">
+                    <a href="/logout" class="btn btn-light btn-lg">
                         <i class="fa-solid fa-right-from-bracket me-2"></i>
                         Logout
                     </a>
                 <?php else: ?>
-                    <a href="/login" class="btn btn-outline-dark btn-lg">
+                    <a href="/login" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-right-to-bracket me-2"></i>
                         Login
                     </a>
-                    <a href="/register" class="btn btn-dark btn-lg">
+                    <a href="/register" class="btn btn-light btn-lg">
                         <i class="fa-solid fa-user-plus me-2"></i>
                         Register
                     </a>

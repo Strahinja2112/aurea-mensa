@@ -15,8 +15,7 @@ body {
 
 main {
     flex-grow: 1;
-    padding-top: 150px;
-    border: 10px solid black;
+    /*padding-top: 140px;*/
 }
 
 div {
@@ -187,16 +186,13 @@ section {
 
 #mainNavbar {
     padding-block: 40px;
+    backdrop-filter: blur(5px);
     transition: all 500ms;
 }
 
 #mainNavbar.scrolled {
     padding-block: 20px;
-    background: black !important;
-}
-
-#mainNavbar.scrolled * {
-    color: white !important;
+    background: rgb(0, 0, 0, .5) !important;
 }
 
 .logo {
@@ -209,18 +205,20 @@ section {
 
 .logo a {
     display: block;
-    color: black;
+    color: white;
 }
 
 .logo a > div:first-child {
-    font-size: 36px;
+    font-size: 52px;
     line-height: 0.75;
+    font-family: serif;
 }
 
 .logo a > div:last-child {
     font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.680em;
+    letter-spacing: 0.3em;
     line-height: 0.75;
     margin-top: 12px;
+    opacity: 0.6;
 }

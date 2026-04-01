@@ -60,7 +60,7 @@ final class Helpers
         $siteName = self::WEBSITE_NAME;
         
         // Osnovni CSS fajlovi koji idu na svaku stranicu
-        $defaultCss = ["globals.css", "header.css", "responsive.css"];
+        $defaultCss = ["globals.css", "landing.css", "responsive.css"];
         
         // Spajamo podrazumevane sa dodatnim CSS fajlovima ako ih proslediš
         $allCss = array_merge($defaultCss, $extraCss);

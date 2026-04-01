@@ -8,7 +8,7 @@ const BASE_PATH = ROOT . DIRECTORY_SEPARATOR . APP_DIR;
 
 final class Helpers
 {
-    public const WEBSITE_NAME = "Restaurant App";
+    public const WEBSITE_NAME = "Neko Ime";
     
     /**
      * Joins path segments using system directory separator.
@@ -60,7 +60,7 @@ final class Helpers
         $siteName = self::WEBSITE_NAME;
         
         // Osnovni CSS fajlovi koji idu na svaku stranicu
-        $defaultCss = ["globals.css", "template.css", "responsive.css"];
+        $defaultCss = ["globals.css", "header.css", "responsive.css"];
         
         // Spajamo podrazumevane sa dodatnim CSS fajlovima ako ih proslediš
         $allCss = array_merge($defaultCss, $extraCss);

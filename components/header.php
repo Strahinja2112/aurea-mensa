@@ -1,54 +1,54 @@
-<header class="header">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="header_content d-flex flex-row align-items-center justify-content-between">
-                    <div class="logo">
-                        <a href="#">
-                            <div>The Venue</div>
-                            <div>restaurant</div>
-                        </a>
-                    </div>
-                    <nav class="main_nav">
-                        <ul class="d-flex flex-row align-items-center justify-content-start">
-                            <li><a href="index.html">home</a></li>
-                            <li><a href="about.html">about us</a></li>
-                            <li><a href="menu.html">menu</a></li>
-                            <li><a href="#">delivery</a></li>
-                            <li><a href="blog.html">blog</a></li>
-                            <li><a href="contact.html">contact</a></li>
-                        </ul>
-                    </nav>
-<!--                    ovde ce da bude auth button -->
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<div class="hamburger_bar trans_400 d-flex flex-row align-items-center justify-content-start">
-    <div class="hamburger">
-        <div class="menu_toggle d-flex flex-row align-items-center justify-content-start">
-            <div class="hamburger_container">
-                <div class="menu_hamburger">
-                    <div class="line_1 hamburger_lines" style="transform: matrix(1, 0, 0, 1, 0, 0);"></div>
-                    <div class="line_2 hamburger_lines" style="visibility: inherit; opacity: 1;"></div>
-                    <div class="line_3 hamburger_lines" style="transform: matrix(1, 0, 0, 1, 0, 0);"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<?php
+$user = Auth::getUser();
+?>
 
-<div class="menu trans_800">
-    <div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
-        <ul>
-            <li><a href="index.html">home</a></li>
-            <li><a href="about.html">about us</a></li>
-            <li><a href="menu.html">menu</a></li>
-            <li><a href="#">delivery</a></li>
-            <li><a href="blog.html">blog</a></li>
-            <li><a href="contact.html">contact</a></li>
-        </ul>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-transparent border-bottom">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="logo my-12">
+            <a href="#">
+                <div><?php echo Helpers::WEBSITE_NAME ?></div>
+                <div>restaurant</div>
+            </a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon no-border"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-center fs-5 px-3" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-5 px-3" href="/menu">Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-5 px-3" href="/reservations">Reservations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-5 px-3" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-5 px-3" href="/contact">Contact</a>
+                </li>
+            </ul>
+            <div class="d-flex gap-2">
+                <?php if ($user): ?>
+                    <a href="/profile" class="btn btn-outline-dark btn-lg">
+                        Profile
+                    </a>
+                    <a href="/logout" class="btn btn-dark btn-lg">
+                        Logout
+                    </a>
+                <?php else: ?>
+                    <a href="/login" class="btn btn-outline-dark btn-lg">
+                        Login
+                    </a>
+                    <a href="/register" class="btn btn-dark btn-lg">
+                        Register
+                    </a>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
-    <div class="menu_reservations_phone ml-auto">Reservations: +34 586 778 8892</div>
-</div>
+</nav>

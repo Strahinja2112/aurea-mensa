@@ -1,11 +1,11 @@
 #main-image-div {
     min-height: 100vh;
-    border:1px solid black;
+    border: 1px solid black;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url("../public/images/elements.jpg");
+    background-image: url("../public/images/anotheronethankyou.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

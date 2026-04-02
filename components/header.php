@@ -1,19 +1,17 @@
 <?php
 $user = Auth::getUser();
 $navLinks = [
-        'index.php' => 'Home',
-        'menu.php' => 'Menu',
-        'reservations.php' => 'Reservations',
-        'about.php' => 'About',
-        'contact.php' => 'Contact'
+        'menu' => 'Menu',
+        'reservations' => 'Reservations',
+        'about' => 'About',
+        'contact' => 'Contact'
 ];
 
 $relativePath = Helpers::getRelativePath('pages/');
-
 ?>
 
 <nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-dark ">
-    <div class="container-fluid container-lg d-flex justify-content-between align-items-center">
+    <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
         <div class="logo">
             <a href="<?= Helpers::getRelativePath() . 'index.php' ?>">
                 <div><?php echo Helpers::WEBSITE_NAME ?></div>
@@ -42,7 +40,7 @@ $relativePath = Helpers::getRelativePath('pages/');
                         <i class="fa-solid fa-user me-2"></i>
                         Profil
                     </a>
-                    <a href="<?= $relativePath . 'logout' ?>" class="btn btn-light btn-lg">
+                    <a href="<?= $relativePath . 'logout' ?>" class="btn btn-danger btn-lg">
                         <i class="fa-solid fa-right-from-bracket me-2"></i>
                         Logout
                     </a>

@@ -38,7 +38,7 @@ CREATE TABLE users
     last_name       VARCHAR(100),
     phone           VARCHAR(30),
     role_id         INT          NOT NULL,
-    email_confirmed BOOLEAN   DEFAULT FALSE,
+    email_verified BOOLEAN   DEFAULT FALSE,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles (id)
@@ -58,7 +58,7 @@ CREATE TABLE auth_sessions
 -- PASSWORD RESET TOKENS
 -- =====================================================
 
-CREATE TABLE password_resets
+CREATE TABLE verification_tokens
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     user_id    INT          NOT NULL,
@@ -144,4 +144,4 @@ CREATE INDEX idx_table_seats ON restaurant_tables (seats);
 -- =====================================================
 -- Overlap validation (time conflicts) rešava se na aplikacionom nivou (PHP/JS)
 -- Kod rezervacije generiše backend (npr UUID ili random string)
--- Email aktivacija i reset lozinke koriste password_resets tabelu
+-- Email aktivacija i reset lozinke koriste verification_tokens tabelu

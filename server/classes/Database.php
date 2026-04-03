@@ -14,7 +14,7 @@ final class Database
     public ORMTable $authSessions;
     
     public ORMTable $users;
-    public ORMTable $passwordResets;
+    public ORMTable $verificationTokens;
     public ORMTable $restaurantTables;
     public ORMTable $reservations;
     public ORMTable $reservationTables;
@@ -40,10 +40,10 @@ final class Database
             'last_name',
             'phone',
             'role_id',
-            'email_confirmed',
+            'email_verified',
             'created_at',
         ],
-        'password_resets' => [
+        'verification_tokens' => [
             'id',
             'user_id',
             'token',
@@ -101,7 +101,7 @@ final class Database
         $this->roles = new ORMTable($this->pdo, 'roles', $this->schema['roles']);
         $this->authSessions = new ORMTable($this->pdo, 'auth_sessions', $this->schema['auth_sessions']);
         $this->users = new ORMTable($this->pdo, 'users', $this->schema['users']);
-        $this->passwordResets = new ORMTable($this->pdo, 'password_resets', $this->schema['password_resets']);
+        $this->verificationTokens = new ORMTable($this->pdo, 'verification_tokens', $this->schema['verification_tokens']);
         $this->restaurantTables = new ORMTable($this->pdo, 'restaurant_tables', $this->schema['restaurant_tables']);
         $this->reservations = new ORMTable($this->pdo, 'reservations', $this->schema['reservations']);
         $this->reservationTables = new ORMTable($this->pdo, 'reservation_tables', $this->schema['reservation_tables']);

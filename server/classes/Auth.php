@@ -38,17 +38,15 @@ final class Auth
                     'last_name' => $data['last_name'] ?? null,
                     'phone' => $data['phone'] ?? null,
                     'role_id' => $role['id'],
-                    // TODO: OVO ZA SAD NEK STOJI OVAKO DOK NE BUDE GOTOVA VERIFIKACIJA
-                    'email_confirmed' => 1
                 ]
             ]);
 
             $token = bin2hex(random_bytes(32));
-            db()->passwordResets->create([
+            db()->verificationTokens->create([
                 'data' => [
                     'user_id' => $user['id'],
                     'token' => $token,
-                    'expires_at' => date('Y-m-d H:i:s', strtotime('+24 hours'))
+                    'expires_at' => date('Y-m-d H:i:s', strtotime('+10 minutes'))
                 ]
             ]);
 
@@ -75,7 +73,7 @@ final class Auth
         if (!$user) {
             return false;
         }
-        if (!(int)$user['email_confirmed']) {
+        if (!(int)$user['email_verified']) {
             return false;
         }
         if (!password_verify($password, $user['password_hash'])) {
@@ -107,7 +105,7 @@ final class Auth
         return db()->users->findFirst([
             'where' => [
                 'id' => $session['user_id'],
-                'email_confirmed' => 1,
+                'email_verified' => 1,
             ],
         ]);
     }

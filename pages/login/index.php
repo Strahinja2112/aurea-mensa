@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require '../../init.php';
@@ -14,7 +15,7 @@ if (Auth::isSignedIn()) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
-
+    
     if (Auth::signIn($email, $password)) {
         header("Location: ../../index.php");
         exit;
@@ -26,21 +27,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="sr">
-<?php Helpers::renderHead("Prijava", [], ['auth.css']); ?>
+<?php
+Helpers::renderHead("Prijava", [], ['auth.css']); ?>
 <body>
 
-<?php require_once Helpers::getFullPath('components', 'header.php'); ?>
+<?php
+require_once Helpers::getFullPath('components', 'header.php'); ?>
 
 <main>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
             <h2 id="title">Dobrodošli nazad</h2>
-
-            <?php if ($error): ?>
+            
+            <?php
+            if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
                     <i class="fas fa-exclamation-triangle me-2"></i> <?= $error ?>
                 </div>
-            <?php endif; ?>
+            <?php
+            endif; ?>
 
             <form id="loginForm" method="POST" action="">
                 <div class="form-group">

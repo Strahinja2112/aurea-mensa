@@ -7,7 +7,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE reservation_logs;
 TRUNCATE TABLE reservation_tables;
 TRUNCATE TABLE reservations;
-TRUNCATE TABLE password_resets;
+TRUNCATE TABLE verification_tokens;
 TRUNCATE TABLE users;
 TRUNCATE TABLE restaurant_tables;
 
@@ -69,6 +69,6 @@ VALUES
 -- PASSWORD RESETS
 -- =====================================================
 
-INSERT INTO password_resets (user_id, token, expires_at)
+INSERT INTO verification_tokens (user_id, token, expires_at)
 VALUES
     (3, 'reset-token-123', DATE_ADD(NOW(), INTERVAL 1 DAY));

@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-require '../../init.php';
+require_once '../../init.php';
 
 $error = null;
 $success = null;
@@ -21,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'last_name' => $_POST['last_name'] ?? '',
                 'phone' => $_POST['phone'] ?? '',
         ];
-
+        
         Auth::registerNewUser($data);
         $success = "Registracija uspešna! Proverite svoj email za aktivaciju naloga.";
     } catch (Exception $e) {
@@ -32,27 +33,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="sr">
-<?php Helpers::renderHead("Registracija", [], ['auth.css']); ?>
+<?php
+Helpers::renderHead("Registracija", [], ['auth.css']); ?>
 <body>
 
-<?php require_once Helpers::getFullPath('components', 'header.php'); ?>
+<?php
+require_once Helpers::getFullPath('components', 'header.php'); ?>
 
 <main>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
             <h2 id="title">Kreirajte vaš nalog</h2>
-
-            <?php if ($error): ?>
+            
+            <?php
+            if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
                     <i class="fas fa-exclamation-triangle me-2"></i> <?= $error ?>
                 </div>
-            <?php endif; ?>
-
-            <?php if ($success): ?>
+            <?php
+            endif; ?>
+            
+            <?php
+            if ($success): ?>
                 <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4">
                     <i class="fas fa-check-circle me-2"></i> <?= $success ?>
                 </div>
-            <?php endif; ?>
+            <?php
+            endif; ?>
 
             <form id="registerForm" method="POST" action="">
                 <div class="row">
@@ -98,8 +105,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </form>
 
-            <div class="text-center mt-4 login-link-text">
-                <p>Već imate nalog? <a href="../login">Prijavite se</a></p>
+            <div class="text-center mt-5 login-link-text d-flex justify-content-between">
+                <p class="small mb-2 text-white">
+                    Već imate nalog? <a href="../login/">Prijavite se</a>
+                </p>
+                <p class="small opacity-75 text-white">
+                    Nema mejla? <a href="../resend-activation/">Pošalji novi link</a>
+                </p>
             </div>
         </div>
     </div>

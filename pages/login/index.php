@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require '../../init.php';
+require_once '../../init.php';
 
 $error = null;
 $relativePath = Helpers::getRelativePath();
@@ -77,8 +77,11 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                 </div>
             </form>
 
-            <div class="text-center mt-4 login-link-text">
-                <p>Nemate nalog? <a href="../register">Registrujte se ovde</a></p>
+            <div class="text-center mt-5 login-link-text d-flex justify-content-between">
+                <p class="small text-white">Nemate nalog? <a href="../register">Registrujte se ovde</a></p>
+                <p class="small opacity-75 text-white">
+                    Nema mejla? <a href="../resend-activation/">Pošalji novi link</a>
+                </p>
             </div>
         </div>
     </div>

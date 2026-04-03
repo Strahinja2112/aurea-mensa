@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require '../../init.php';
+require_once '../../init.php';
 
 Auth::signOut();
 

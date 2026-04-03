@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-require '../../init.php';
+require_once '../../init.php';
 
 $error = null;
 $success = null;
 $token = $_GET['token'] ?? null;
+
+var_dump($token);
 
 if (!$token) {
     $error = "Nevažeći zahtev. Token nedostaje.";
@@ -19,13 +21,13 @@ if (!$token) {
     ]);
     
     if (!$verificationRecord) {
-        $error = "Link je nevažeći ili je istekao (važi 15 minuta).";
+        $error = "Link je nevažeći ili je istekao (važi 10 minuta).";
     } else {
         db()->beginTransaction();
         try {
             db()->users->update([
                     'where' => ['id' => $verificationRecord['user_id']],
-                    'data' => ['is_active' => 1]
+                    'data' => ['email_verified' => 1]
             ]);
             
             db()->verificationTokens->delete([
@@ -62,7 +64,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                     <i class="fas fa-exclamation-triangle me-2"></i> <?= $error ?>
                 </div>
                 <div class="login-link-text">
-                    <p>Vratite se na <a href="register.php">registraciju</a> kako biste dobili novi kod.</p>
+                    <p>Vratite se na <a href="../register">registraciju</a> kako biste dobili novi kod.</p>
                 </div>
             <?php
             endif; ?>
@@ -70,11 +72,12 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
             <?php
             if ($success): ?>
                 <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4">
-                    <i class="fas fa-check-circle me-2"></i> <?= $success ?>
+                    <i class="fas fa-check-circle me-2"></i>
+                    <?= $success ?>
                 </div>
                 <div class="register-btn-wrapper">
                     <div class="button">
-                        <a href="login.php">PRIJAVI SE</a>
+                        <a href="../login">PRIJAVI SE</a>
                     </div>
                 </div>
             <?php

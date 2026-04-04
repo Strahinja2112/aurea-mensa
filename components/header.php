@@ -7,7 +7,7 @@ $navLinks = [
         'contact' => 'Contact'
 ];
 
-$relativePath = Helpers::getRelativePath('pages/auth/');
+$relativePath = Helpers::getRelativePath('pages');
 ?>
 
 <nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-dark ">
@@ -36,20 +36,20 @@ $relativePath = Helpers::getRelativePath('pages/auth/');
             </ul>
             <div class="d-flex gap-2">
                 <?php if ($user): ?>
-                    <a href="<?= $relativePath . 'profile' ?>" class="btn btn-outline-light btn-lg">
+                    <a href="<?= $relativePath . '/profile' ?>" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-user me-2"></i>
                         Profil
                     </a>
-                    <a href="<?= $relativePath . 'logout' ?>" class="btn btn-danger btn-lg">
+                    <a href="<?= $relativePath . '/auth/logout' ?>" class="btn btn-danger btn-lg">
                         <i class="fa-solid fa-right-from-bracket me-2"></i>
                         Logout
                     </a>
                 <?php else: ?>
-                    <a href="<?= $relativePath . 'login' ?>" class="btn btn-outline-light btn-lg">
+                    <a href="<?= $relativePath . '/auth/login' ?>" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-right-to-bracket me-2"></i>
                         Login
                     </a>
-                    <a href="<?= $relativePath . 'register' ?>" class="btn btn-light btn-lg">
+                    <a href="<?= $relativePath . '/auth/register' ?>" class="btn btn-light btn-lg">
                         <i class="fa-solid fa-user-plus me-2"></i>
                         Registracija
                     </a>

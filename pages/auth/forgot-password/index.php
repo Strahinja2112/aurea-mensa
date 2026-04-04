@@ -66,15 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php else: ?>
                     <form id="authForm" method="POST" action="">
                         <?php if ($token): ?>
-                            <p class="text-center mb-4 small opacity-75">Unesite vašu novu lozinku ispod.</p>
                             <div class="form-group">
                                 <label class="form-label">Nova lozinka</label>
                                 <input type="password" name="password" class="form-control custom-input"
                                        placeholder="Min. 6 karaktera" required>
                             </div>
                         <?php else: ?>
-                            <p class="text-center mb-4 small opacity-75">Unesite email adresu i poslaćemo vam link za
-                                reset.</p>
                             <div class="form-group">
                                 <label class="form-label">Email adresa</label>
                                 <input type="email" name="email" class="form-control custom-input"

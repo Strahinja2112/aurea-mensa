@@ -16,7 +16,7 @@ final class Mailer
     public static function send(string $to, string $subject, string $body): bool
     {
         $mail = new PHPMailer(true);
-
+        
         try {
             $mail->isSMTP();
             $mail->Host = Env::$MAILTRAP_DOMAIN;
@@ -26,14 +26,14 @@ final class Mailer
             $mail->Password = Env::$MAILTRAP_PASSWORD;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->CharSet = 'UTF-8';
-
+            
             $mail->setFrom('no-reply@restoran.rs', 'Restoran Rezervacije');
             $mail->addAddress($to);
-
+            
             $mail->isHTML(true);
             $mail->Subject = $subject;
             $mail->Body = $body;
-
+            
             return $mail->send();
         } catch (Exception $e) {
             var_dump($mail->ErrorInfo);
@@ -46,13 +46,17 @@ final class Mailer
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
         $host = $_SERVER['HTTP_HOST'];
-        $link = "{$protocol}://{$host}/pages/activate.php?token=" . $token;
+        if ($host == 'localhost') {
+            $host .= ':3000';
+        }
+        $appDir = APP_DIR;
+        $baseUrl = "{$protocol}://{$host}/{$appDir}";
         
         $subject = "Aktivacija vašeg naloga - Aurea Mensa";
         
         $body = "
             <div style='margin: 0; padding: 0; background-color: #121212; font-family: \"PT Sans Narrow\", sans-serif;'>
-                <table role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%' style='background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url(\"{$protocol}://{$host}/public/images/elements.jpg\"); background-size: cover; background-position: center; padding: 60px 0;'>
+                <table role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%' style='background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url($baseUrl . \"public/images/elements.jpg\"); background-size: cover; background-position: center; padding: 60px 0;'>
                     <tr>
                         <td align='center'>
                             <table role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 500px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; margin: 20px;'>
@@ -73,7 +77,7 @@ final class Mailer
                                         <table role='presentation' border='0' cellpadding='0' cellspacing='0' style='margin: 0 auto;'>
                                             <tr>
                                                 <td align='center' style='border-radius: 6px; background-color: #f8f9fa;'>
-                                                    <a href='{$link}' style='display: inline-block; padding: 16px 40px; font-size: 16px; color: #333333; text-decoration: none; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;'>
+                                                    <a href='{$baseUrl}/pages/activate-account/index.php?token={$token}' style='display: inline-block; padding: 16px 40px; font-size: 16px; color: #333333; text-decoration: none; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;'>
                                                         Aktiviraj nalog
                                                     </a>
                                                 </td>
@@ -81,7 +85,7 @@ final class Mailer
                                         </table>
         
                                         <p style='margin-top: 40px; font-size: 13px; color: #a5a5a5;'>
-                                            Već imate nalog? <a href='{$protocol}://{$host}/pages/login' style='color: #a0c4ff; text-decoration: none;'>Prijavite se</a>
+                                            Već imate nalog? <a href='{$baseUrl}/pages/login' style='color: #a0c4ff; text-decoration: none;'>Prijavite se</a>
                                         </p>
         
                                         <div style='margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;'>

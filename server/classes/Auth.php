@@ -43,8 +43,6 @@ final class Auth
                     'last_name' => $data['last_name'] ?? null,
                     'phone' => $data['phone'] ?? null,
                     'role_id' => $role['id'],
-                    // ovo je sad tako da bih izbegao da saljem nepotrebne mejlove da ne trosim free tier
-                    'email_verified' => 1
                 ]
             ]);
 

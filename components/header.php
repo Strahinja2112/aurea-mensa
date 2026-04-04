@@ -10,7 +10,7 @@ $navLinks = [
 $relativePath = Helpers::getRelativePath('pages');
 ?>
 
-<nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-dark ">
+<nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-dark">
     <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
         <div class="logo">
             <a href="<?= Helpers::getRelativePath() . 'index.php' ?>">

@@ -112,7 +112,7 @@ $myReservations = db()->reservations->findMany([
 
                     <div class="form-group mb-4">
                         <label class="form-label small opacity-50">Telefon</label>
-                        <input type="text" name="phone" class="form-control custom-input"
+                        <input type="text" required name="phone" class="form-control custom-input"
                                value="<?= htmlspecialchars($old_phone) ?>">
                     </div>
 
@@ -167,7 +167,7 @@ $myReservations = db()->reservations->findMany([
                     <?php endforeach; ?>
 
                     <?php if (empty($myReservations)): ?>
-                        <h3 class="text-center text-white my-5">Nema podataka o rezervacijama.</h3>
+                        <h3 class="text-center text-white opacity-50 my-5">Nema podataka o rezervacijama.</h3>
                     <?php endif; ?>
                 </div>
             </div>

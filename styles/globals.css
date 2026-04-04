@@ -196,8 +196,7 @@ section {
 }
 
 #mainNavbar.scrolled {
-    padding-block: 20px;
-    background: rgb(0, 0, 0, .5) !important;
+    padding-block: 15px;
 }
 
 .logo a {
@@ -258,7 +257,7 @@ section {
 
 .custom-input {
     background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
     color: #FFFFFF !important;
     border-radius: 6px;
     padding: 10px;

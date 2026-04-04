@@ -1,10 +1,8 @@
 <?php
 $user = Auth::getUser();
 $navLinks = [
-        'menu' => 'Menu',
-        'reservations' => 'Reservations',
-        'about' => 'About',
-        'contact' => 'Contact'
+        'about' => 'O nama',
+        'res' => "Rezervacija",
 ];
 
 $relativePath = Helpers::getRelativePath('pages');
@@ -15,7 +13,7 @@ $relativePath = Helpers::getRelativePath('pages');
         <div class="logo">
             <a href="<?= Helpers::getRelativePath() . 'index.php' ?>">
                 <div><?php echo Helpers::WEBSITE_NAME ?></div>
-                <div>restoran</div>
+                <div>RESTORAN</div>
             </a>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
@@ -27,7 +25,7 @@ $relativePath = Helpers::getRelativePath('pages');
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <?php foreach ($navLinks as $file => $name): ?>
                     <li class="nav-item">
-                        <a class="nav-link fs-5 ls-1 px-lg-3 mt-3 mt-lg-0 py-lg-0"
+                        <a class="nav-link fs-5 px-lg-3 mt-3 mt-lg-0 py-lg-0"
                            href="<?= $relativePath . $file ?>">
                             <?= $name ?>
                         </a>

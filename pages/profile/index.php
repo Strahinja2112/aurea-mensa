@@ -73,8 +73,8 @@ $myReservations = db()->reservations->findMany([
 <?php require_once Helpers::getFullPath('components', 'header.php'); ?>
 
 <main class="container-fluid container-lg">
-    <div class="row justify-content-center g-4 container-fluid container-lg">
-        <div class="col-12 col-lg-4" style="max-width: 450px;">
+    <div class="row justify-content-center g-4 w-100">
+        <div class="col-12 col-lg-5">
             <div class="glass-card h-100">
                 <h2 class="text-center mb-4">Izmena Profila</h2>
 
@@ -138,8 +138,7 @@ $myReservations = db()->reservations->findMany([
                 </form>
             </div>
         </div>
-
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-lg-7">
             <div class="glass-card h-100 w-100" style="max-width: 1000px !important;">
                 <h2 class="text-center mb-4">Rezervacije</h2>
 
@@ -167,7 +166,7 @@ $myReservations = db()->reservations->findMany([
                     <?php endforeach; ?>
 
                     <?php if (empty($myReservations)): ?>
-                        <h3 class="text-center text-white opacity-50 my-5">Nema podataka o rezervacijama.</h3>
+                        <h3 class="text-center text-white opacity-50 my-5">Trenutno nemate nijednu rezervaciju.</h3>
                     <?php endif; ?>
                 </div>
             </div>

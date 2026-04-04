@@ -11,10 +11,6 @@ main {
     padding: 0;
 }
 
-.ls-1 {
-    letter-spacing: 1px;
-}
-
 .res-item {
     background: rgba(255, 255, 255, 0.03);
     padding: 15px 20px;

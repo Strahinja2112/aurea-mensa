@@ -11,32 +11,63 @@ main {
     padding: 0;
 }
 
-.res-item {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 15px 20px;
-    border-radius: 8px;
-    transition: background 0.3s;
+.reservation-container {
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-.res-item:hover {
+.res-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.res-card:hover {
     background: rgba(255, 255, 255, 0.05);
 }
 
-.btn-cancel {
-    background: none;
-    border: none;
-    color: #ff4d4d;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    padding: 0;
-    opacity: 0.7;
-    transition: 0.3s;
+.res-card.active {
+    border-left-color: #ffffff;
 }
 
-.btn-cancel:hover {
-    opacity: 1;
-    text-decoration: underline;
+.res-card.cancelled {
+    border-left-color: #ff4d4d;
+    opacity: 0.6;
+}
+
+.res-card.completed {
+    border-left-color: #2ecc71;
+}
+
+.date-badge {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 15px;
+    border-radius: 8px;
+    min-width: 70px;
+}
+
+.date-badge .day {
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.date-badge .month {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    opacity: 0.6;
+}
+
+.status-indicator {
+    font-size: 0.65rem;
+    padding: 2px 10px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .status-active {
@@ -45,28 +76,31 @@ main {
 
 .status-cancelled {
     color: #ff4d4d;
-    opacity: 0.5;
 }
 
 .status-completed {
     color: #2ecc71;
 }
 
-.reservation-container {
-    max-height: 580px;
-    overflow-y: auto;
-    padding-right: 5px;
-}
-
-.reservation-container::-webkit-scrollbar {
-    width: 4px;
-}
-
-.reservation-container::-webkit-scrollbar-track {
+.btn-cancel-modern {
     background: transparent;
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    color: #ff4d4d;
+    padding: 6px 15px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: 0.3s;
 }
 
-.reservation-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+.btn-cancel-modern:hover {
+    background: #ff4d4d;
+    color: white;
+    border-color: #ff4d4d;
+    box-shadow: 0 4px 15px rgba(255, 77, 77, 0.2);
+}
+
+.ls-1 {
+    letter-spacing: 1px;
 }

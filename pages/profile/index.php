@@ -145,28 +145,59 @@ $myReservations = db()->reservations->findMany([
                 <div class="reservation-container">
                     <?php foreach ($myReservations as $res):
                         $resTimestamp = strtotime($res['reservation_date'] . ' ' . $res['start_time']);
-                        $canCancel = ($res['status'] === 'ACTIVE' && ($resTimestamp - time()) > 14400);
-                        ?>
-                        <div class="res-item d-flex justify-content-between align-items-center mb-3">
-                            <div class="res-info">
-                                <span class="d-block small opacity-50 text-uppercase ls-1"><?= $res['reservation_code'] ?></span>
-                                <span class="h5 mb-0"><?= date('d.m.Y.', strtotime($res['reservation_date'])) ?> u <?= substr($res['start_time'], 0, 5) ?>h</span>
-                            </div>
+                        $secondsUntilRes = $resTimestamp - time();
+                        $canCancel = ($res['status'] === 'ACTIVE' && $secondsUntilRes > 4 * 60 * 60);
 
-                            <div class="res-status text-end">
-                                <span class="d-block small mb-2 status-<?= strtolower($res['status']) ?>"><?= $res['status'] ?></span>
-                                <?php if ($canCancel): ?>
-                                    <button onclick="cancelReservation(<?= $res['id'] ?>)" class="btn-cancel">Otkaži
-                                    </button>
-                                <?php else: ?>
-                                    <i class="fas fa-lock opacity-25"></i>
-                                <?php endif; ?>
+                        $day = date('d', $resTimestamp);
+                        $month = date('M', $resTimestamp);
+                        $time = substr($res['start_time'], 0, 5);
+                        $status = strtolower($res['status']);
+                        ?>
+
+                        <div class="res-card mb-4 <?= $status ?>">
+                            <div class="row align-items-center g-0">
+                                <div class="col-auto date-badge text-center">
+                                    <span class="d-block day"><?= $day ?></span>
+                                    <span class="d-block month text-uppercase"><?= $month ?></span>
+                                </div>
+
+                                <div class="col ps-4">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="time-label h5 mb-0"><?= $time ?>h</span>
+                                        <span class="status-indicator ms-3 status-<?= $status ?>"><?= $res['status'] ?></span>
+                                    </div>
+                                    <div class="small opacity-50 text-uppercase ls-1">
+                                        Kôd: <span class="text-white"><?= $res['reservation_code'] ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-end pe-3">
+                                    <?php if ($canCancel): ?>
+                                        <div class="cancel-logic">
+                            <span class="d-block small opacity-50 mb-2" style="font-size: 0.65rem;">
+                                Moguće otkazati još <?= floor(($secondsUntilRes - 14400) / 3600) ?>h
+                            </span>
+                                            <button onclick="cancelReservation(<?= $res['id'] ?>)"
+                                                    class="btn-cancel-modern">
+                                                OTKAŽI
+                                            </button>
+                                        </div>
+                                    <?php elseif ($res['status'] === 'ACTIVE'): ?>
+                                        <div class="locked-info opacity-25" title="Otkazivanje više nije moguće">
+                                            <i class="fas fa-lock mb-1"></i>
+                                            <span class="d-block small text-uppercase" style="font-size: 0.6rem;">Zaključano</span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
 
                     <?php if (empty($myReservations)): ?>
-                        <h3 class="text-center text-white opacity-50 my-5">Trenutno nemate nijednu rezervaciju.</h3>
+                        <div class="text-center py-5 opacity-25">
+                            <i class="fas fa-calendar-alt fa-3x mb-3"></i>
+                            <h3>Nema rezervacija</h3>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>

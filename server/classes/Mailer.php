@@ -79,31 +79,35 @@ final class Mailer
 
     public static function send(string $to, string $subject, string $body): bool
     {
-        $mail = new PHPMailer(true);
+//        $mail = new PHPMailer(true);
+//
+//
+//        try {
+//            $mail->isSMTP();
+//            $mail->Host = Env::$MAILTRAP_DOMAIN;
+//            $mail->Port = Env::$MAILTRAP_PORT;
+//            $mail->SMTPAuth = true;
+//            $mail->Username = Env::$MAILTRAP_USERNAME;
+//            $mail->Password = Env::$MAILTRAP_PASSWORD;
+//            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+//            $mail->CharSet = 'UTF-8';
+//
+//            $mail->setFrom('no-reply@restoran.rs', 'Restoran Rezervacije');
+//            $mail->addAddress($to);
+//
+//            $mail->isHTML(true);
+//            $mail->Subject = $subject;
+//            $mail->Body = $body;
+//
+//            return $mail->send();
+//        } catch (Exception $e) {
+//            var_dump($mail->ErrorInfo);
+//            var_dump($e->getMessage());
+//            return false;
+//        }
 
-        try {
-            $mail->isSMTP();
-            $mail->Host = Env::$MAILTRAP_DOMAIN;
-            $mail->Port = Env::$MAILTRAP_PORT;
-            $mail->SMTPAuth = true;
-            $mail->Username = Env::$MAILTRAP_USERNAME;
-            $mail->Password = Env::$MAILTRAP_PASSWORD;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->CharSet = 'UTF-8';
-
-            $mail->setFrom('no-reply@restoran.rs', 'Restoran Rezervacije');
-            $mail->addAddress($to);
-
-            $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body = $body;
-
-            return $mail->send();
-        } catch (Exception $e) {
-            var_dump($mail->ErrorInfo);
-            var_dump($e->getMessage());
-            return false;
-        }
+        // Ovo je da ne bi poslao mail zapravo da ne trosim, default kada kreira korisnika je da stavi da je emial_verified = 1
+        return true;
     }
 
     public static function sendActivationEmail(string $email, string $token): bool

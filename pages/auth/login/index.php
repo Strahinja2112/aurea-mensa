@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="sr">
 <?php
-Helpers::renderHead("Prijava", [], ['auth.css']); ?>
+Helpers::renderHead("Prijava", ['auth.css']); ?>
 <body>
 
 <?php

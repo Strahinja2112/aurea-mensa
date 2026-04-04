@@ -58,7 +58,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
 <main>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
-            <h2 id="title" class="text-center">
+            <h2 class="text-center">
                 <?php echo $success ? "Nalog uspešno kreiran" : "Kreirajte vaš nalog" ?>
             </h2>
 

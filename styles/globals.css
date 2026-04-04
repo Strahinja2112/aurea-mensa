@@ -220,12 +220,6 @@ section {
     opacity: 0.6;
 }
 
-.glass-card #title {
-    font-size: 52px;
-    line-height: 0.75;
-    font-family: serif;
-    font-weight: 300;
-}
 
 .glass-card {
     /*background: rgba(255, 255, 255, 0.08);*/
@@ -240,9 +234,11 @@ section {
 }
 
 .glass-card h2 {
+    font-size: 52px;
+    line-height: 0.75;
+    font-family: serif;
+    font-weight: 300;
     color: #f8f9fa;
-    font-family: 'PT Sans Narrow', sans-serif;
-    font-weight: 700;
     padding-bottom: 35px;
     text-align: center;
     letter-spacing: 1px;
@@ -267,6 +263,10 @@ section {
     border-radius: 6px;
     padding: 10px;
     transition: all 0.3s ease;
+}
+
+.custom-input::placeholder {
+    color: darkgray !important;
 }
 
 .custom-input:focus {

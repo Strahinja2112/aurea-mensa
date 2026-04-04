@@ -56,18 +56,7 @@ final class Helpers
         return $base . implode('/', $segments);
     }
 
-    public static function loadLocalCssFile(string $file): string
-    {
-        $localPath = dirname($_SERVER['SCRIPT_FILENAME']) . DIRECTORY_SEPARATOR . $file;
-
-        if (file_exists($localPath)) {
-            return $file;
-        }
-
-        return self::getRelativePath('styles', $file);
-    }
-
-    public static function renderHead(string $pageTitle, array $localCss = [], array $extraGlobalCss = []): void
+    public static function renderHead(string $pageTitle, array $extraGlobalCss = []): void
     {
         $siteName = self::WEBSITE_NAME;
 
@@ -78,11 +67,6 @@ final class Helpers
 
         foreach ($allGlobalCss as $file) {
             $url = self::getRelativePath('styles', $file);
-            $cssLinks .= "<link rel=\"stylesheet\" href=\"{$url}\">\n    ";
-        }
-
-        foreach ($localCss as $file) {
-            $url = self::loadLocalCssFile($file);
             $cssLinks .= "<link rel=\"stylesheet\" href=\"{$url}\">\n    ";
         }
 
@@ -97,7 +81,7 @@ final class Helpers
     </head>
     HTML;
     }
-    
+
     public static function isValidPhone(string $phone): bool
     {
         $cleanPhone = preg_replace('/[^0-9+]/', '', $phone);

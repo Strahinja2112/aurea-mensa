@@ -3,10 +3,6 @@ body {
     background-size: cover;
 }
 
-*::placeholder {
-    color: darkgray !important;
-}
-
 main {
     display: flex;
     align-items: center;

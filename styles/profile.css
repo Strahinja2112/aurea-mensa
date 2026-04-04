@@ -1,0 +1,75 @@
+body {
+    background: url('../public/images/elements.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.ls-1 {
+    letter-spacing: 1px;
+}
+
+.res-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.res-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-cancel {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 0;
+    opacity: 0.7;
+    transition: 0.3s;
+}
+
+.btn-cancel:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.status-active {
+    color: #0dcaf0;
+}
+
+.status-cancelled {
+    color: #ff4d4d;
+    opacity: 0.5;
+}
+
+.status-completed {
+    color: #2ecc71;
+}
+
+.reservation-container {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.reservation-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.reservation-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.reservation-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}

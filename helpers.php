@@ -10,7 +10,7 @@ const BASE_PATH = ROOT . DIRECTORY_SEPARATOR . APP_DIR;
 final class Helpers
 {
     public const WEBSITE_NAME = "Aurea Mensa";
-    
+
     /**
      * Joins path segments using system directory separator.
      */
@@ -19,7 +19,7 @@ final class Helpers
         $filteredSegments = array_filter($segments, fn($segment) => $segment !== '');
         return implode(DIRECTORY_SEPARATOR, $filteredSegments);
     }
-    
+
     /**
      * Returns the full server path.
      */
@@ -27,7 +27,7 @@ final class Helpers
     {
         return self::joinPaths(BASE_PATH, ...$segments);
     }
-    
+
     /**
      * Calculates the relative path from the current page to the project root.
      * Optionally appends additional segments to the path.
@@ -36,56 +36,56 @@ final class Helpers
     {
         $currentDir = realpath(dirname($_SERVER['SCRIPT_FILENAME']));
         $rootDir = realpath(BASE_PATH);
-        
+
         $relativePart = str_replace($rootDir, '', $currentDir);
         $relativePart = trim($relativePart, DIRECTORY_SEPARATOR);
-        
+
         $base = '';
-        
+
         if ($relativePart !== '') {
             $depth = count(explode(DIRECTORY_SEPARATOR, $relativePart));
             $base = str_repeat('../', $depth);
         } else {
             $base = './';
         }
-        
+
         if (empty($segments)) {
             return $base;
         }
-        
+
         return $base . implode('/', $segments);
     }
-    
+
     public static function loadLocalCssFile(string $file): string
     {
         $localPath = dirname($_SERVER['SCRIPT_FILENAME']) . DIRECTORY_SEPARATOR . $file;
-        
+
         if (file_exists($localPath)) {
             return $file;
         }
-        
+
         return self::getRelativePath('styles', $file);
     }
-    
+
     public static function renderHead(string $pageTitle, array $localCss = [], array $extraGlobalCss = []): void
     {
         $siteName = self::WEBSITE_NAME;
-        
+
         $defaultGlobalCss = ["globals.css", "landing.css", "responsive.css"];
         $allGlobalCss = array_merge($defaultGlobalCss, $extraGlobalCss);
-        
+
         $cssLinks = "";
-        
+
         foreach ($allGlobalCss as $file) {
             $url = self::getRelativePath('styles', $file);
             $cssLinks .= "<link rel=\"stylesheet\" href=\"{$url}\">\n    ";
         }
-        
+
         foreach ($localCss as $file) {
             $url = self::loadLocalCssFile($file);
             $cssLinks .= "<link rel=\"stylesheet\" href=\"{$url}\">\n    ";
         }
-        
+
         echo <<<HTML
     <head>
         <meta charset="UTF-8">

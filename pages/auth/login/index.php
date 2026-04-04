@@ -2,22 +2,19 @@
 
 declare(strict_types=1);
 
-require_once '../../init.php';
+require_once '../../../init.php';
 
 $error = null;
 $relativePath = Helpers::getRelativePath();
 
-if (Auth::isSignedIn()) {
-    header("Location: ../../index.php");
-    exit;
-}
+Auth::redirectIfSignedIn();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
-    
+
     if (Auth::signIn($email, $password)) {
-        header("Location: ../../index.php");
+        header("Location: ../../../index.php");
         exit;
     } else {
         $error = "Neispravni podaci ili nalog nije aktiviran.";
@@ -38,7 +35,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
             <h2 id="title">Dobrodošli nazad</h2>
-            
+
             <?php
             if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
@@ -80,7 +77,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
             <div class="text-center mt-5 login-link-text d-flex justify-content-between">
                 <p class="small text-white">Nemate nalog? <a href="../register">Registrujte se ovde</a></p>
                 <p class="small opacity-75 text-white">
-                    Nema mejla? <a href="../resend-activation/">Pošalji novi link</a>
+                    Nema mejla? <a href="../resend-activation">Pošalji novi link</a>
                 </p>
             </div>
         </div>

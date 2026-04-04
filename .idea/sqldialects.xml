@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/server/classes/Database.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/server/classes/Database.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/server/db-scripts/ddl.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/server/db-scripts/dml.sql" dialect="MariaDB" />
   </component>
 </project>

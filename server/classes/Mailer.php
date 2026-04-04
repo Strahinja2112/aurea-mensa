@@ -13,10 +13,21 @@ require_once BASE_PATH . '/env.php';
 
 final class Mailer
 {
+    private static function getAppUrl(): string
+    {
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+        $host = $_SERVER['HTTP_HOST'];
+        if ($host == 'localhost') {
+            $host .= ':3000';
+        }
+
+        return "{$protocol}://{$host}/" . APP_DIR;
+    }
+
     public static function send(string $to, string $subject, string $body): bool
     {
         $mail = new PHPMailer(true);
-        
+
         try {
             $mail->isSMTP();
             $mail->Host = Env::$MAILTRAP_DOMAIN;
@@ -26,14 +37,14 @@ final class Mailer
             $mail->Password = Env::$MAILTRAP_PASSWORD;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->CharSet = 'UTF-8';
-            
+
             $mail->setFrom('no-reply@restoran.rs', 'Restoran Rezervacije');
             $mail->addAddress($to);
-            
+
             $mail->isHTML(true);
             $mail->Subject = $subject;
             $mail->Body = $body;
-            
+
             return $mail->send();
         } catch (Exception $e) {
             var_dump($mail->ErrorInfo);
@@ -41,19 +52,13 @@ final class Mailer
             return false;
         }
     }
-    
+
     public static function sendActivationEmail(string $email, string $token): bool
     {
-        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-        $host = $_SERVER['HTTP_HOST'];
-        if ($host == 'localhost') {
-            $host .= ':3000';
-        }
-        $appDir = APP_DIR;
-        $baseUrl = "{$protocol}://{$host}/{$appDir}";
-        
+        $baseUrl = self::getAppUrl();
+
         $subject = "Aktivacija vašeg naloga - Aurea Mensa";
-        
+
         $body = "
             <div style='margin: 0; padding: 0; background-color: #121212; font-family: \"PT Sans Narrow\", sans-serif;'>
                 <table role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%' style='background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url($baseUrl . \"public/images/elements.jpg\"); background-size: cover; background-position: center; padding: 60px 0;'>
@@ -102,7 +107,7 @@ final class Mailer
                 </table>
             </div>
         ";
-        
+
         return self::send($email, $subject, $body);
     }
 }

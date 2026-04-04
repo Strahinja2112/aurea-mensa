@@ -7,7 +7,7 @@ $navLinks = [
         'contact' => 'Contact'
 ];
 
-$relativePath = Helpers::getRelativePath('pages/');
+$relativePath = Helpers::getRelativePath('pages/auth/');
 ?>
 
 <nav id="mainNavbar" class="navbar fixed-top navbar-expand-lg navbar-dark ">

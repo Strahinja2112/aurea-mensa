@@ -2,19 +2,21 @@
 
 declare(strict_types=1);
 
-require_once '../../init.php';
+require_once '../../../init.php';
+
+Auth::redirectIfSignedIn();
 
 $error = null;
 $success = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Molimo unesite ispravnu email adresu.";
     } else {
         $user = db()->users->findFirst(['where' => ['email' => $email]]);
-        
+
         if (!$user) {
             $success = "Ako nalog postoji, instrukcije su poslate.";
         } elseif ($user['email_verified']) {
@@ -26,12 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'expires_at' => ['gt' => date('Y-m-d H:i:s')]
                     ]
             ]);
-            
+
             if ($existingToken) {
                 $error = "Već imate aktivan kod na mejlu.";
             } else {
                 db()->verificationTokens->delete(['where' => ['user_id' => $user['id']]]);
-                
+
                 $token = bin2hex(random_bytes(32));
                 db()->verificationTokens->create([
                         'data' => [
@@ -40,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 'expires_at' => date('Y-m-d H:i:s', strtotime('+10 minutes'))
                         ]
                 ]);
-                
+
                 if (Mailer::sendActivationEmail($email, $token)) {
                     $success = "Novi aktivacioni link je poslat na vašu adresu.";
                 } else {
@@ -64,7 +66,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
             <h2 id="title" class="text-center mb-4">Aktivacija</h2>
-            
+
             <?php
             if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small mb-4">
@@ -72,7 +74,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                 </div>
             <?php
             endif; ?>
-            
+
             <?php
             if ($success): ?>
                 <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small mb-4">
@@ -80,7 +82,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                 </div>
             <?php
             endif; ?>
-            
+
             <?php
             if (!$success): ?>
                 <form method="POST" action="">
@@ -99,7 +101,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
             endif; ?>
 
             <div class="text-center mt-4 login-link-text">
-                <a href="../login/">Nazad na prijavu</a>
+                <a href="../login">Nazad na prijavu</a>
             </div>
         </div>
     </div>

@@ -2,16 +2,12 @@
 
 declare(strict_types=1);
 
-require_once '../../init.php';
+require_once '../../../init.php';
 
 $error = null;
 $success = null;
 
-if (Auth::isSignedIn()) {
-    header("Location: ../../index.php");
-    exit;
-}
-
+Auth::redirectIfSignedIn();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -22,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'last_name' => $_POST['last_name'] ?? '',
                 'phone' => $_POST['phone'] ?? '',
         ];
-        
+
         Auth::registerNewUser($data);
         $success = "Registracija uspešna! Proverite svoj email za aktivaciju naloga.";
     } catch (Exception $e) {
@@ -44,7 +40,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
             <h2 id="title">Kreirajte vaš nalog</h2>
-            
+
             <?php
             if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
@@ -52,7 +48,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                 </div>
             <?php
             endif; ?>
-            
+
             <?php
             if ($success): ?>
                 <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4">
@@ -107,10 +103,10 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
 
             <div class="text-center mt-5 login-link-text d-flex justify-content-between">
                 <p class="small mb-2 text-white">
-                    Već imate nalog? <a href="../login/">Prijavite se</a>
+                    Već imate nalog? <a href="../login">Prijavite se</a>
                 </p>
                 <p class="small opacity-75 text-white">
-                    Nema mejla? <a href="../resend-activation/">Pošalji novi link</a>
+                    Nema mejla? <a href="../resend-activation">Pošalji novi link</a>
                 </p>
             </div>
         </div>

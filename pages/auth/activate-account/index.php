@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-require_once '../../init.php';
+require_once '../../../init.php';
+
+Auth::redirectIfSignedIn();
 
 $error = null;
 $success = null;
@@ -19,7 +21,7 @@ if (!$token) {
                     'expires_at' => ['gt' => date('Y-m-d H:i:s')]
             ]
     ]);
-    
+
     if (!$verificationRecord) {
         $error = "Link je nevažeći ili je istekao (važi 10 minuta).";
     } else {
@@ -29,11 +31,11 @@ if (!$token) {
                     'where' => ['id' => $verificationRecord['user_id']],
                     'data' => ['email_verified' => 1]
             ]);
-            
+
             db()->verificationTokens->delete([
                     'where' => ['id' => $verificationRecord['id']]
             ]);
-            
+
             db()->commit();
             $success = "Nalog je uspešno aktiviran! Sada se možete prijaviti.";
         } catch (Exception $e) {
@@ -56,8 +58,8 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
 <main>
     <div class="container d-flex justify-content-center">
         <div class="glass-card text-center">
-            <h2 id="title" class="mb-4">Aktivacija</h2>
-            
+            <h2 id="title" class="mb-4">Aktivacija Naloga</h2>
+
             <?php
             if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
@@ -68,7 +70,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                 </div>
             <?php
             endif; ?>
-            
+
             <?php
             if ($success): ?>
                 <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4">

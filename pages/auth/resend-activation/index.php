@@ -65,7 +65,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
 <main>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
-            <h2 id="title" class="text-center mb-4">Aktivacija</h2>
+            <h2 id="title" class="text-center mb-4">Aktivacija Naloga</h2>
 
             <?php
             if ($error): ?>

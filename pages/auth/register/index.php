@@ -58,7 +58,9 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
 <main>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
-            <h2 id="title" class="text-center mb-4">Kreirajte vaš nalog</h2>
+            <h2 id="title" class="text-center">
+                <?php echo $success ? "Nalog uspešno kreiran" : "Kreirajte vaš nalog" ?>
+            </h2>
 
             <?php if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">

@@ -10,7 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'PT Sans Narrow', sans-serif;
-    background: #FFFFFF;
+    background: black;
     color: #a5a5a5;
 }
 

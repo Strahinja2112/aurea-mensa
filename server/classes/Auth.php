@@ -12,11 +12,16 @@ final class Auth
     public static function registerNewUser(array $data): array
     {
         $existing = db()->users->findFirst([
-            'where' => ['email' => $data['email']]
+            'where' => [
+                'OR' => [
+                    ['email' => $data['email']],
+                    ['phone' => $data['phone']]
+                ]
+            ]
         ]);
 
         if ($existing) {
-            throw new Exception("Korisnik sa ovom email adresom već postoji.");
+            throw new Exception("Korisnik sa ovom email adresom ili brojem telefona već postoji.");
         }
 
         $role = db()->roles->findFirst([

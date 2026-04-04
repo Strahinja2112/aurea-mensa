@@ -97,6 +97,25 @@ final class Helpers
     </head>
     HTML;
     }
+    
+    public static function isValidPhone(string $phone): bool
+    {
+        $cleanPhone = preg_replace('/[^0-9+]/', '', $phone);
+        return (bool)preg_match('/^(\+381|0)6[0-9]{7,8}$/', $cleanPhone);
+    }
+
+    /**
+     * Provera jačine lozinke
+     * Uslovi: Min 8 karaktera, bar jedno veliko slovo, bar jedan broj
+     */
+    public static function isStrongPassword(string $password): bool
+    {
+        $hasUppercase = preg_match('@[A-Z]@', $password);
+        $hasNumber = preg_match('@[0-9]@', $password);
+        $isLongEnough = strlen($password) >= 8;
+
+        return $hasUppercase && $hasNumber && $isLongEnough;
+    }
 }
 
 function db(): Database

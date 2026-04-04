@@ -9,7 +9,7 @@ $token = $_GET['token'] ?? null;
 $isTokenValid = false;
 if ($token) {
     $check = db()->verificationTokens->findFirst([
-        'where' => ['token' => $token, 'expires_at' => ['gt' => date('Y-m-d H:i:s')]]
+            'where' => ['token' => $token, 'expires_at' => ['gt' => date('Y-m-d H:i:s')]]
     ]);
     $isTokenValid = (bool)$check;
 }
@@ -18,8 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         if ($token) {
             $password = $_POST['password'] ?? '';
-            if (strlen($password) < 6) throw new Exception("Lozinka mora imati bar 6 karaktera.");
-
+            if (!Helpers::isStrongPassword($password)) {
+                throw new Exception("Lozinka mora imati bar 8 karaktera, jedno veliko slovo i jedan broj.");
+            }
             Auth::resetPassword($token, $password);
             $success = "Lozinka je uspešno promenjena. Sada se možete <a href='../login/' class='text-white text-decoration-underline'>prijaviti</a>.";
         } else {

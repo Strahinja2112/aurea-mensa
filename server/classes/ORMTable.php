@@ -518,4 +518,38 @@ final class ORMTable
 
         return $name;
     }
+
+    /**
+     * Pokušava da ažurira postojeći red, a ako ga nema, kreira novi.
+     * Korisno za sesije, brojače ili korisnička podešavanja.
+     * * @param array{
+     * where: array<string, mixed>,
+     * update: array<string, mixed>,
+     * create: array<string, mixed>
+     * } $args
+     * @return array<string, mixed>
+     */
+    public function upsert(array $args): array
+    {
+        $where = $args['where'] ?? [];
+        $updateData = $args['update'] ?? [];
+        $createData = $args['create'] ?? [];
+
+        if ($where === []) {
+            throw new InvalidArgumentException('upsert zahteva "where" uslov.');
+        }
+
+        $existing = $this->findFirst(['where' => $where]);
+
+        if ($existing) {
+            return $this->update([
+                'where' => $where,
+                'data' => $updateData
+            ]) ?? $existing;
+        }
+
+        return $this->create([
+            'data' => $createData
+        ]);
+    }
 }

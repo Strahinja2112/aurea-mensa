@@ -188,4 +188,45 @@ final class Auth
     {
         setcookie(self::COOKIE_NAME, '', time() - 3600, '/');
     }
+
+    public static function requestPasswordReset(string $email): void
+    {
+        $user = db()->users->findFirst(['where' => ['email' => $email]]);
+
+        if (!$user || !$user['email_verified']) return;
+
+        db()->verificationTokens->delete(['where' => ['user_id' => $user['id']]]);
+
+        $token = bin2hex(random_bytes(32));
+        db()->verificationTokens->create([
+            'data' => [
+                'user_id' => $user['id'],
+                'token' => $token,
+                'expires_at' => date('Y-m-d H:i:s', strtotime('+10 minutes'))
+            ]
+        ]);
+
+        Mailer::sendPasswordResetEmail($email, $token);
+    }
+
+    public static function resetPassword(string $token, string $newPassword): void
+    {
+        $tokenData = db()->verificationTokens->findFirst([
+            'where' => [
+                'token' => $token,
+                'expires_at' => ['gt' => date('Y-m-d H:i:s')]
+            ]
+        ]);
+
+        if (!$tokenData) {
+            throw new Exception("Link je nevažeći ili je istekao.");
+        }
+
+        db()->users->update([
+            'where' => ['id' => $tokenData['user_id']],
+            'data' => ['password_hash' => password_hash($newPassword, PASSWORD_BCRYPT)]
+        ]);
+
+        db()->verificationTokens->delete(['where' => ['id' => $tokenData['id']]]);
+    }
 }

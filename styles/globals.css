@@ -222,14 +222,15 @@ section {
 
 .glass-card {
     /*background: rgba(255, 255, 255, 0.08);*/
-    backdrop-filter: blur(120px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(100px);
+    -webkit-backdrop-filter: blur(100px);
     /*border: 1px solid rgba(255, 255, 255, 0.15);*/
     padding: 35px;
     width: 100%;
     max-width: 550px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
 }
 
 .glass-card h2 {

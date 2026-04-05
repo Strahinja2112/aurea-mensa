@@ -1,8 +1,9 @@
 <?php
+
 $user = Auth::getUser();
 $navLinks = [
         'about' => 'O nama',
-        'res' => "Rezervacija",
+        'reserve-table' => "Rezervacija",
 ];
 
 $relativePath = Helpers::getRelativePath('pages');
@@ -12,7 +13,8 @@ $relativePath = Helpers::getRelativePath('pages');
     <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
         <div class="logo">
             <a href="<?= Helpers::getRelativePath() . 'index.php' ?>">
-                <div><?php echo Helpers::WEBSITE_NAME ?></div>
+                <div><?php
+                    echo Helpers::WEBSITE_NAME ?></div>
                 <div>RESTORAN</div>
             </a>
         </div>
@@ -23,26 +25,39 @@ $relativePath = Helpers::getRelativePath('pages');
 
         <div class="collapse navbar-collapse" id="navbarMenu">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                <?php foreach ($navLinks as $file => $name): ?>
+                <?php
+                foreach ($navLinks as $file => $name): ?>
                     <li class="nav-item">
                         <a class="nav-link fs-5 px-lg-3 mt-3 mt-lg-0 py-lg-0"
-                           href="<?= $relativePath . $file ?>">
+                           href="<?= $relativePath . '/' . $file ?>">
                             <?= $name ?>
                         </a>
                     </li>
-                <?php endforeach; ?>
+                <?php
+                endforeach; ?>
             </ul>
             <div class="d-flex gap-2">
-                <?php if ($user): ?>
+                <?php
+                if ($user): ?>
                     <a href="<?= $relativePath . '/profile' ?>" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-user me-2"></i>
                         Profil
                     </a>
+                    <?php
+                    if ($user->isAdmin()): ?>
+                        <a href="<?= $relativePath . '/auth/logout' ?>"
+                           class="btn btn-danger btn-lg">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+                            Dashboard
+                        </a>
+                    <?php
+                    endif ?>
                     <a href="<?= $relativePath . '/auth/logout' ?>" class="btn btn-danger btn-lg">
                         <i class="fa-solid fa-right-from-bracket me-2"></i>
                         Logout
                     </a>
-                <?php else: ?>
+                <?php
+                else: ?>
                     <a href="<?= $relativePath . '/auth/login' ?>" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-right-to-bracket me-2"></i>
                         Login
@@ -51,7 +66,8 @@ $relativePath = Helpers::getRelativePath('pages');
                         <i class="fa-solid fa-user-plus me-2"></i>
                         Registracija
                     </a>
-                <?php endif; ?>
+                <?php
+                endif; ?>
             </div>
         </div>
     </div>
@@ -70,6 +86,5 @@ $relativePath = Helpers::getRelativePath('pages');
             }
 
         });
-
     });
 </script>

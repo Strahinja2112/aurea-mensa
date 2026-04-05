@@ -18,20 +18,21 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- =====================================================
 
 INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, email_verified)
-VALUES ('admin@gmail.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Admin', 'Adminović',
-        '0600000001', 2, TRUE),
+VALUES ('katjatodic@gmail.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Katja', 'Todic',
+        '0600000003',
+        1, TRUE),
        ('pavicevicstrahinja99@gmail.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Strahinja',
         'Pavicevic',
-        '0600000002', 3, TRUE),
-       ('katjatodic@gmail.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Katja', 'Todic',
-        '0600000003',
-        1, TRUE);
+        '0600000002', 2, TRUE),
+       ('admin@gmail.com', '$2a$10$2wzbVp3uqbwkgCI3q8EFwO7Z7dDBxjsL5Sc5uq50mcl.VRc9LVGxm', 'Admin', 'Adminović',
+        '0600000001', 3, TRUE);
 
 -- =====================================================
 -- RESTAURANT TABLES
 -- =====================================================
 
-INSERT INTO restaurant_tables (name, seats, location_description, is_smoking)
+INSERT
+INTO restaurant_tables (name, seats, location_description, is_smoking)
 VALUES ('Sto 1', 2, 'Pored prozora', FALSE),
        ('Sto 2', 4, 'Sredina restorana', FALSE),
        ('Sto 3', 6, 'Pušački deo', TRUE),

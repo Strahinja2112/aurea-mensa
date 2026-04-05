@@ -44,6 +44,10 @@ CREATE TABLE users
     CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
+INSERT INTO users
+values (1, 'admin@gmail.com', '$2a$10$2wzbVp3uqbwkgCI3q8EFwO7Z7dDBxjsL5Sc5uq50mcl.VRc9LVGxm', 'Admin', 'Admin',
+        065123456, 3, 1, now());
+
 CREATE TABLE auth_sessions
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,

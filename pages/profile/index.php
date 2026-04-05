@@ -64,6 +64,8 @@ $myReservations = db()->reservations->findMany([
         'where' => ['user_id' => $user->id],
         'orderBy' => ['reservation_date' => 'DESC', 'start_time' => 'DESC']
 ]);
+
+$relativePath = Helpers::getRelativePath("pages/auth/")
 ?>
 
 <!DOCTYPE html>
@@ -141,7 +143,16 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                         </div>
                     </div>
 
-                    <button type="submit" name="update_profile" class="btn btn-light w-100">Sačuvaj izmene</button>
+                    <div class="d-flex gap-3 w-100">
+                        <a href="<?= $relativePath . '/auth/logout' ?>" class="btn btn-danger btn-lg flex-fill">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+                            Odjavi se
+                        </a>
+                        <button type="submit" name="update_profile" class="btn btn-light btn-lg flex-fill">
+                            <i class="fa-solid fa-save me-2"></i>
+                            Sačuvaj izmene
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -45,17 +45,13 @@ $relativePath = Helpers::getRelativePath('pages');
                     </a>
                     <?php
                     if ($user->isAdmin()): ?>
-                        <a href="<?= $relativePath . '/auth/logout' ?>"
-                           class="btn btn-danger btn-lg">
-                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+                        <a href="<?= $relativePath . '/dashboard' ?>"
+                           class="btn btn-success btn-lg">
+                            <i class="fa-solid fa-dashboard me-2"></i>
                             Dashboard
                         </a>
                     <?php
                     endif ?>
-                    <a href="<?= $relativePath . '/auth/logout' ?>" class="btn btn-danger btn-lg">
-                        <i class="fa-solid fa-right-from-bracket me-2"></i>
-                        Logout
-                    </a>
                 <?php
                 else: ?>
                     <a href="<?= $relativePath . '/auth/login' ?>" class="btn btn-outline-light btn-lg">

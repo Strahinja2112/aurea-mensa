@@ -44,16 +44,16 @@ VALUES ('Sto 1', 2, 'Pored prozora', FALSE),
 INSERT INTO reservations (user_id, reservation_code, reservation_date, start_time, end_time, status)
 VALUES
     -- Rezervacija za sutra (može se otkazati)
-    (2, 'REZ-SUTRA1', '2026-04-05', '14:00:00', '16:00:00', 'ACTIVE'),
+    (1, 'REZ-SUTRA1', '2026-04-05', '14:00:00', '16:00:00', 'ACTIVE'),
 
     -- Rezervacija za prekosutra (može se otkazati)
-    (2, 'REZ-PREKOS', '2026-04-06', '20:00:00', '22:00:00', 'ACTIVE'),
+    (1, 'REZ-PREKOS', '2026-04-06', '20:00:00', '22:00:00', 'ACTIVE'),
 
     -- Rezervacija za danas kasno uveče (ako je sada pre 18:00, moći ćeš da je otkažeš)
-    (2, 'REZ-Danas', '2026-04-04', '22:00:00', '23:30:00', 'ACTIVE'),
+    (1, 'REZ-Danas', '2026-04-04', '22:00:00', '23:30:00', 'ACTIVE'),
 
     -- Rezervacija koja je "ZAKLJUČANA" (danas je, ali počinje za manje od 4 sata ili je već prošla)
-    (2, 'REZ-LOCK12', '2026-04-04', '10:00:00', '12:00:00', 'ACTIVE');
+    (1, 'REZ-LOCK12', '2026-04-04', '10:00:00', '12:00:00', 'ACTIVE');
 -- =====================================================
 -- RESERVATION TABLES
 -- =====================================================

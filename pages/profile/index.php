@@ -85,7 +85,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
 <main class="container-fluid container-lg">
     <div class="row justify-content-center g-4 w-100">
         <div class="col-12 col-lg-5">
-            <div class="glass-card h-100">
+            <div class="glass-card h-100" style="max-width: 1000px !important;">
                 <h2 class="text-center mb-4">Izmena Profila</h2>
                 
                 <?php
@@ -259,6 +259,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
     </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     async function cancelReservation(id) {
         if (!confirm('Otkazati rezervaciju?')) {

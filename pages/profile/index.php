@@ -169,12 +169,30 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                     <?php
                     foreach ($myReservations as $res):
                         $resTimestamp = strtotime($res['reservation_date'] . ' ' . $res['start_time']);
-                        $secondsUntilRes = $resTimestamp - time();
-                        $canCancel = ($res['status'] === 'ACTIVE' && $secondsUntilRes > 14400);
+                        $now = time();
+                        $deadlineTimestamp = $resTimestamp - 14400;
+                        $secondsLeftToCancel = $deadlineTimestamp - $now;
                         
+                        $canCancel = ($res['status'] === 'ACTIVE' && $secondsLeftToCancel > 0);
+                        
+                        $timerText = "";
+                        if ($canCancel) {
+                            if ($secondsLeftToCancel >= 86400) {
+                                $days = floor($secondsLeftToCancel / 86400);
+                                $timerText = $days . ($days == 1 ? " dan" : " dana");
+                            } elseif ($secondsLeftToCancel >= 3600) {
+                                $hours = floor($secondsLeftToCancel / 3600);
+                                $mins = floor(($secondsLeftToCancel % 3600) / 60);
+                                $timerText = "{$hours}h {$mins}min";
+                            } else {
+                                $mins = ceil($secondsLeftToCancel / 60);
+                                $timerText = "{$mins} min";
+                            }
+                        }
+                        
+                        $time = substr($res['start_time'], 0, 5);
                         $day = date('d', $resTimestamp);
                         $month = date('M', $resTimestamp);
-                        $time = substr($res['start_time'], 0, 5);
                         $status = strtolower($res['status']);
                         ?>
 
@@ -199,8 +217,9 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                                     <div class="action-wrapper text-end">
                                         <?php
                                         if ($canCancel): ?>
-                                            <span class="d-block timer-text opacity-50 mb-2">
-                                                Još <?= floor(($secondsUntilRes - 14400) / 3600) ?>h za otkaz
+                                            <span class="d-block timer-text opacity-75 mb-2"
+                                                  style="font-size: 0.7rem;">
+                                                Možete otkazati još <?= $timerText ?>
                                             </span>
                                             <button onclick="cancelReservation(<?= $res['id'] ?>)"
                                                     class="btn-res-action btn-active fs-6">
@@ -208,8 +227,11 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                                             </button>
                                         <?php
                                         else: ?>
-                                            <span class="d-block timer-text opacity-25 mb-2">
-                                                Otkazivanje onemogućeno
+                                            <span class="d-block timer-text opacity-25 mb-2" style="font-size: 0.7rem;">
+                                                <?= $res['status'] === 'ACTIVE'
+                                                        ? 'Isteklo vreme za otkaz'
+                                                        : 'Akcija onemogućena'
+                                                ?>
                                             </span>
                                             <button class="btn-res-action btn-disabled fs-6" disabled>
                                                 <i class="fa-solid fa-lock me-2"></i>

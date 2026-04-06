@@ -9,37 +9,36 @@ $success = null;
 
 Auth::redirectIfSignedIn();
 
-$old_first_name = $_POST['first_name'] ?? '';
-$old_last_name = $_POST['last_name'] ?? '';
-$old_email = $_POST['email'] ?? '';
-$old_phone = $_POST['phone'] ?? '';
+$oldFirstName = $_POST['first_name'] ?? '';
+$oldLastName = $_POST['last_name'] ?? '';
+$oldEmail = $_POST['email'] ?? '';
+$oldPhone = $_POST['phone'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $password = $_POST['password'] ?? '';
-
+        
         if (!Helpers::isStrongPassword($password)) {
             throw new Exception("Lozinka mora imati bar 8 karaktera, jedno veliko slovo i jedan broj.");
         }
-
-        if (!empty($old_phone) && !Helpers::isValidPhone($old_phone)) {
+        
+        if (!empty($oldPhone) && !Helpers::isValidPhone($oldPhone)) {
             throw new Exception("Format broja telefona nije ispravan (npr. 0641234567).");
         }
-
+        
         $data = [
-                'email' => $old_email,
+                'email' => $oldEmail,
                 'password' => $password,
-                'first_name' => $old_first_name,
-                'last_name' => $old_last_name,
-                'phone' => $old_phone,
+                'first_name' => $oldFirstName,
+                'last_name' => $oldLastName,
+                'phone' => $oldPhone,
         ];
-
+        
         Auth::registerNewUser($data);
-
+        
         $success = "Registracija uspešna! Proverite svoj email za aktivaciju naloga.";
-
-        $old_first_name = $old_last_name = $old_email = $old_phone = '';
-
+        
+        $oldFirstName = $oldLastName = $oldEmail = $oldPhone = '';
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -59,46 +58,52 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
     <div class="container d-flex justify-content-center">
         <div class="glass-card">
             <h2 class="text-center">
-                <?php echo $success ? "Nalog uspešno kreiran" : "Kreirajte vaš nalog" ?>
+                <?php
+                echo $success ? "Nalog uspešno kreiran" : "Kreirajte vaš nalog" ?>
             </h2>
-
-            <?php if ($error): ?>
+            
+            <?php
+            if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
                     <i class="fas fa-exclamation-triangle me-2"></i> <?= $error ?>
                 </div>
-            <?php endif; ?>
-
-            <?php if ($success): ?>
+            <?php
+            endif; ?>
+            
+            <?php
+            if ($success): ?>
                 <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
                     <i class="fas fa-check-circle me-2"></i> <?= $success ?>
                 </div>
-            <?php endif; ?>
-
-            <?php if (!$success): ?>
+            <?php
+            endif; ?>
+            
+            <?php
+            if (!$success): ?>
                 <form id="registerForm" method="POST" action="">
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label class="form-label">Ime</label>
                             <input type="text" name="first_name" class="form-control custom-input"
-                                   placeholder="npr. Marko" value="<?= htmlspecialchars($old_first_name) ?>" required>
+                                   placeholder="npr. Marko" value="<?= htmlspecialchars($oldFirstName) ?>" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="form-label">Prezime</label>
                             <input type="text" name="last_name" class="form-control custom-input"
-                                   placeholder="npr. Marković" value="<?= htmlspecialchars($old_last_name) ?>" required>
+                                   placeholder="npr. Marković" value="<?= htmlspecialchars($oldLastName) ?>" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Email adresa</label>
                         <input type="email" name="email" class="form-control custom-input"
-                               placeholder="marko@primer.com" value="<?= htmlspecialchars($old_email) ?>" required>
+                               placeholder="marko@primer.com" value="<?= htmlspecialchars($oldEmail) ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Broj telefona</label>
                         <input type="text" name="phone" class="form-control custom-input"
-                               placeholder="06x xxx xxxx" value="<?= htmlspecialchars($old_phone) ?>">
+                               placeholder="06x xxx xxxx" value="<?= htmlspecialchars($oldPhone) ?>">
                     </div>
 
                     <div class="form-group">
@@ -120,7 +125,8 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                         </div>
                     </div>
                 </form>
-            <?php endif; ?>
+            <?php
+            endif; ?>
 
             <div class="text-center mt-5 login-link-text d-flex justify-content-between">
                 <p class="small mb-2 text-white">

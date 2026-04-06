@@ -9,21 +9,21 @@ $user = Auth::getUser();
 $error = null;
 $success = null;
 
-$old_first_name = $_POST['first_name'] ?? $user->first_name;
-$old_last_name = $_POST['last_name'] ?? $user->last_name;
-$old_phone = $_POST['phone'] ?? ($user->phone ?? '');
+$oldFirstName = $_POST['first_name'] ?? $user->firstName;
+$oldLastName = $_POST['last_name'] ?? $user->lastName;
+$oldPhone = $_POST['phone'] ?? ($user->phone ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     try {
         db()->beginTransaction();
         
         $updateData = [
-                'first_name' => $old_first_name,
-                'last_name' => $old_last_name,
-                'phone' => $old_phone
+                'first_name' => $oldFirstName,
+                'last_name' => $oldLastName,
+                'phone' => $oldPhone
         ];
         
-        if (!empty($old_phone) && !Helpers::isValidPhone($old_phone)) {
+        if (!empty($oldPhone) && !Helpers::isValidPhone($oldPhone)) {
             throw new Exception("Format broja telefona nije ispravan.");
         }
         
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                 throw new Exception("Popunite i trenutnu i novu lozinku za promenu.");
             }
             
-            if (!password_verify($oldPassword, $user->password_hash)) {
+            if (!password_verify($oldPassword, $user->passwordHash)) {
                 throw new Exception("Trenutna lozinka nije ispravna.");
             }
             
@@ -115,19 +115,19 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                         <div class="col-6 mb-3">
                             <label class="form-label small opacity-50">Ime</label>
                             <input type="text" name="first_name" class="form-control custom-input"
-                                   value="<?= htmlspecialchars($old_first_name) ?>" required>
+                                   value="<?= htmlspecialchars($oldFirstName) ?>" required>
                         </div>
                         <div class="col-6 mb-3">
                             <label class="form-label small opacity-50">Prezime</label>
                             <input type="text" name="last_name" class="form-control custom-input"
-                                   value="<?= htmlspecialchars($old_last_name) ?>" required>
+                                   value="<?= htmlspecialchars($oldLastName) ?>" required>
                         </div>
                     </div>
 
                     <div class="form-group mb-4">
                         <label class="form-label small opacity-50">Telefon</label>
                         <input type="text" required name="phone" class="form-control custom-input"
-                               value="<?= htmlspecialchars($old_phone) ?>">
+                               value="<?= htmlspecialchars($oldPhone) ?>">
                     </div>
 
                     <div class="password-section mt-4 pt-4 border-top border-white border-opacity-10">

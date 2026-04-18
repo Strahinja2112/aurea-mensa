@@ -193,6 +193,7 @@ section {
     padding-block: 30px;
     backdrop-filter: blur(20px);
     transition: all 500ms;
+    z-index: 1000;
 }
 
 #mainNavbar.scrolled {
@@ -228,9 +229,9 @@ section {
     padding: 35px;
     width: 100%;
     max-width: 550px;
-    border-radius: 12px;
+    border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+    /*z-index: 1000;*/
 }
 
 .glass-card h2 {

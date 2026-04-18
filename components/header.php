@@ -80,7 +80,6 @@ $relativePath = Helpers::getRelativePath('pages');
             } else {
                 navbar.classList.remove("scrolled");
             }
-
         });
     });
 </script>

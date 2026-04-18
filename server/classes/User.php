@@ -6,39 +6,39 @@ class User
 {
     public int $id;
     public string $email;
-    public ?string $first_name;
-    public ?string $last_name;
+    public ?string $firstName;
+    public ?string $lastName;
     public ?string $phone;
-    public int $role_id;
-    public bool $email_verified;
-    public string $password_hash;
-    public string $created_at;
+    public int $roleId;
+    public bool $emailVerified;
+    public string $passwordHash;
+    public string $createdAt;
     
     public function __construct(array $data)
     {
         $this->id = (int)($data['id'] ?? 0);
         $this->email = $data['email'] ?? '';
-        $this->password_hash = $data['password_hash'] ?? '';
-        $this->first_name = $data['first_name'] ?? null;
-        $this->last_name = $data['last_name'] ?? null;
+        $this->passwordHash = $data['password_hash'] ?? '';
+        $this->firstName = $data['first_name'] ?? null;
+        $this->lastName = $data['last_name'] ?? null;
         $this->phone = $data['phone'] ?? null;
-        $this->role_id = (int)($data['role_id'] ?? 0);
-        $this->email_verified = (bool)($data['email_verified'] ?? false);
-        $this->created_at = $data['created_at'] ?? '';
+        $this->roleId = (int)($data['role_id'] ?? 0);
+        $this->emailVerified = (bool)($data['email_verified'] ?? false);
+        $this->createdAt = $data['created_at'] ?? '';
     }
     
     public function getFullName(): string
     {
-        if (!$this->first_name && !$this->last_name) {
+        if (!$this->firstName && !$this->lastName) {
             return $this->email;
         }
-        return trim($this->first_name . ' ' . $this->last_name);
+        return trim($this->firstName . ' ' . $this->lastName);
     }
     
     public function getInitials(): string
     {
-        $f = !empty($this->first_name) ? mb_substr($this->first_name, 0, 1) : '';
-        $l = !empty($this->last_name) ? mb_substr($this->last_name, 0, 1) : '';
+        $f = !empty($this->firstName) ? mb_substr($this->firstName, 0, 1) : '';
+        $l = !empty($this->lastName) ? mb_substr($this->lastName, 0, 1) : '';
         
         $initials = strtoupper($f . $l);
         return !empty($initials) ? $initials : strtoupper(mb_substr($this->email, 0, 1));
@@ -46,11 +46,11 @@ class User
     
     public function isAdmin(): bool
     {
-        return $this->role_id === 3;
+        return $this->roleId === 3;
     }
     
     public function isStaff(): bool
     {
-        return $this->role_id === 2;
+        return $this->roleId === 2;
     }
 }

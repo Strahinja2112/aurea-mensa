@@ -10,3 +10,27 @@
     background-position: center;
     background-size: cover;
 }
+
+
+#hero {
+    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../public/images/elements.jpg") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 90vh;
+}
+
+section#about {
+    padding-block: 50px;
+}
+
+section#about .glass-card {
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+section#about .glass-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+#title {
+    font-size: 10em;
+}

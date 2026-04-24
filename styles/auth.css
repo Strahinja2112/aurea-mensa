@@ -1,3 +1,8 @@
+body {
+    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../public/images/landing.jpg") no-repeat center center fixed;
+    background-size: cover;
+}
+
 main {
     display: flex;
     align-items: center;

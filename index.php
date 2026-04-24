@@ -14,7 +14,7 @@ include Helpers::getFullPath("components", "header.php") ?>
 <main>
     <section id="hero" class="d-flex align-items-center justify-content-center text-center px-3">
         <div class="">
-            <h1 id="title" class="display-2 text-white font-serif mb-3"><?= Helpers::WEBSITE_NAME ?></h1>
+            <h1 id="hero-title" class="display-2 text-white font-serif mb-3"><?= Helpers::WEBSITE_NAME ?></h1>
             <p class="h4 fw-light text-white opacity-75 mb-5 ls-1"
                style="max-width: 800px; margin: 0 auto 3rem;">
                 U svetu koji nikada ne spava, pronađite trenutak za sebe. Uživajte u savršenoj harmoniji ukusa, mirisa i

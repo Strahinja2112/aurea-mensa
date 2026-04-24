@@ -5,17 +5,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url("../public/images/elements.jpg");
+    background-image: url("../public/images/landing.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
 
-
 #hero {
-    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../public/images/elements.jpg") no-repeat center center fixed;
+    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../public/images/landing-blur.png") no-repeat center center fixed;
     background-size: cover;
-    min-height: 90vh;
+    min-height: 80vh;
 }
 
 section#about {
@@ -31,6 +30,6 @@ section#about .glass-card:hover {
     background: rgba(255, 255, 255, 0.06) !important;
 }
 
-#title {
+#hero-title {
     font-size: 10em;
 }

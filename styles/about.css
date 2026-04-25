@@ -1,0 +1,85 @@
+#about-hero {
+    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../public/images/landing-blur.png") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 50vh;
+    padding-top: 140px;
+}
+
+#about-hero .page-subtitle {
+    font-size: 14px;
+    letter-spacing: 3px;
+}
+
+.page-subtitle {
+    font-family: serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+}
+
+.about-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.about-image-wrapper img {
+    width: 100%;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.about-image-wrapper:hover img {
+    transform: scale(1.03);
+}
+
+#values .glass-card {
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+#values .glass-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.text-accent {
+    color: #ffa07f;
+}
+
+.stats-section {
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-number {
+    font-size: 3.5rem;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.cta-section {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    margin: 0 auto;
+    max-width: 90%;
+}
+
+@media (max-width: 768px) {
+    .stat-number {
+        font-size: 2.5rem;
+    }
+
+    .stat-label {
+        font-size: 10px;
+    }
+
+    #about-hero {
+        min-height: 40vh;
+        padding-top: 120px;
+    }
+}

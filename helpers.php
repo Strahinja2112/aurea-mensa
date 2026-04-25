@@ -10,8 +10,8 @@ const BASE_PATH = ROOT . DIRECTORY_SEPARATOR . APP_DIR;
 final class Helpers
 {
     public const WEBSITE_NAME = "Aurea Mensa";
-    public const WEBSITE_DESCRIPTION = "Ekskluzivna kulinarska avantura u srcu Beograda.";
-    public const WEBSITE_ADDRESS = "Knez Mihailova 12, Beograd";
+    public const WEBSITE_DESCRIPTION = "Ekskluzivna kulinarska avantura u srcu Subotice.";
+    public const WEBSITE_ADDRESS = "Knez Mihailova 12, Subotica";
     public const WEBSITE_PHONE = "+381 11 123 4567";
     public const WEBSITE_EMAIL = "rezervacije@aureamensa.rs";
     public const WEBSITE_WORKING_DAYS = "08:00 - 23:00";

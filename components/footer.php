@@ -73,7 +73,6 @@ $relativePath = Helpers::getRelativePath('pages');
     .site-footer {
         backdrop-filter: blur(20px);
         padding: 60px 0 30px;
-        margin-top: 100px;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 

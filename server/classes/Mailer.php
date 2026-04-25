@@ -99,7 +99,7 @@ final class Mailer
             $mail->Subject = $subject;
             $mail->Body = $body;
 
-//            return $mail->send();
+            return $mail->send();
         } catch (Exception $e) {
             var_dump($mail->ErrorInfo);
             var_dump($e->getMessage());

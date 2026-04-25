@@ -35,23 +35,23 @@ include Helpers::getFullPath("components", "header.php") ?>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="glass-card text-center p-4 h-100 border-0">
-                    <i class="fa-solid fa-utensils fa-2x mb-3 text-white opacity-50"></i>
-                    <h3 class="h5 text-white mb-3">Vrhunski Kvalitet</h3>
+                    <i class="fa-solid fa-utensils fa-2x mb-3"></i>
+                    <h3 class="h1 text-white mb-3 font-serif">Vrhunski Kvalitet</h3>
                     <p class="small opacity-50">Samo najsvežiji sastojci pripremljeni od strane naših šefova
                         kuhinje.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="glass-card text-center p-4 h-100 border-0">
-                    <i class="fa-solid fa-clock fa-2x mb-3 text-white opacity-50"></i>
-                    <h3 class="h5 text-white mb-3">Brza Rezervacija</h3>
+                    <i class="fa-solid fa-clock fa-2x mb-3"></i>
+                    <h3 class="h1 font-serif text-white mb-3">Brza Rezervacija</h3>
                     <p class="small opacity-50">Sistem koji prati vaše vreme. Otkazivanje moguće do 4h pre termina.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="glass-card text-center p-4 h-100 border-0">
-                    <i class="fa-solid fa-gem fa-2x mb-3 text-white opacity-50"></i>
-                    <h3 class="h5 text-white mb-3">Unikatan Ambijent</h3>
+                    <i class="fa-solid fa-gem fa-2x mb-3"></i>
+                    <h3 class="h1 font-serif text-white mb-3">Unikatan Ambijent</h3>
                     <p class="small opacity-50">Uživajte u modernom enterijeru dizajniranom za vaš potpuni komfor.</p>
                 </div>
             </div>

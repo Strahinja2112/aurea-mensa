@@ -11,7 +11,6 @@ if ($token) {
     $check = db()->verificationTokens->findFirst([
             'where' => ['token' => $token, 'expires_at' => ['gt' => date('Y-m-d H:i:s')]]
     ]);
-    var_dump($token);
     $isTokenValid = (bool)$check;
 }
 
@@ -39,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="sr">
 <?php Helpers::renderHead($token ? "Nova lozinka" : "Reset lozinke", ['auth.css']); ?>
 <body>
-<?php //require_once Helpers::getFullPath('components', 'header.php'); ?>
+<?php require_once Helpers::getFullPath('components', 'header.php'); ?>
 
 <main>
     <div class="container d-flex justify-content-center">

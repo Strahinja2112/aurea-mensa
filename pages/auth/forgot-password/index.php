@@ -104,7 +104,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </main>
 
-<script>
+<?php require_once Helpers::getFullPath("components", "footer.php"); ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("authForm");
         const btn = document.getElementById("submitBtn");

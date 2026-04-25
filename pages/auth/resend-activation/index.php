@@ -106,5 +106,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
         </div>
     </div>
 </main>
+
+<?php require_once Helpers::getFullPath("components", "footer.php"); ?>
 </body>
 </html>

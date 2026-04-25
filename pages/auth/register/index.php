@@ -17,15 +17,15 @@ $oldPhone = $_POST['phone'] ?? '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $password = $_POST['password'] ?? '';
-        
+
         if (!Helpers::isStrongPassword($password)) {
             throw new Exception("Lozinka mora imati bar 8 karaktera, jedno veliko slovo i jedan broj.");
         }
-        
+
         if (!empty($oldPhone) && !Helpers::isValidPhone($oldPhone)) {
             throw new Exception("Format broja telefona nije ispravan (npr. 0641234567).");
         }
-        
+
         $data = [
                 'email' => $oldEmail,
                 'password' => $password,
@@ -33,11 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'last_name' => $oldLastName,
                 'phone' => $oldPhone,
         ];
-        
+
         Auth::registerNewUser($data);
-        
+
         $success = "Registracija uspešna! Proverite svoj email za aktivaciju naloga.";
-        
+
         $oldFirstName = $oldLastName = $oldEmail = $oldPhone = '';
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -61,7 +61,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                 <?php
                 echo $success ? "Nalog uspešno kreiran" : "Kreirajte vaš nalog" ?>
             </h2>
-            
+
             <?php
             if ($error): ?>
                 <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
@@ -69,7 +69,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                 </div>
             <?php
             endif; ?>
-            
+
             <?php
             if ($success): ?>
                 <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
@@ -77,7 +77,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
                 </div>
             <?php
             endif; ?>
-            
+
             <?php
             if (!$success): ?>
                 <form id="registerForm" method="POST" action="">
@@ -139,6 +139,9 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
         </div>
     </div>
 </main>
+
+<?php
+require_once Helpers::getFullPath("components", "footer.php"); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>

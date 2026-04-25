@@ -23,7 +23,9 @@ $relativePath = Helpers::getRelativePath('pages');
                 <ul class="footer-links">
                     <li>
                         <i class="fa-solid fa-location-dot me-2"></i>
-                        <?php echo Helpers::WEBSITE_ADDRESS ?>
+                        <a href="https://www.google.com/maps?q=<?php echo urlencode(Helpers::WEBSITE_ADDRESS); ?>" target="_blank">
+                            <?php echo Helpers::WEBSITE_ADDRESS ?>
+                        </a>
                     </li>
                     <li>
                         <i class="fa-solid fa-phone me-2"></i>
@@ -41,7 +43,7 @@ $relativePath = Helpers::getRelativePath('pages');
             </div>
 
             <div class="col-lg-4 col-md-6">
-                <h5 class="footer-heading">Radno vrijeme</h5>
+                <h5 class="footer-heading">Radno vreme</h5>
                 <ul class="footer-links">
                     <li>
                         <span class="text-white">Pon - Pet:</span>

@@ -33,7 +33,8 @@ Helpers::renderHead("O nama", ["about.css"]); ?>
                 </p>
                 <p class="mt-4 opacity-75">
                     Naš tim čine strastveni kuvari, sommelieri i profesionalci koji dele istu misiju: da svakim obrokom
-                    stvaraju nezaboravno iskustvo. Odabir samo najsvežijih lokalnih sastojaka, kombinovan sa tehnikama koje
+                    stvaraju nezaboravno iskustvo. Odabir samo najsvežijih lokalnih sastojaka, kombinovan sa tehnikama
+                    koje
                     nasleđujemo iz generacije u generaciju, čini našu kuhinju prepoznatljivom.
                 </p>
                 <p class="mt-4 opacity-75">
@@ -43,7 +44,7 @@ Helpers::renderHead("O nama", ["about.css"]); ?>
             </div>
             <div class="col-lg-6">
                 <div class="about-image-wrapper">
-                    <img src="<?= Helpers::getRelativePath('public/images/landing.jpg') ?>"
+                    <img src="<?= Helpers::getRelativePath('public/images/anotheronethankyou.jpg') ?>"
                          alt="Enterijer restorana Aurea Mensa" class="img-fluid">
                 </div>
             </div>
@@ -61,7 +62,8 @@ Helpers::renderHead("O nama", ["about.css"]); ?>
                     <i class="fa-solid fa-leaf fa-2x mb-4 text-accent"></i>
                     <h3 class="h3 text-white font-serif mb-3">Svežina Sastojaka</h3>
                     <p class="small opacity-75 mb-0">
-                        Sarađujemo isključivo sa lokalnim proizvođačima. Svaki sastojak prolazi strogu selekciju pre nego
+                        Sarađujemo isključivo sa lokalnim proizvođačima. Svaki sastojak prolazi strogu selekciju pre
+                        nego
                         što dospe do naše kuhinje. Sezonska jela su sastavni deo naše ponude.
                     </p>
                 </div>

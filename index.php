@@ -18,7 +18,7 @@ include Helpers::getFullPath("components", "header.php") ?>
             <p class="h4 fw-light text-white opacity-75 mb-5 ls-1"
                style="max-width: 800px; margin: 0 auto 3rem;">
                 U svetu koji nikada ne spava, pronađite trenutak za sebe. Uživajte u savršenoj harmoniji ukusa, mirisa i
-                ambijenta koji je stvoren da vas izoluje od svakodnevice.ABCD
+                ambijenta koji je stvoren da vas izoluje od svakodnevice.
             </p>
             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
                 <a href="pages/auth/register/" class="btn btn-cta px-5 py-3 fw-bold">

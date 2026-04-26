@@ -4,14 +4,30 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
-TRUNCATE TABLE reservation_logs;
-TRUNCATE TABLE reservation_tables;
-TRUNCATE TABLE reservations;
-TRUNCATE TABLE verification_tokens;
-TRUNCATE TABLE users;
-TRUNCATE TABLE restaurant_tables;
+DELETE FROM reservation_logs;
+DELETE FROM reservation_tables;
+DELETE FROM reservations;
+DELETE FROM verification_tokens;
+DELETE FROM users;
+DELETE FROM restaurant_tables;
+
+ALTER TABLE reservation_logs AUTO_INCREMENT = 1;
+ALTER TABLE reservations AUTO_INCREMENT = 1;
+ALTER TABLE verification_tokens AUTO_INCREMENT = 1;
+ALTER TABLE users AUTO_INCREMENT = 1;
+ALTER TABLE restaurant_tables AUTO_INCREMENT = 1;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- =====================================================
+-- ROLES
+-- =====================================================
+
+INSERT INTO roles (id, name)
+VALUES
+    (1, 'USER'),
+    (2, 'STAFF'),
+    (3, 'ADMIN');
 
 -- =====================================================
 -- USERS

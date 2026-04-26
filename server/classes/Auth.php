@@ -36,14 +36,15 @@ final class Auth
         
         try {
             $user = db()->users->create([
-                    'data' => [
-                            'email' => $data['email'],
-                            'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT),
-                            'first_name' => $data['first_name'] ?? null,
-                            'last_name' => $data['last_name'] ?? null,
-                            'phone' => $data['phone'] ?? null,
-                            'role_id' => $role['id'],
-                    ]
+                'data' => [
+                    'email' => $data['email'],
+                    'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT),
+                    'first_name' => $data['first_name'] ?? null,
+                    'last_name' => $data['last_name'] ?? null,
+                    'phone' => $data['phone'] ?? null,
+                    'role_id' => $role['id'],
+                    'email_verified' => 1,
+                ]
             ]);
             
             $token = bin2hex(random_bytes(32));
@@ -55,11 +56,11 @@ final class Auth
                     ]
             ]);
             
-            $mailSent = Mailer::sendActivationEmail($user['email'], $token);
+            //$mailSent = Mailer::sendActivationEmail($user['email'], $token);
             
-            if (!$mailSent) {
-                throw new Exception("Greška prilikom slanja aktivacionog emaila.");
-            }
+            //if (!$mailSent) {
+                //throw new Exception("Greška prilikom slanja aktivacionog emaila.");
+            //}
             
             db()->commit();
             return $user;

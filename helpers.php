@@ -49,7 +49,7 @@ final class Helpers
         $base = '';
 
         if ($relativePart !== '') {
-            $depth = count(explode('/', $relativePart));
+            $depth = count(explode(DIRECTORY_SEPARATOR, $relativePart));
             $base = str_repeat('../', $depth);
         } else {
             $base = './';

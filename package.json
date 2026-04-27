@@ -2,8 +2,4 @@
   "scripts": {
     "dev": "browser-sync start --proxy \"localhost\" --startPath \"web-restaurant-app\" --files \"**/*.php, **/*.css, **/*.js\""
   },
-  "dependencies": {
-    "global": "^4.4.0",
-    "opencode-ai": "^1.14.22"
-  }
 }

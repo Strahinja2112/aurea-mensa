@@ -4,18 +4,24 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
-DELETE FROM reservation_logs;
-DELETE FROM reservation_tables;
-DELETE FROM reservations;
-DELETE FROM verification_tokens;
-DELETE FROM users;
-DELETE FROM restaurant_tables;
+TRUNCATE reservation_logs;
+TRUNCATE reservation_tables;
+TRUNCATE reservations;
+TRUNCATE verification_tokens;
+TRUNCATE users;
+TRUNCATE restaurant_tables;
+TRUNCATE roles;
 
-ALTER TABLE reservation_logs AUTO_INCREMENT = 1;
-ALTER TABLE reservations AUTO_INCREMENT = 1;
-ALTER TABLE verification_tokens AUTO_INCREMENT = 1;
-ALTER TABLE users AUTO_INCREMENT = 1;
-ALTER TABLE restaurant_tables AUTO_INCREMENT = 1;
+ALTER TABLE reservation_logs
+    AUTO_INCREMENT = 1;
+ALTER TABLE reservations
+    AUTO_INCREMENT = 1;
+ALTER TABLE verification_tokens
+    AUTO_INCREMENT = 1;
+ALTER TABLE users
+    AUTO_INCREMENT = 1;
+ALTER TABLE restaurant_tables
+    AUTO_INCREMENT = 1;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -24,23 +30,23 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- =====================================================
 
 INSERT INTO roles (id, name)
-VALUES
-    (1, 'USER'),
-    (2, 'STAFF'),
-    (3, 'ADMIN');
+VALUES (1, 'USER'),
+       (2, 'STAFF'),
+       (3, 'ADMIN');
 
 -- =====================================================
 -- USERS
 -- =====================================================
+-- Sifra svakog test korisnika je "pass"
 
 INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, email_verified)
-VALUES ('katjatodic@gmail.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Katja', 'Todic',
+VALUES ('katjatodic@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Katja', 'Todic',
         '0600000003',
         1, TRUE),
-       ('pavicevicstrahinja99@gmail.com', '$2a$04$M9I6c4g6ZYPipFzhlmYeVe7moz319SfDEpZ58e1HEnOrKWo0MXgLm', 'Strahinja',
+       ('pavicevicstrahinja99@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Strahinja',
         'Pavicevic',
         '0600000002', 2, TRUE),
-       ('admin@gmail.com', '$2a$10$2wzbVp3uqbwkgCI3q8EFwO7Z7dDBxjsL5Sc5uq50mcl.VRc9LVGxm', 'Admin', 'Adminović',
+       ('admin@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Admin', 'Adminović',
         '0600000001', 3, TRUE);
 
 -- =====================================================

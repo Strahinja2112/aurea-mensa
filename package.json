@@ -1,5 +1,5 @@
 {
   "scripts": {
     "dev": "browser-sync start --proxy \"localhost\" --startPath \"web-restaurant-app\" --files \"**/*.php, **/*.css, **/*.js\""
-  },
+  }
 }

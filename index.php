@@ -7,6 +7,7 @@ require_once 'init.php';
 <html lang="en">
 <?php
 Helpers::renderHead("Home") ?>
+
 <body>
 <?php
 include Helpers::getFullPath("components", "header.php") ?>
@@ -57,6 +58,9 @@ include Helpers::getFullPath("components", "header.php") ?>
             </div>
         </div>
     </section>
+
+    <pre class="text-white"><?= json_encode(DBConfig::getCredentials(), JSON_PRETTY_PRINT) ?></pre>
+
 </main>
 
 <?php

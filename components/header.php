@@ -3,7 +3,7 @@
 $user = Auth::getUser();
 $navLinks = [
         'about' => 'O nama',
-        'reserve_table' => "Rezervacija",
+        'reserve-table' => "Rezervacija",
 ];
 
 $relativePath = Helpers::getRelativePath('pages');

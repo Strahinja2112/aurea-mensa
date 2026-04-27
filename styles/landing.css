@@ -12,14 +12,14 @@
 }
 
 #hero {
-    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../public/images/landing-blur.png") no-repeat center center fixed;
+    background: linear-gradient(to bottom, transparent 80%, rgb(5, 5, 5) 100%), url("../public/images/landing-blur.png") no-repeat center center fixed;
     background-size: cover;
     min-height: 80vh;
     padding-top: 140px;
 }
 
 section#about {
-    padding-block: 50px;
+    padding-block: 150px;
 }
 
 section#about .glass-card {

@@ -9,7 +9,6 @@ const BASE_PATH = ROOT . DIRECTORY_SEPARATOR . APP_DIR;
 
 final class Helpers
 {
-    public const ROOT = ROOT;
     public const WEBSITE_NAME = "Aurea Mensa";
     public const WEBSITE_DESCRIPTION = "Ekskluzivna kulinarska avantura u srcu Subotice.";
     public const WEBSITE_ADDRESS = "Vatroslava Lisinskog 26, Subotica";
@@ -42,7 +41,7 @@ final class Helpers
     public static function getRelativePath(string ...$segments): string
     {
         $currentDir = realpath(dirname($_SERVER['SCRIPT_FILENAME']));
-        $rootDir = realpath(BASE_PATH);
+        $rootDir = is_dir(BASE_PATH) ? realpath(BASE_PATH) : realpath(ROOT);
         
         $relativePart = str_replace($rootDir, '', $currentDir);
         $relativePart = trim($relativePart, DIRECTORY_SEPARATOR);

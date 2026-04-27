@@ -40,19 +40,21 @@ final class Helpers
      */
     public static function getRelativePath(string ...$segments): string
     {
-        $currentDir = realpath(dirname($_SERVER['SCRIPT_FILENAME']));
-        $rootDir = is_dir(BASE_PATH) ? realpath(BASE_PATH) : realpath(ROOT);
+        $currentDir = rtrim(str_replace('\\', '/', realpath(dirname($_SERVER['SCRIPT_FILENAME']))), '/');
+        $rootDir = rtrim(str_replace('\\', '/', is_dir(BASE_PATH) ? realpath(BASE_PATH) : realpath(ROOT)), '/');
         
-        $relativePart = str_replace($rootDir, '', $currentDir);
-        $relativePart = trim($relativePart, DIRECTORY_SEPARATOR);
-        
-        $base = '';
-        
-        if ($relativePart !== '') {
-            $depth = count(explode(DIRECTORY_SEPARATOR, $relativePart));
-            $base = str_repeat('../', $depth);
-        } else {
+        if ($currentDir === $rootDir) {
             $base = './';
+        } else {
+            $relativePart = str_replace($rootDir, '', $currentDir);
+            $relativePart = trim($relativePart, '/');
+            
+            if ($relativePart === '') {
+                $base = './';
+            } else {
+                $depth = count(explode('/', $relativePart));
+                $base = str_repeat('../', $depth);
+            }
         }
         
         if (empty($segments)) {

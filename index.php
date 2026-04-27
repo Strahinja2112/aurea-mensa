@@ -10,7 +10,7 @@ Helpers::renderHead("Home") ?>
 
 <body>
 <?php
-include Helpers::getFullPath("components", "header.php") ?>
+include Helpers::getRelativePath("components", "header.php") ?>
 
 <main>
     <section id="hero" class="d-flex align-items-center justify-content-center text-center px-3">
@@ -19,7 +19,7 @@ include Helpers::getFullPath("components", "header.php") ?>
             <p class="h4 fw-light text-white opacity-75 mb-5 ls-1"
                style="max-width: 800px; margin: 0 auto 3rem;">
                 U svetu koji nikada ne spava, pronađite trenutak za sebe. Uživajte u savršenoj harmoniji ukusa, mirisa i
-                ambijenta koji je stvoren da vas izoluje od svakodnevice.ABCD
+                ambijenta koji je stvoren da vas izoluje od svakodnevice.
             </p>
             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
                 <a href="pages/auth/register/" class="btn btn-cta px-5 py-3 fw-bold">
@@ -31,7 +31,10 @@ include Helpers::getFullPath("components", "header.php") ?>
             </div>
         </div>
     </section>
-
+    <h2 class="text-white mx-auto">
+        <?= Helpers::getRelativePath("components", "header.php") ?>
+        <pre class="text-white"><?= json_encode(DBConfig::getCredentials(), JSON_PRETTY_PRINT) ?></pre>
+    </h2>
     <section id="about" class="container pb-5">
         <div class="row g-4">
             <div class="col-md-4">
@@ -58,9 +61,6 @@ include Helpers::getFullPath("components", "header.php") ?>
             </div>
         </div>
     </section>
-
-    <pre class="text-white"><?= json_encode(DBConfig::getCredentials(), JSON_PRETTY_PRINT) ?></pre>
-
 </main>
 
 <?php

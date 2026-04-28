@@ -12,6 +12,7 @@ Helpers::renderHead("Home") ?>
 include Helpers::getRelativePath("src/components/header.php") ?>
 
 <main>
+    <?= Helpers::getRelativePath("src/components/header.php") ?>
     <section id="hero" class="d-flex align-items-center justify-content-center text-center px-3">
         <div class="">
             <h1 id="hero-title" class="display-2 text-white font-serif mb-3"><?= Helpers::WEBSITE_NAME ?></h1>

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-define('ROOT', dirname(__DIR__));
+define('ROOT', dirname(dirname(__DIR__)));
 
-const APP_DIR = 'web-restaurant-app';
-const BASE_PATH = ROOT . DIRECTORY_SEPARATOR . APP_DIR;
+const BASE_PATH = ROOT;
 
 final class Helpers
 {
@@ -18,6 +17,14 @@ final class Helpers
     public const WEBSITE_WORKING_WEEKEND = "09:00 - 00:00";
 
     /**
+     * Returns the full src path.
+     */
+    public static function getFullPath(string ...$segments): string
+    {
+        return self::joinPaths(BASE_PATH, ...$segments);
+    }
+
+    /**
      * Joins path segments using system directory separator.
      */
     public static function joinPaths(string ...$segments): string
@@ -26,12 +33,30 @@ final class Helpers
         return implode(DIRECTORY_SEPARATOR, $filteredSegments);
     }
 
-    /**
-     * Returns the full src path.
-     */
-    public static function getFullPath(string ...$segments): string
+    public static function renderHead(string $pageTitle, array $extraGlobalCss = []): void
     {
-        return self::joinPaths(BASE_PATH, ...$segments);
+        $siteName = self::WEBSITE_NAME;
+
+        $defaultGlobalCss = ["globals.css", "landing.css", "responsive.css"];
+        $allGlobalCss = array_merge($defaultGlobalCss, $extraGlobalCss);
+
+        $cssLinks = "";
+
+        foreach ($allGlobalCss as $file) {
+            $url = self::getRelativePath('src/styles', $file);
+            $cssLinks .= "<link rel=\"stylesheet\" href=\"{$url}\">\n    ";
+        }
+
+        echo <<<HTML
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{$pageTitle} | {$siteName}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        {$cssLinks}
+    </head>
+    HTML;
     }
 
     /**
@@ -41,6 +66,7 @@ final class Helpers
     public static function getRelativePath(string ...$segments): string
     {
         $currentDir = rtrim(str_replace('\\', '/', realpath(dirname($_SERVER['SCRIPT_FILENAME']))), '/');
+
         $rootDir = rtrim(str_replace('\\', '/', is_dir(BASE_PATH) ? realpath(BASE_PATH) : realpath(ROOT)), '/');
 
         if ($currentDir === $rootDir) {
@@ -62,32 +88,6 @@ final class Helpers
         }
 
         return $base . implode('/', $segments);
-    }
-
-    public static function renderHead(string $pageTitle, array $extraGlobalCss = []): void
-    {
-        $siteName = self::WEBSITE_NAME;
-
-        $defaultGlobalCss = ["globals.css", "landing.css", "responsive.css"];
-        $allGlobalCss = array_merge($defaultGlobalCss, $extraGlobalCss);
-
-        $cssLinks = "";
-
-        foreach ($allGlobalCss as $file) {
-            $url = self::getRelativePath('styles', $file);
-            $cssLinks .= "<link rel=\"stylesheet\" href=\"{$url}\">\n    ";
-        }
-
-        echo <<<HTML
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{$pageTitle} | {$siteName}</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        {$cssLinks}
-    </head>
-    HTML;
     }
 
     public static function isValidPhone(string $phone): bool

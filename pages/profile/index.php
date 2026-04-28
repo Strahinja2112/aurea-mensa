@@ -80,10 +80,10 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css']); ?>
 <body>
 
 <?php
-require_once Helpers::getRelativePath('components', 'header.php'); ?>
+require_once Helpers::getRelativePath('src/components/header.php'); ?>
 
-<main class="container-fluid container-lg">
-    <div class="row justify-content-center g-4 w-100">
+<main>
+    <div class="container-fluid container-lg row justify-content-center g-4 w-100">
         <div class="col-12 col-lg-5">
             <div class="glass-card h-100" style="max-width: 1000px !important;">
                 <h2 class="text-center mb-4">Izmena Profila</h2>
@@ -260,7 +260,7 @@ require_once Helpers::getRelativePath('components', 'header.php'); ?>
 </main>
 
 <?php
-require_once Helpers::getFullPath("components", "footer.php"); ?>
+require_once Helpers::getFullPath("src/components/footer.php"); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-require_once "../../init.php";
-
 class Env
 {
     public static string $MAILTRAP_API_KEY;

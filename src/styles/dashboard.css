@@ -224,3 +224,46 @@ main {
         grid-template-columns: 1fr;
     }
 }
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 1em);
+}
+
+.modal-content.glass-card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-content.glass-card .modal-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-content.glass-card .modal-body {
+    background: transparent;
+    padding: 20px;
+}
+
+.modal-content.glass-card .modal-footer {
+    background: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+}
+
+.modal-backdrop.show {
+    opacity: 0.7;
+}
+
+select.form-control.custom-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px;
+    padding-right: 40px;
+}
+
+.btn-close.btn-close-white {
+    filter: invert(1);
+}

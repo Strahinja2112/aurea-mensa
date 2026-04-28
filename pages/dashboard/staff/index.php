@@ -138,15 +138,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
         $reservation = db()->reservations->findFirst(['where' => ['id' => $reservationId]]);
 
         if ($reservation) {
-            db()->reservationLogs->create([
-                    'data' => [
-                            'reservation_id' => $reservationId,
-                            'staff_id' => $user->id,
-                            'arrived' => 0,
-                            'comment' => $comment,
-                    ],
+            $existingComment = db()->reservationLogs->findFirst([
+                'where' => [
+                    'reservation_id' => $reservationId,
+                    'comment' => ['not' => null],
+                ],
             ]);
-            $message = 'Komentar uspešno dodat!';
+
+            if ($existingComment) {
+                $error = 'Komentar za ovu rezervaciju već postoji.';
+            } else {
+                db()->reservationLogs->create([
+                    'data' => [
+                        'reservation_id' => $reservationId,
+                        'staff_id' => $user->id,
+                        'arrived' => 0,
+                        'comment' => $comment,
+                    ],
+                ]);
+                $message = 'Komentar uspešno dodat!';
+            }
         }
     }
 }
@@ -237,9 +248,9 @@ $pageTitle = 'Staff Dashboard';
 </main>
 
 <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content glass-card">
-            <div class="modal-header">
+            <div class="modal-header border-bottom border-white border-opacity-10">
                 <h5 class="modal-title text-white">Dodaj Komentar</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Zatvori"></button>
@@ -265,9 +276,7 @@ $pageTitle = 'Staff Dashboard';
     </div>
 </div>
 
-<?php 
-require_once Helpers::getRelativePath('src/components/reservation-card.php');
-include Helpers::getRelativePath('src/components/footer.php') ?>
+<?php include Helpers::getRelativePath('src/components/footer.php') ?>
 
 <script>
     function fillCode(code) {

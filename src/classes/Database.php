@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-require "../../init.php";
-require Helpers::getRelativePath('/src/db_config.php');
+require __DIR__ . "/../db_config.php";
 
 final class Database
 {

@@ -7,7 +7,7 @@ require_once '../../init.php';
 Auth::requireAuth();
 
 $tables = db()->restaurantTables->findMany([
-    'orderBy' => ['id' => 'ASC']
+        'orderBy' => ['id' => 'ASC']
 ]);
 
 $today = date('Y-m-d');
@@ -30,21 +30,21 @@ $today = date('Y-m-d');
                     <div class="col-md-6 form-group">
                         <label class="form-label">Datum rezervacije</label>
                         <input
-                            type="date"
-                            name="reservation_date"
-                            class="form-control custom-input"
-                            min="<?= $today ?>"
-                            required
+                                type="date"
+                                name="reservation_date"
+                                class="form-control custom-input"
+                                min="<?= $today ?>"
+                                required
                         >
                     </div>
 
                     <div class="col-md-6 form-group">
                         <label class="form-label">Vreme početka</label>
                         <input
-                            type="time"
-                            name="start_time"
-                            class="form-control custom-input"
-                            required
+                                type="time"
+                                name="start_time"
+                                class="form-control custom-input"
+                                required
                         >
                     </div>
                 </div>
@@ -70,9 +70,9 @@ $today = date('Y-m-d');
                             <div class="col-md-6">
                                 <label class="table-card d-block p-3 rounded-3">
                                     <input
-                                        type="checkbox"
-                                        name="table_ids[]"
-                                        value="<?= htmlspecialchars((string)$table['id']) ?>"
+                                            type="checkbox"
+                                            name="table_ids[]"
+                                            value="<?= htmlspecialchars((string)$table['id']) ?>"
                                     >
 
                                     <span class="ms-2 text-white fw-bold">
@@ -170,7 +170,7 @@ $today = date('Y-m-d');
             btnSpinner.classList.remove("d-none");
 
             try {
-                const response = await fetch("<?= Helpers::getRelativePath('server/actions/create_reservation.php') ?>", {
+                const response = await fetch("<?= Helpers::getRelativePath('src/actions/create_reservation.php') ?>", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -247,9 +247,9 @@ $today = date('Y-m-d');
     }
 
     select.custom-input {
-        background-color: rgba(255,255,255,0.06);
+        background-color: rgba(255, 255, 255, 0.06);
         color: #fff;
-        border: 1px solid rgba(255,255,255,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     select.custom-input option {

@@ -28,8 +28,8 @@
 
 @font-face {
     font-family: 'Edward';
-    src: url("../public/fonts/edwardian_script_itc.ttf") format('truetype'),
-    url("../public/fonts/edwardian_script_itc.otf") format('opentype');
+    src: url("../../public/fonts/edwardian_script_itc.ttf") format('truetype'),
+    url("../../public/fonts/edwardian_script_itc.otf") format('opentype');
 }
 
 /*********************************

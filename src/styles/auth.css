@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../public/images/landing-blur.png") no-repeat center center fixed;
+    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../../public/images/landing-blur.png") no-repeat center center fixed;
     background-size: cover;
 }
 

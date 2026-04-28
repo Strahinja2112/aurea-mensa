@@ -2,7 +2,6 @@ main {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    margin-top: 80px;
     padding: 0;
     padding-block: 60px;
 }
@@ -39,9 +38,9 @@ main {
     width: 180px;
 }
 
-.res-cards-list {
-    display: flex;
-    flex-direction: column;
+.res-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
@@ -51,6 +50,7 @@ main {
     border-radius: 12px;
     padding: 25px;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .res-card:hover {
@@ -106,14 +106,38 @@ main {
 .res-card-body {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+}
+
+.res-code-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.res-code-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .res-code {
     font-size: 1.8rem;
     font-weight: 400;
     color: #fff;
-    margin-bottom: 5px;
+}
+
+.res-subtitle {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .res-user,
@@ -179,20 +203,30 @@ main {
     .dashboard-container {
         flex-direction: column;
     }
-    
+
     .dashboard-left {
         width: 100%;
     }
-    
+
     .dashboard-right {
         max-width: 100%;
     }
-    
+
     .filter-bar {
         flex-wrap: wrap;
     }
-    
+
     .filter-bar input {
         width: 100%;
+    }
+
+    .res-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .res-cards-grid {
+        grid-template-columns: 1fr;
     }
 }

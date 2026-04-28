@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $code = $_POST['reservation_code'] ?? '';
 
     if (empty($code)) {
-        $error = 'Please enter a reservation code.';
+        $error = 'Molimo unesite kod rezervacije.';
     } else {
         $reservation = db()->reservations->findFirst([
                 'where' => [
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         if (!$reservation) {
-            $error = 'Reservation not found or already processed.';
+            $error = 'Rezervacija nije pronađena ili je već obrađena.';
         } else {
             $existingLog = db()->reservationLogs->findFirst([
                     'where' => [
@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             if ($existingLog) {
-                $error = 'Guest has already checked in.';
+                $error = 'Gost je već prijavljen.';
             } else {
                 db()->reservationLogs->create([
                         'data' => [
@@ -123,8 +123,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 'comment' => $_POST['comment'] ?? null,
                         ],
                 ]);
-                $message = 'Guest checked in successfully!';
+                $message = 'Gost uspešno prijavljen!';
             }
+        }
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
+    $reservationId = (int)($_POST['reservation_id'] ?? 0);
+    $comment = $_POST['new_comment'] ?? '';
+
+    if ($reservationId && !empty($comment)) {
+        $reservation = db()->reservations->findFirst(['where' => ['id' => $reservationId]]);
+
+        if ($reservation) {
+            db()->reservationLogs->create([
+                    'data' => [
+                            'reservation_id' => $reservationId,
+                            'staff_id' => $user->id,
+                            'arrived' => 0,
+                            'comment' => $comment,
+                    ],
+            ]);
+            $message = 'Komentar uspešno dodat!';
         }
     }
 }
@@ -132,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $pageTitle = 'Staff Dashboard';
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="sr">
 <?php Helpers::renderHead($pageTitle, ['auth.css', 'profile.css', 'dashboard.css']) ?>
 
 <body>
@@ -142,7 +163,7 @@ $pageTitle = 'Staff Dashboard';
     <div class="dashboard-container">
         <div class="dashboard-left">
             <div class="glass-card">
-                <h2 class="text-center mb-4">Check In</h2>
+                <h2 class="text-center mb-4">Prijava Gosta</h2>
 
                 <?php if ($message): ?>
                     <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
@@ -156,42 +177,40 @@ $pageTitle = 'Staff Dashboard';
                     </div>
                 <?php endif; ?>
 
-                <form method="post">
+                <form method="post" id="checkinForm">
                     <div class="form-group mb-3">
-                        <label class="form-label opacity-50">Reservation Code</label>
-                        <input type="text" name="reservation_code" class="form-control custom-input"
-                               placeholder="e.g., ABC123XYZ" required>
+                        <label class="form-label opacity-50">Kod Rezervacije</label>
+                        <input type="text" name="reservation_code" id="checkinCode" class="form-control custom-input"
+                               placeholder="npr. ABC123XYZ" required>
                     </div>
 
                     <div class="form-group mb-4">
-                        <label class="form-label opacity-50">Comment (optional)</label>
+                        <label class="form-label opacity-50">Komentar (opciono)</label>
                         <textarea name="comment" class="form-control custom-input"
-                                  rows="3" placeholder="Any notes..."></textarea>
+                                  rows="3" placeholder="Beleške o gostu..."></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-light btn-lg w-100">
-                        <i class="fa-solid fa-check me-2"></i>Check In Guest
+                        <i class="fa-solid fa-check me-2"></i>Prijavi Gosta
                     </button>
                 </form>
             </div>
         </div>
 
         <div class="dashboard-right">
-            <div class="glass-card" style="max-width: 1000px !important;">
-                <h2 class="text-center mb-4">Today's Reservations</h2>
+            <div class="glass-card" style="max-width: 1000px">
+                <h2 class="text-center mb-4">Danasnje Rezervacije</h2>
 
                 <div class="filter-bar mb-4">
                     <input type="text" id="searchInput" class="form-control custom-input"
-                           placeholder="Search by code, name, email, or phone..."
+                           placeholder="Pretraži po kodu, imenu, emailu ili telefonu..."
                            value="<?= htmlspecialchars($searchQuery) ?>">
 
                     <select id="statusFilter" class="form-control custom-input" onchange="applyFilters()">
-                        <option value="pending" <?= $statusFilter === 'pending' ? 'selected' : '' ?>>Pending Only
+                        <option value="pending" <?= $statusFilter === 'pending' ? 'selected' : '' ?>>Na Cekanju</option>
+                        <option value="checked_in" <?= $statusFilter === 'checked_in' ? 'selected' : '' ?>>Prijavljeni
                         </option>
-                        <option value="checked_in" <?= $statusFilter === 'checked_in' ? 'selected' : '' ?>>Checked In
-                            Only
-                        </option>
-                        <option value="all" <?= $statusFilter === 'all' ? 'selected' : '' ?>>All</option>
+                        <option value="all" <?= $statusFilter === 'all' ? 'selected' : '' ?>>Sve</option>
                     </select>
 
                     <button type="button" class="btn btn-outline-light btn-lg" onclick="applyFilters()">
@@ -202,10 +221,10 @@ $pageTitle = 'Staff Dashboard';
                 <?php if (empty($todayReservations)): ?>
                     <div class="text-center py-5">
                         <i class="fa-solid fa-calendar-xmark fa-3x mb-3 opacity-10"></i>
-                        <h3 class="text-white opacity-25 fw-light">No reservations found.</h3>
+                        <h3 class="text-white opacity-25 fw-light">Nema rezervacija.</h3>
                     </div>
                 <?php else: ?>
-                    <div class="res-cards-list">
+                    <div class="res-cards-grid">
                         <?php foreach ($todayReservations as $item): ?>
                             <?php
                             $res = $item['reservation'];
@@ -218,11 +237,17 @@ $pageTitle = 'Staff Dashboard';
                             $endTime = substr($res['end_time'], 0, 5);
                             $userName = trim(($resUser['first_name'] ?? '') . ' ' . ($resUser['last_name'] ?? ''));
                             if (!$userName) {
-                                $userName = $resUser['email'] ?? 'Unknown';
+                                $userName = $resUser['email'] ?? 'Nepoznat';
                             }
+
+                            $userRole = db()->roles->findFirst(['where' => ['id' => $resUser['role_id']]]);
+                            $roleName = $userRole['name'] ?? 'Korisnik';
                             ?>
 
-                            <div class="res-card <?= $arrived ? 'checked-in' : '' ?>">
+                            <div class="res-card <?= $arrived ? 'checked-in' : '' ?>"
+                                 onclick="fillCode('<?= htmlspecialchars($res['reservation_code']) ?>')"
+                                 data-reservation-id="<?= $res['id'] ?>">
+
                                 <div class="res-card-header">
                                     <div class="res-time">
                                         <span class="time-start"><?= htmlspecialchars($time) ?></span>
@@ -230,12 +255,17 @@ $pageTitle = 'Staff Dashboard';
                                         <span class="time-end"><?= htmlspecialchars($endTime) ?></span>
                                     </div>
                                     <div class="res-status <?= $arrived ? 'arrived' : 'pending' ?>">
-                                        <?= $arrived ? 'Checked In' : 'Pending' ?>
+                                        <?= $arrived ? 'Prijavljen' : 'Na cekanju' ?>
                                     </div>
                                 </div>
 
                                 <div class="res-card-body">
-                                    <div class="res-code"><?= htmlspecialchars($res['reservation_code']) ?></div>
+                                    <div class="res-code-wrapper">
+                                        <span class="res-code-label">Kod:</span>
+                                        <span class="res-code"><?= htmlspecialchars($res['reservation_code']) ?></span>
+                                    </div>
+
+                                    <div class="res-subtitle">Gost</div>
                                     <div class="res-user">
                                         <i class="fa-solid fa-user"></i>
                                         <span><?= htmlspecialchars($userName) ?></span>
@@ -246,23 +276,34 @@ $pageTitle = 'Staff Dashboard';
                                     </div>
                                     <div class="res-contact">
                                         <i class="fa-solid fa-phone"></i>
-                                        <span><?= htmlspecialchars($resUser['phone'] ?? 'No phone') ?></span>
+                                        <span><?= htmlspecialchars($resUser['phone'] ?? 'Bez telefona') ?></span>
                                     </div>
-                                    <div class="res-tables">
-                                        <i class="fa-solid fa-chair"></i>
-                                        <span><?= htmlspecialchars(implode(', ', $tableNames)) ?></span>
-                                    </div>
+                                    <!---->
+                                    <!--                                    <div class="res-subtitle">Sto</div>-->
+                                    <!--                                    <div class="res-tables">-->
+                                    <!--                                        <i class="fa-solid fa-chair"></i>-->
+                                    <!--                                        <span>-->
+                                    <?php //= htmlspecialchars(implode(', ', $tableNames)) ?><!--</span>-->
+                                    <!--                                    </div>-->
+
                                     <?php if (!empty($log['comment'])): ?>
+                                        <div class="res-subtitle">Komentar</div>
                                         <div class="res-comment">
                                             <i class="fa-solid fa-comment"></i>
                                             <span><?= htmlspecialchars($log['comment']) ?></span>
                                         </div>
+                                    <?php elseif ($arrived): ?>
+                                        <button type="button" class="btn btn-sm btn-outline-light mt-2"
+                                                onclick="event.stopPropagation(); openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                                            <i class="fa-solid fa-plus me-1"></i>Dodaj komentar
+                                        </button>
                                     <?php endif; ?>
                                 </div>
 
-                                <div class="res-card-footer">
-                                    <span class="res-date"><?= date('d M Y', strtotime($res['reservation_date'])) ?></span>
-                                </div>
+                                <!--                                <div class="res-card-footer">-->
+                                <!--                                    <span class="res-date">-->
+                                <?php //= date('d M Y', strtotime($res['reservation_date'])) ?><!--</span>-->
+                                <!--                                </div>-->
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -272,9 +313,44 @@ $pageTitle = 'Staff Dashboard';
     </div>
 </main>
 
+<div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h5 class="modal-title text-white">Dodaj Komentar</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Zatvori"></button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="reservation_id" id="modalReservationId" value="">
+                    <input type="hidden" name="add_comment" value="1">
+                    <p class="text-white mb-3">Rezervacija: <code class="text-warning" id="modalReservationCode"></code>
+                    </p>
+                    <div class="mb-3">
+                        <label for="modalComment" class="form-label text-white">Komentar</label>
+                        <textarea class="form-control custom-input" id="modalComment" name="new_comment" rows="3"
+                                  placeholder="Unesite komentar..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Otkaži</button>
+                    <button type="submit" class="btn btn-success">Sačuvaj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <?php include Helpers::getRelativePath('src/components/footer.php') ?>
 
 <script>
+    function fillCode(code) {
+        document.getElementById('checkinCode').value = code;
+        document.getElementById('checkinCode').focus();
+        document.getElementById('checkinCode').scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
+
     function applyFilters() {
         const search = document.getElementById('searchInput').value;
         const status = document.getElementById('statusFilter').value;
@@ -291,6 +367,13 @@ $pageTitle = 'Staff Dashboard';
             applyFilters();
         }
     });
+
+    function openCommentModal(reservationId, reservationCode) {
+        document.getElementById('modalReservationId').value = reservationId;
+        document.getElementById('modalReservationCode').textContent = reservationCode;
+        const modal = new bootstrap.Modal(document.getElementById('commentModal'));
+        modal.show();
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

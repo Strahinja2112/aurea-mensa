@@ -1,17 +1,6 @@
--- =====================================================
--- DATABASE: Restaurant
--- =====================================================
-
-DROP
-    DATABASE IF EXISTS Restaurant;
-CREATE
-    DATABASE Restaurant CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE
-    Restaurant;
-
--- =====================================================
--- ROLES
--- =====================================================
+DROP DATABASE IF EXISTS Restaurant;
+CREATE DATABASE Restaurant CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE Restaurant;
 
 CREATE TABLE roles
 (
@@ -24,10 +13,6 @@ VALUES ('USER'),
        ('STAFF'),
        ('ADMIN');
 
--- =====================================================
--- USERS
--- =====================================================
-
 CREATE TABLE users
 (
     id             INT AUTO_INCREMENT PRIMARY KEY,
@@ -37,6 +22,7 @@ CREATE TABLE users
     last_name      VARCHAR(100),
     phone          VARCHAR(30) UNIQUE,
     role_id        INT          NOT NULL,
+
     -- TODO: zameni kad zapravo budes koristio MAILER
     email_verified BOOLEAN   DEFAULT TRUE,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -54,10 +40,6 @@ CREATE TABLE auth_sessions
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
--- =====================================================
--- PASSWORD RESET TOKENS
--- =====================================================
-
 CREATE TABLE verification_tokens
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,10 +50,6 @@ CREATE TABLE verification_tokens
     CONSTRAINT fk_reset_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
--- =====================================================
--- TABLES (RESTAURANT TABLES)
--- =====================================================
-
 CREATE TABLE restaurant_tables
 (
     id                   INT AUTO_INCREMENT PRIMARY KEY,
@@ -80,10 +58,6 @@ CREATE TABLE restaurant_tables
     location_description VARCHAR(255),
     is_smoking           BOOLEAN DEFAULT FALSE
 );
-
--- =====================================================
--- RESERVATIONS
--- =====================================================
 
 CREATE TABLE reservations
 (
@@ -99,10 +73,6 @@ CREATE TABLE reservations
     CONSTRAINT fk_res_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
--- =====================================================
--- RESERVATION TABLES (M:N)
--- =====================================================
-
 CREATE TABLE reservation_tables
 (
     reservation_id INT NOT NULL,
@@ -113,10 +83,6 @@ CREATE TABLE reservation_tables
     CONSTRAINT fk_rt_res FOREIGN KEY (reservation_id) REFERENCES reservations (id) ON DELETE CASCADE,
     CONSTRAINT fk_rt_table FOREIGN KEY (table_id) REFERENCES restaurant_tables (id) ON DELETE CASCADE
 );
-
--- =====================================================
--- STAFF COMMENTS / ARRIVAL CONFIRMATION
--- =====================================================
 
 CREATE TABLE reservation_logs
 (
@@ -131,17 +97,6 @@ CREATE TABLE reservation_logs
     CONSTRAINT fk_log_staff FOREIGN KEY (staff_id) REFERENCES users (id)
 );
 
--- =====================================================
--- INDEXES (performance)
--- =====================================================
-
 CREATE INDEX idx_reservation_date ON reservations (reservation_date);
 CREATE INDEX idx_reservation_user ON reservations (user_id);
 CREATE INDEX idx_table_seats ON restaurant_tables (seats);
-
--- =====================================================
--- NOTES
--- =====================================================
--- Overlap validation (time conflicts) rešava se na aplikacionom nivou (PHP/JS)
--- Kod rezervacije generiše backend (npr UUID ili random string)
--- Email aktivacija i reset lozinke koriste verification_tokens tabelu

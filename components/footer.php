@@ -76,6 +76,7 @@ $relativePath = Helpers::getRelativePath('pages');
         backdrop-filter: blur(20px);
         padding: 60px 0 30px;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
+        /*margin-top: 100px;*/
     }
 
     .footer-logo a {

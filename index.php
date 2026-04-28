@@ -1,5 +1,4 @@
 <?php
-
 require_once 'init.php';
 ?>
 
@@ -31,11 +30,11 @@ include Helpers::getRelativePath("components", "header.php") ?>
             </div>
         </div>
     </section>
-    <h2 class="text-white mx-auto">
-        <?= Helpers::getRelativePath("components", "header.php") ?>
-        <pre class="text-white"><?= json_encode(DBConfig::getCredentials(), JSON_PRETTY_PRINT) ?></pre>
-    </h2>
-    <section id="about" class="container pb-5">
+<!--    <h2 class="text-white mx-auto">-->
+<!--        --><?php //= Helpers::getRelativePath("components", "header.php") ?>
+<!--        <pre class="text-white">--><?php //= json_encode(DBConfig::getCredentials(), JSON_PRETTY_PRINT) ?><!--</pre>-->
+<!--    </h2>-->
+<!--    <section id="about" class="container pb-5">-->
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="glass-card text-center p-4 h-100 border-0">

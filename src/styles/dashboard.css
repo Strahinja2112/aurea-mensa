@@ -1,0 +1,136 @@
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 80px;
+    padding: 0;
+}
+
+.reservation-container {
+    max-width: 1000px;
+    width: 100%;
+}
+
+.res-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 20px 0 20px 25px;
+    transition: all 0.3s ease;
+}
+
+.res-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.res-card.checked-in {
+    border-color: rgba(46, 204, 113, 0.3);
+    background: rgba(46, 204, 113, 0.05);
+}
+
+.res-card .day {
+    font-size: 2.2rem;
+    font-weight: 300;
+    line-height: 1;
+    color: #fff;
+}
+
+.res-card .month {
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    opacity: 0.5;
+    margin-top: 8px;
+}
+
+.res-meta {
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.status-pill {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    padding: 4px 15px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: bold;
+}
+
+.status-active {
+    color: #0dcaf0;
+}
+
+.status-cancelled {
+    color: #ff4d4d;
+}
+
+.status-completed {
+    color: #2ecc71;
+}
+
+.btn-res-action {
+    min-width: 140px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    transition: 0.3s;
+    border: 1px solid transparent;
+}
+
+.btn-active {
+    background: rgba(255, 77, 77, 0.1);
+    border-color: rgba(255, 77, 77, 0.2);
+    color: #ff4d4d;
+}
+
+.btn-active:hover {
+    background: #ff4d4d;
+    color: white;
+}
+
+.btn-disabled {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+}
+
+.timer-text {
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.ls-1 {
+    letter-spacing: 1px;
+}
+
+.h2 {
+    font-size: 2rem;
+}
+
+.glass-card {
+    padding: 40px;
+}
+
+.glass-card h2 {
+    font-size: 2.5rem;
+    padding-bottom: 30px;
+}
+
+.form-label {
+    font-size: 1.1rem;
+}
+
+.custom-input {
+    padding: 15px;
+    font-size: 1.1rem;
+}
+
+.badge {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}

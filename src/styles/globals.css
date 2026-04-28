@@ -218,7 +218,6 @@ section {
     opacity: 0.6;
 }
 
-
 .glass-card {
     background: rgba(255, 255, 255, 0.03) !important;
     backdrop-filter: blur(15px) !important;

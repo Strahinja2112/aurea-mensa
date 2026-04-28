@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-require 'src/helpers.php';
-require 'src/env.php';
+require 'src/classes/Helpers.php';
+require 'src/classes/Env.php';
 
 spl_autoload_register(function (string $class): void {
     if (class_exists($class, false)) {
@@ -11,13 +11,14 @@ spl_autoload_register(function (string $class): void {
     }
 
     $directories = [
-        Helpers::getFullPath('src'),
-        Helpers::getFullPath('src', 'classes'),
-        Helpers::getFullPath('components'),
+        Helpers::getRelativePath('src'),
+        Helpers::getRelativePath('src/classes'),
+        Helpers::getRelativePath('src/components'),
     ];
 
+
     foreach ($directories as $directory) {
-        $file = $directory . DIRECTORY_SEPARATOR . $class . '.php';
+        $file = $directory . '/' . $class . '.php';
 
         if (is_file($file)) {
             require_once $file;

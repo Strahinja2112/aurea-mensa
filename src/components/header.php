@@ -13,9 +13,8 @@ $relativePath = Helpers::getRelativePath('pages');
     <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
         <div class="logo">
             <a href="<?= Helpers::getRelativePath() . 'index.php' ?>">
-                <div><?php
-                    echo Helpers::WEBSITE_NAME ?></div>
-                <div>RESTORAN</div>
+                <div><?= Helpers::WEBSITE_NAME ?></div>
+                <span>RESTORAN</span>
             </a>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"

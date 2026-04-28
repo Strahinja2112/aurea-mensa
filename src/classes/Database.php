@@ -2,24 +2,21 @@
 
 declare(strict_types=1);
 
-require_once BASE_PATH . '/src/db_config.php';
+require "../../init.php";
+require Helpers::getRelativePath('/src/db_config.php');
 
 final class Database
 {
     private static ?Database $instance = null;
-
-    private PDO $pdo;
-
     public ORMTable $roles;
     public ORMTable $authSessions;
-
     public ORMTable $users;
     public ORMTable $verificationTokens;
     public ORMTable $restaurantTables;
     public ORMTable $reservations;
     public ORMTable $reservationTables;
     public ORMTable $reservationLogs;
-
+    private PDO $pdo;
     /**
      * @var array<string, list<string>>
      */
@@ -110,16 +107,6 @@ final class Database
         $this->reservationLogs = new ORMTable($this->pdo, 'reservation_logs', $this->schema['reservation_logs']);
     }
 
-    private function __clone()
-    {
-        throw new Exception("Cannot clone singleton");
-    }
-
-    public function __wakeup()
-    {
-        throw new Exception("Cannot unserialize singleton");
-    }
-
     public static function getNewOrExistingInstance(): Database
     {
         if (self::$instance === null) {
@@ -127,6 +114,11 @@ final class Database
         }
 
         return self::$instance;
+    }
+
+    public function __wakeup()
+    {
+        throw new Exception("Cannot unserialize singleton");
     }
 
     public function pdo(): PDO
@@ -147,5 +139,10 @@ final class Database
     public function rollBack(): bool
     {
         return $this->pdo->rollBack();
+    }
+
+    private function __clone()
+    {
+        throw new Exception("Cannot clone singleton");
     }
 }

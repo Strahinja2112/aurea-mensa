@@ -9,10 +9,26 @@ require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/Exception.php';
 require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/SMTP.php';
 
-require_once BASE_PATH . '/env.php';
+require_once BASE_PATH . '/Env.php';
 
 final class Mailer
 {
+    public static function sendActivationEmail(string $email, string $token): bool
+    {
+        $baseUrl = self::getAppUrl();
+        $url = "{$baseUrl}/pages/auth/activate-account/index.php?token={$token}";
+
+        $body = self::getEmailTemplate(
+            "Dobrodošli",
+            "Već imate nalog? <a href='{$baseUrl}/pages/auth/login' style='color: #a0c4ff; text-decoration: none;'>Prijavite se</a>",
+            "Hvala vam što ste postali deo naše priče. Kliknite na dugme ispod kako biste aktivirali svoj nalog i potvrdili registraciju.",
+            "Aktiviraj nalog",
+            $url
+        );
+
+        return self::send($email, "Aktivacija vašeg naloga - Aurea Mensa", $body);
+    }
+
     private static function getAppUrl(): string
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
@@ -108,22 +124,6 @@ final class Mailer
 
         // Ovo je da ne bi poslao mail zapravo da ne trosim, default kada kreira korisnika je da stavi da je emial_verified = 1
         return true;
-    }
-
-    public static function sendActivationEmail(string $email, string $token): bool
-    {
-        $baseUrl = self::getAppUrl();
-        $url = "{$baseUrl}/pages/auth/activate-account/index.php?token={$token}";
-
-        $body = self::getEmailTemplate(
-            "Dobrodošli",
-            "Već imate nalog? <a href='{$baseUrl}/pages/auth/login' style='color: #a0c4ff; text-decoration: none;'>Prijavite se</a>",
-            "Hvala vam što ste postali deo naše priče. Kliknite na dugme ispod kako biste aktivirali svoj nalog i potvrdili registraciju.",
-            "Aktiviraj nalog",
-            $url
-        );
-
-        return self::send($email, "Aktivacija vašeg naloga - Aurea Mensa", $body);
     }
 
     public static function sendPasswordResetEmail(string $email, string $token): bool

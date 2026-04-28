@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once '../../init.php';
+require_once '../../autoload.php';
 
 Auth::requireAuth();
 
@@ -18,7 +18,8 @@ $today = date('Y-m-d');
 <?php Helpers::renderHead("Rezervacija", ['auth.css']); ?>
 <body>
 
-<?php require_once Helpers::getFullPath('components', 'header.php'); ?>
+<?php
+require_once Helpers::getFullPath('src/components/header.php'); ?>
 
 <main>
     <div class="container d-flex justify-content-center">
@@ -114,7 +115,8 @@ $today = date('Y-m-d');
     </div>
 </main>
 
-<?php require_once Helpers::getFullPath("components", "footer.php"); ?>
+<?php
+require_once Helpers::getFullPath('src/components/footer.php'); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

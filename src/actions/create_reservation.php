@@ -7,7 +7,7 @@ date_default_timezone_set('Europe/Belgrade');
 ob_start();
 
 try {
-    require_once '../../init.php';
+    require_once '../../autoload.php';
 
     header('Content-Type: application/json; charset=UTF-8');
 

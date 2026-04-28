@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once '../../../init.php';
+require_once '../../../autoload.php';
 
 Auth::redirectIfSignedIn();
 
@@ -53,7 +53,7 @@ Helpers::renderHead("Aktivacija naloga", ['auth.css']); ?>
 <body>
 
 <?php
-require_once Helpers::getFullPath('components', 'header.php'); ?>
+require_once Helpers::getFullPath('src/components/header.php'); ?>
 
 <main>
     <div class="container d-flex justify-content-center">
@@ -89,7 +89,7 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
 </main>
 
 <?php
-require_once Helpers::getFullPath("components", "footer.php"); ?>
+require_once Helpers::getFullPath('src/components/footer.php'); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

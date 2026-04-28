@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-require_once '../../init.php';
+require_once '../../autoload.php';
 
 Auth::requireAuth();
 $user = Auth::getUser();

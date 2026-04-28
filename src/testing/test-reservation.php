@@ -1,5 +1,5 @@
 <?php
-require_once '../../init.php';
+require_once '../../autoload.php';
 ?>
 
 <button id="button" onclick="testReservation()">Testiraj rezervaciju</button>

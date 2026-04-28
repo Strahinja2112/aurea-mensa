@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../init.php';
+require_once '../../autoload.php';
 ?>
 
 <!doctype html>
@@ -8,7 +8,9 @@ require_once '../../init.php';
 <?php
 Helpers::renderHead("O nama", ["about.css"]); ?>
 <body>
-<?php include Helpers::getFullPath("components", "header.php"); ?>
+
+<?php
+require_once Helpers::getFullPath('src/components/header.php'); ?>
 
 <main>
     <section id="about-hero" class="d-flex align-items-center justify-content-center text-center px-3">
@@ -128,7 +130,8 @@ Helpers::renderHead("O nama", ["about.css"]); ?>
     </section>
 </main>
 
-<?php include Helpers::getFullPath("components", "footer.php"); ?>
+<?php
+require_once Helpers::getFullPath('src/components/footer.php'); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

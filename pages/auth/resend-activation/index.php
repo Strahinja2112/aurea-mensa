@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once '../../../init.php';
+require_once '../../../autoload.php';
 
 Auth::redirectIfSignedIn();
 
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 Helpers::renderHead("Novi kod", ['auth.css']); ?>
 <body>
 <?php
-require_once Helpers::getFullPath('components', 'header.php'); ?>
+require_once Helpers::getFullPath('src/components/header.php'); ?>
 
 <main>
     <div class="container d-flex justify-content-center">
@@ -107,6 +107,8 @@ require_once Helpers::getFullPath('components', 'header.php'); ?>
     </div>
 </main>
 
-<?php require_once Helpers::getFullPath("components", "footer.php"); ?>
+<?php
+require_once Helpers::getFullPath('src/components/footer.php'); ?>
+
 </body>
 </html>

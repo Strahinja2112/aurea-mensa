@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../../autoload.php';
+require_once Helpers::getRelativePath('src/components/reservation-card.php');
 
 $user = Auth::getUser();
 
@@ -226,85 +227,7 @@ $pageTitle = 'Staff Dashboard';
                 <?php else: ?>
                     <div class="res-cards-grid">
                         <?php foreach ($todayReservations as $item): ?>
-                            <?php
-                            $res = $item['reservation'];
-                            $tableNames = $item['tables'];
-                            $arrived = $item['arrived'];
-                            $log = $item['log'];
-                            $resUser = $item['user'];
-
-                            $time = substr($res['start_time'], 0, 5);
-                            $endTime = substr($res['end_time'], 0, 5);
-                            $userName = trim(($resUser['first_name'] ?? '') . ' ' . ($resUser['last_name'] ?? ''));
-                            if (!$userName) {
-                                $userName = $resUser['email'] ?? 'Nepoznat';
-                            }
-
-                            $userRole = db()->roles->findFirst(['where' => ['id' => $resUser['role_id']]]);
-                            $roleName = $userRole['name'] ?? 'Korisnik';
-                            ?>
-
-                            <div class="res-card <?= $arrived ? 'checked-in' : '' ?>"
-                                 onclick="fillCode('<?= htmlspecialchars($res['reservation_code']) ?>')"
-                                 data-reservation-id="<?= $res['id'] ?>">
-
-                                <div class="res-card-header">
-                                    <div class="res-time">
-                                        <span class="time-start"><?= htmlspecialchars($time) ?></span>
-                                        <span class="time-separator">-</span>
-                                        <span class="time-end"><?= htmlspecialchars($endTime) ?></span>
-                                    </div>
-                                    <div class="res-status <?= $arrived ? 'arrived' : 'pending' ?>">
-                                        <?= $arrived ? 'Prijavljen' : 'Na cekanju' ?>
-                                    </div>
-                                </div>
-
-                                <div class="res-card-body">
-                                    <div class="res-code-wrapper">
-                                        <span class="res-code-label">Kod:</span>
-                                        <span class="res-code"><?= htmlspecialchars($res['reservation_code']) ?></span>
-                                    </div>
-
-                                    <div class="res-subtitle">Gost</div>
-                                    <div class="res-user">
-                                        <i class="fa-solid fa-user"></i>
-                                        <span><?= htmlspecialchars($userName) ?></span>
-                                    </div>
-                                    <div class="res-contact">
-                                        <i class="fa-solid fa-envelope"></i>
-                                        <span><?= htmlspecialchars($resUser['email'] ?? '') ?></span>
-                                    </div>
-                                    <div class="res-contact">
-                                        <i class="fa-solid fa-phone"></i>
-                                        <span><?= htmlspecialchars($resUser['phone'] ?? 'Bez telefona') ?></span>
-                                    </div>
-                                    <!---->
-                                    <!--                                    <div class="res-subtitle">Sto</div>-->
-                                    <!--                                    <div class="res-tables">-->
-                                    <!--                                        <i class="fa-solid fa-chair"></i>-->
-                                    <!--                                        <span>-->
-                                    <?php //= htmlspecialchars(implode(', ', $tableNames)) ?><!--</span>-->
-                                    <!--                                    </div>-->
-
-                                    <?php if (!empty($log['comment'])): ?>
-                                        <div class="res-subtitle">Komentar</div>
-                                        <div class="res-comment">
-                                            <i class="fa-solid fa-comment"></i>
-                                            <span><?= htmlspecialchars($log['comment']) ?></span>
-                                        </div>
-                                    <?php elseif ($arrived): ?>
-                                        <button type="button" class="btn btn-sm btn-outline-light mt-2"
-                                                onclick="event.stopPropagation(); openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
-                                            <i class="fa-solid fa-plus me-1"></i>Dodaj komentar
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
-
-                                <!--                                <div class="res-card-footer">-->
-                                <!--                                    <span class="res-date">-->
-                                <?php //= date('d M Y', strtotime($res['reservation_date'])) ?><!--</span>-->
-                                <!--                                </div>-->
-                            </div>
+                            <?php renderReservationCard($item); ?>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
@@ -342,7 +265,9 @@ $pageTitle = 'Staff Dashboard';
     </div>
 </div>
 
-<?php include Helpers::getRelativePath('src/components/footer.php') ?>
+<?php 
+require_once Helpers::getRelativePath('src/components/reservation-card.php');
+include Helpers::getRelativePath('src/components/footer.php') ?>
 
 <script>
     function fillCode(code) {
@@ -375,6 +300,8 @@ $pageTitle = 'Staff Dashboard';
         modal.show();
     }
 </script>
+
+<?php require_once Helpers::getRelativePath('src/components/reservation-card.php'); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

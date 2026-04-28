@@ -12,7 +12,6 @@ Helpers::renderHead("Home") ?>
 include Helpers::getRelativePath("src/components/header.php") ?>
 
 <main>
-    <?= Helpers::getRelativePath("src/components/header.php") ?>
     <section id="hero" class="d-flex align-items-center justify-content-center text-center px-3">
         <div class="">
             <h1 id="hero-title" class="display-2 text-white font-serif mb-3"><?= Helpers::WEBSITE_NAME ?></h1>
@@ -31,11 +30,6 @@ include Helpers::getRelativePath("src/components/header.php") ?>
             </div>
         </div>
     </section>
-    <!--    <h2 class="text-white mx-auto">-->
-    <!--        --><?php //= Helpers::getRelativePath("components", "header.php") ?>
-    <!--        <pre class="text-white">-->
-    <?php //= json_encode(DBConfig::getCredentials(), JSON_PRETTY_PRINT) ?><!--</pre>-->
-    <!--    </h2>-->
     <section id="about" class="container pb-5">
         <div class="row g-4">
             <div class="col-md-4">

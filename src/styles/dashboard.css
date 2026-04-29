@@ -63,6 +63,10 @@ main {
     transition: all 0.2s ease;
 }
 
+.filter-buttons .btn-filter i {
+    padding-right: 10px;
+}
+
 .filter-buttons .btn-filter:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;

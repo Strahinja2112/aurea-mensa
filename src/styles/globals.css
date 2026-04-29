@@ -5,8 +5,9 @@ html, body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    min-height: 100vh;
     background: rgb(5, 5, 5);
+    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../../public/images/landing-blur.png") no-repeat center center fixed;
+    background-size: cover;
 }
 
 body {

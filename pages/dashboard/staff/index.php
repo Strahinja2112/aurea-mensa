@@ -96,7 +96,7 @@ $pageTitle = 'Staff Dashboard';
 <main>
     <div class="glass-card dashboard-container">
         <div class="page-header text-center mb-4">
-            <h2 class="mb-0 pb-1">Današnje Rezervacije</h2>
+            <h2 class="mb-0 pb-2">Današnje Rezervacije</h2>
             <p class="page-subtitle"><?= date('l, d. M') ?></p>
         </div>
 

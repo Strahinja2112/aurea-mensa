@@ -18,7 +18,6 @@ Thumbs.db
 
 # Temporary and log files
 *.log
-*.sql
 *.sqlite
 *~
 *.swp

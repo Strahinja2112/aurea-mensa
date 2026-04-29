@@ -78,7 +78,7 @@ function renderReservationCard(array $data): void
             <div class="res-actions mt-3">
                 <?php if (!$arrived): ?>
                     <button type="button" class="btn btn-success btn-sm"
-                            onclick="event.stopPropag ation(); quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                            onclick="event.stopPropagation(); quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
                         <i class="fa-solid fa-check me-1"></i>Prijavi
                     </button>
                 <?php endif; ?>

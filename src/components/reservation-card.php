@@ -59,6 +59,14 @@ function renderReservationCard(array $data): void
                 <span><?= htmlspecialchars($resUser['phone'] ?? 'Bez telefona') ?></span>
             </div>
 
+            <?php if (!empty($data['tables'])): ?>
+                <div class="res-subtitle">Sto</div>
+                <div class="res-tables">
+                    <i class="fa-solid fa-chair"></i>
+                    <span><?= htmlspecialchars(implode(', ', $data['tables'])) ?></span>
+                </div>
+            <?php endif; ?>
+
             <?php if ($hasComment): ?>
                 <div class="res-subtitle">Komentar</div>
                 <div class="res-comment">

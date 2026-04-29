@@ -8,10 +8,15 @@ main {
 
 .dashboard-container {
     display: flex;
+    flex-direction: column;
     gap: 40px;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1200px;
     padding: 0 20px;
+}
+
+.dashboard-full {
+    width: 100%;
 }
 
 .dashboard-left {
@@ -107,6 +112,24 @@ main {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.res-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-fill-code {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+}
+
+.btn-fill-code:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }
 
 .res-code-wrapper {

@@ -94,10 +94,14 @@ CREATE TABLE reservations
     start_time       TIME        NOT NULL,
     end_time         TIME        NOT NULL,
     status           ENUM ('ACTIVE', 'CANCELLED', 'COMPLETED') DEFAULT 'ACTIVE',
+    arrived          BOOLEAN   DEFAULT FALSE,
+    arrived_at       DATETIME,
+    arrival_staff_id INT,
     comment          TEXT,
-    created_at       TIMESTAMP                                 DEFAULT CURRENT_TIMESTAMP,
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_res_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    CONSTRAINT fk_res_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_arrival_staff FOREIGN KEY (arrival_staff_id) REFERENCES users (id)
 );
 
 -- =====================================================

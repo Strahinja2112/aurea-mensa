@@ -36,13 +36,8 @@ foreach ($reservations as $res) {
         $tableNames[] = $table['name'] ?? 'Unknown';
     }
 
-    $log = db()->reservationLogs->findFirst([
-            'where' => [
-                    'reservation_id' => $res['id'],
-                    'arrived' => 1,
-            ],
-    ]);
-    $arrived = !empty($log);
+    $arrived = !empty($res['arrived']);
+    $comment = $res['comment'] ?? null;
 
     $userData = db()->users->findFirst(['where' => ['id' => $res['user_id']]]);
 
@@ -82,85 +77,12 @@ foreach ($reservations as $res) {
             'reservation' => $res,
             'tables' => $tableNames,
             'arrived' => $arrived,
-            'log' => $log,
             'user' => $userData,
     ];
 }
 
 $message = null;
 $error = null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkin'])) {
-    $code = $_POST['reservation_code'] ?? '';
-
-    if (empty($code)) {
-        $error = 'Molimo unesite kod rezervacije.';
-    } else {
-        $reservation = db()->reservations->findFirst([
-                'where' => [
-                        'reservation_code' => $code,
-                        'status' => 'ACTIVE',
-                ],
-        ]);
-
-        if (!$reservation) {
-            $error = 'Rezervacija nije pronađena ili je već obrađena.';
-        } else {
-            $existingLog = db()->reservationLogs->findFirst([
-                    'where' => [
-                            'reservation_id' => $reservation['id'],
-                            'arrived' => 1,
-                    ],
-            ]);
-
-            if ($existingLog) {
-                $error = 'Gost je već prijavljen.';
-            } else {
-                db()->reservationLogs->create([
-                        'data' => [
-                                'reservation_id' => $reservation['id'],
-                                'staff_id' => $user->id,
-                                'arrived' => 1,
-                                'comment' => $_POST['comment'] ?? null,
-                        ],
-                ]);
-                $message = 'Gost uspešno prijavljen!';
-            }
-        }
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
-    $reservationId = (int)($_POST['reservation_id'] ?? 0);
-    $comment = $_POST['new_comment'] ?? '';
-
-    if ($reservationId && !empty($comment)) {
-        $reservation = db()->reservations->findFirst(['where' => ['id' => $reservationId]]);
-
-        if ($reservation) {
-            $existingComment = db()->reservationLogs->findFirst([
-                'where' => [
-                    'reservation_id' => $reservationId,
-                    'comment' => ['not' => null],
-                ],
-            ]);
-
-            if ($existingComment) {
-                $error = 'Komentar za ovu rezervaciju već postoji.';
-            } else {
-                db()->reservationLogs->create([
-                    'data' => [
-                        'reservation_id' => $reservationId,
-                        'staff_id' => $user->id,
-                        'arrived' => 0,
-                        'comment' => $comment,
-                    ],
-                ]);
-                $message = 'Komentar uspešno dodat!';
-            }
-        }
-    }
-}
 
 $pageTitle = 'Staff Dashboard';
 ?>
@@ -172,79 +94,38 @@ $pageTitle = 'Staff Dashboard';
 <?php include Helpers::getRelativePath('src/components/header.php') ?>
 
 <main>
-    <div class="dashboard-container">
-        <div class="dashboard-left">
-            <div class="glass-card">
-                <h2 class="text-center mb-4">Prijava Gosta</h2>
+    <div class="glass-card dashboard-container">
+        <h2 class="text-center mb-4">Današnje Rezervacije</h2>
 
-                <?php if ($message): ?>
-                    <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
-                        <?= htmlspecialchars($message) ?>
-                    </div>
-                <?php endif; ?>
+        <div class="filter-bar mb-4">
+            <input type="text" id="searchInput" class="form-control custom-input"
+                   placeholder="Pretraži po kodu, imenu, emailu ili telefonu..."
+                   value="<?= htmlspecialchars($searchQuery) ?>">
 
-                <?php if ($error): ?>
-                    <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
-                        <?= htmlspecialchars($error) ?>
-                    </div>
-                <?php endif; ?>
+            <select id="statusFilter" class="form-control custom-input" onchange="applyFilters()">
+                <option value="pending" <?= $statusFilter === 'pending' ? 'selected' : '' ?>>Na Cekanju</option>
+                <option value="checked_in" <?= $statusFilter === 'checked_in' ? 'selected' : '' ?>>Prijavljeni
+                </option>
+                <option value="all" <?= $statusFilter === 'all' ? 'selected' : '' ?>>Sve</option>
+            </select>
 
-                <form method="post" id="checkinForm">
-                    <input type="hidden" name="checkin" value="1">
-                    <div class="form-group mb-3">
-                        <label class="form-label opacity-50">Kod Rezervacije</label>
-                        <input type="text" name="reservation_code" id="checkinCode" class="form-control custom-input"
-                               placeholder="npr. ABC123XYZ" required>
-                    </div>
-
-                    <div class="form-group mb-4">
-                        <label class="form-label opacity-50">Komentar (opciono)</label>
-                        <textarea name="comment" class="form-control custom-input"
-                                  rows="3" placeholder="Beleške o gostu..."></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-light btn-lg w-100">
-                        <i class="fa-solid fa-check me-2"></i>Prijavi Gosta
-                    </button>
-                </form>
-            </div>
+            <button type="button" class="btn btn-outline-light btn-lg" onclick="applyFilters()">
+                <i class="fa-solid fa-search"></i>
+            </button>
         </div>
 
-        <div class="dashboard-right">
-            <div class="glass-card" style="max-width: 1000px">
-                <h2 class="text-center mb-4">Danasnje Rezervacije</h2>
-
-                <div class="filter-bar mb-4">
-                    <input type="text" id="searchInput" class="form-control custom-input"
-                           placeholder="Pretraži po kodu, imenu, emailu ili telefonu..."
-                           value="<?= htmlspecialchars($searchQuery) ?>">
-
-                    <select id="statusFilter" class="form-control custom-input" onchange="applyFilters()">
-                        <option value="pending" <?= $statusFilter === 'pending' ? 'selected' : '' ?>>Na Cekanju</option>
-                        <option value="checked_in" <?= $statusFilter === 'checked_in' ? 'selected' : '' ?>>Prijavljeni
-                        </option>
-                        <option value="all" <?= $statusFilter === 'all' ? 'selected' : '' ?>>Sve</option>
-                    </select>
-
-                    <button type="button" class="btn btn-outline-light btn-lg" onclick="applyFilters()">
-                        <i class="fa-solid fa-search"></i>
-                    </button>
-                </div>
-
-                <?php if (empty($todayReservations)): ?>
-                    <div class="text-center py-5">
-                        <i class="fa-solid fa-calendar-xmark fa-3x mb-3 opacity-10"></i>
-                        <h3 class="text-white opacity-25 fw-light">Nema rezervacija.</h3>
-                    </div>
-                <?php else: ?>
-                    <div class="res-cards-grid">
-                        <?php foreach ($todayReservations as $item): ?>
-                            <?php renderReservationCard($item); ?>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
+        <?php if (empty($todayReservations)): ?>
+            <div class="text-center py-5">
+                <i class="fa-solid fa-calendar-xmark fa-3x mb-3 opacity-10"></i>
+                <h3 class="text-white opacity-25 fw-light">Nema rezervacija.</h3>
             </div>
-        </div>
+        <?php else: ?>
+            <div class="res-cards-grid">
+                <?php foreach ($todayReservations as $item): ?>
+                    <?php renderReservationCard($item); ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
 </main>
 
@@ -278,10 +159,28 @@ $pageTitle = 'Staff Dashboard';
 <?php include Helpers::getRelativePath('src/components/footer.php') ?>
 
 <script>
-    function fillCode(code) {
-        document.getElementById('checkinCode').value = code;
-        document.getElementById('checkinCode').focus();
-        document.getElementById('checkinCode').scrollIntoView({behavior: 'smooth', block: 'center'});
+    async function quickCheckIn(reservationId, reservationCode) {
+        try {
+            const response = await fetch('<?= Helpers::getRelativePath("src/actions/checkin.php") ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reservation_id: reservationId
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                window.location.reload();
+            } else {
+                alert(result.message);
+            }
+        } catch (e) {
+            alert('Došlo je do greške. Pokušajte ponovo.');
+        }
     }
 
     function applyFilters() {

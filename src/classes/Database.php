@@ -60,6 +60,7 @@ final class Database
             'start_time',
             'end_time',
             'status',
+            'comment',
             'created_at',
         ],
         'reservation_tables' => [

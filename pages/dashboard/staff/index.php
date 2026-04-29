@@ -90,7 +90,7 @@ foreach ($reservations as $res) {
 $message = null;
 $error = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkin'])) {
     $code = $_POST['reservation_code'] ?? '';
 
     if (empty($code)) {
@@ -190,6 +190,7 @@ $pageTitle = 'Staff Dashboard';
                 <?php endif; ?>
 
                 <form method="post" id="checkinForm">
+                    <input type="hidden" name="checkin" value="1">
                     <div class="form-group mb-3">
                         <label class="form-label opacity-50">Kod Rezervacije</label>
                         <input type="text" name="reservation_code" id="checkinCode" class="form-control custom-input"
@@ -255,23 +256,21 @@ $pageTitle = 'Staff Dashboard';
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Zatvori"></button>
             </div>
-            <form method="post">
-                <div class="modal-body">
-                    <input type="hidden" name="reservation_id" id="modalReservationId" value="">
-                    <input type="hidden" name="add_comment" value="1">
-                    <p class="text-white mb-3">Rezervacija: <code class="text-warning" id="modalReservationCode"></code>
-                    </p>
-                    <div class="mb-3">
-                        <label for="modalComment" class="form-label text-white">Komentar</label>
-                        <textarea class="form-control custom-input" id="modalComment" name="new_comment" rows="3"
-                                  placeholder="Unesite komentar..." required></textarea>
-                    </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalReservationId" value="">
+                <p class="text-white mb-3">Rezervacija: <code class="text-warning" id="modalReservationCode"></code></p>
+                <div class="mb-3">
+                    <label for="modalComment" class="form-label text-white">Komentar</label>
+                    <textarea class="form-control custom-input" id="modalComment" rows="3"
+                              placeholder="Unesite komentar..." required></textarea>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Otkaži</button>
-                    <button type="submit" class="btn btn-success">Sačuvaj</button>
-                </div>
-            </form>
+                <div id="commentError" class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-3 text-center d-none"></div>
+                <div id="commentSuccess" class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-3 text-center d-none"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Otkaži</button>
+                <button disabled class="btn btn-success" id="saveCommentBtn">Sačuvaj</button>
+            </div>
         </div>
     </div>
 </div>
@@ -305,9 +304,65 @@ $pageTitle = 'Staff Dashboard';
     function openCommentModal(reservationId, reservationCode) {
         document.getElementById('modalReservationId').value = reservationId;
         document.getElementById('modalReservationCode').textContent = reservationCode;
+        document.getElementById('modalComment').value = '';
+        document.getElementById('commentError').classList.add('d-none');
+        document.getElementById('commentSuccess').classList.add('d-none');
         const modal = new bootstrap.Modal(document.getElementById('commentModal'));
         modal.show();
     }
+
+    document.getElementById('saveCommentBtn').addEventListener('click', async function() {
+        const reservationId = document.getElementById('modalReservationId').value;
+        const comment = document.getElementById('modalComment').value.trim();
+        const errorEl = document.getElementById('commentError');
+        const successEl = document.getElementById('commentSuccess');
+        const btn = this;
+
+        errorEl.classList.add('d-none');
+        successEl.classList.add('d-none');
+
+        if (!comment) {
+            errorEl.textContent = 'Komentar ne može biti prazan.';
+            errorEl.classList.remove('d-none');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Sačuvaj...';
+
+        try {
+            const response = await fetch('<?= Helpers::getRelativePath("src/actions/add_comment.php") ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reservation_id: parseInt(reservationId),
+                    comment: comment
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                successEl.textContent = result.message;
+                successEl.classList.remove('d-none');
+                setTimeout(() => {
+                    bootstrap.Modal.getInstance(document.getElementById('commentModal')).hide();
+                    window.location.reload();
+                }, 1000);
+            } else {
+                errorEl.textContent = result.message;
+                errorEl.classList.remove('d-none');
+            }
+        } catch (e) {
+            errorEl.textContent = 'Došlo je do greške. Pokušajte ponovo.';
+            errorEl.classList.remove('d-none');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Sačuvaj';
+        }
+    });
 </script>
 
 <?php require_once Helpers::getRelativePath('src/components/reservation-card.php'); ?>

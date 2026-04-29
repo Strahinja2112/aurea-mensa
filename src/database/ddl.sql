@@ -94,6 +94,7 @@ CREATE TABLE reservations
     start_time       TIME        NOT NULL,
     end_time         TIME        NOT NULL,
     status           ENUM ('ACTIVE', 'CANCELLED', 'COMPLETED') DEFAULT 'ACTIVE',
+    comment          TEXT,
     created_at       TIMESTAMP                                 DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_res_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE

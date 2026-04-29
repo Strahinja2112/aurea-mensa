@@ -12,7 +12,7 @@ class DBConfig
             return [
                 'DB_HOST' => 'localhost',
                 'DB_USER' => 'sn',
-                'DB_PASSWORD' => '7v1zTOMzp3aHZ3g',
+                'DB_PASSWORD' => 'add_password_here',
                 'DB_NAME' => 'sn',
             ];
         }

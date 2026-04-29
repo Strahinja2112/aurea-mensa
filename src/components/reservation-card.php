@@ -70,7 +70,7 @@ function renderReservationCard(array $data): void
             <div class="res-actions mt-3">
                 <?php if (!$arrived): ?>
                     <button type="button" class="btn btn-success btn-sm"
-                            onclick="event.stopPropagation(); quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                            onclick="event.stopPropag ation(); quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
                         <i class="fa-solid fa-check me-1"></i>Prijavi
                     </button>
                 <?php endif; ?>
@@ -79,13 +79,6 @@ function renderReservationCard(array $data): void
                     <button type="button" class="btn btn-outline-light btn-sm"
                             onclick="event.stopPropagation(); openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
                         <i class="fa-solid fa-plus me-1"></i>Komentar
-                    </button>
-                <?php endif; ?>
-
-                <?php if ($arrived): ?>
-                    <button type="button" class="btn btn-sm btn-fill-code"
-                            onclick="event.stopPropagation(); fillCode('<?= htmlspecialchars($res['reservation_code']) ?>')">
-                        <i class="fa-solid fa-copy me-1"></i>Kod
                     </button>
                 <?php endif; ?>
             </div>

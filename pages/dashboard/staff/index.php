@@ -95,23 +95,30 @@ $pageTitle = 'Staff Dashboard';
 
 <main>
     <div class="glass-card dashboard-container">
-        <h2 class="text-center mb-4">Današnje Rezervacije</h2>
+        <div class="page-header text-center mb-4">
+            <h2 class="mb-0 pb-1">Današnje Rezervacije</h2>
+            <p class="page-subtitle"><?= date('l, d. M') ?></p>
+        </div>
 
-        <div class="filter-bar mb-4">
+        <div class="filter-buttons mb-4">
+            <button type="button" class="btn btn-filter <?= $statusFilter === 'all' ? 'active' : '' ?>"
+                    onclick="setStatusFilter('all')">
+                <i class="fa-solid fa-list"></i> Sve
+            </button>
+            <button type="button" class="btn btn-filter <?= $statusFilter === 'pending' ? 'active' : '' ?>"
+                    onclick="setStatusFilter('pending')">
+                <i class="fa-solid fa-clock"></i> Na Cekanju
+            </button>
+            <button type="button" class="btn btn-filter <?= $statusFilter === 'checked_in' ? 'active' : '' ?>"
+                    onclick="setStatusFilter('checked_in')">
+                <i class="fa-solid fa-check"></i> Prijavljeni
+            </button>
+        </div>
+
+        <div class="search-bar mb-4">
             <input type="text" id="searchInput" class="form-control custom-input"
                    placeholder="Pretraži po kodu, imenu, emailu ili telefonu..."
                    value="<?= htmlspecialchars($searchQuery) ?>">
-
-            <select id="statusFilter" class="form-control custom-input" onchange="applyFilters()">
-                <option value="pending" <?= $statusFilter === 'pending' ? 'selected' : '' ?>>Na Cekanju</option>
-                <option value="checked_in" <?= $statusFilter === 'checked_in' ? 'selected' : '' ?>>Prijavljeni
-                </option>
-                <option value="all" <?= $statusFilter === 'all' ? 'selected' : '' ?>>Sve</option>
-            </select>
-
-            <button type="button" class="btn btn-outline-light btn-lg" onclick="applyFilters()">
-                <i class="fa-solid fa-search"></i>
-            </button>
         </div>
 
         <?php if (empty($todayReservations)): ?>
@@ -183,20 +190,20 @@ $pageTitle = 'Staff Dashboard';
         }
     }
 
-    function applyFilters() {
+    function setStatusFilter(status) {
         const search = document.getElementById('searchInput').value;
-        const status = document.getElementById('statusFilter').value;
-
-        let url = '?';
-        if (search) url += 'search=' + encodeURIComponent(search) + '&';
-        url += 'status=' + status;
-
+        let url = '?status=' + status;
+        if (search) url += '&search=' + encodeURIComponent(search);
         window.location.href = url;
     }
 
     document.getElementById('searchInput').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
-            applyFilters();
+            const status = new URLSearchParams(window.location.search).get('status') || 'all';
+            const search = document.getElementById('searchInput').value;
+            let url = '?status=' + status;
+            if (search) url += '&search=' + encodeURIComponent(search);
+            window.location.href = url;
         }
     });
 

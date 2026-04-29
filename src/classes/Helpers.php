@@ -6,6 +6,10 @@ if (!defined('ROOT')) {
     define('ROOT', dirname(dirname(__DIR__)));
 }
 
+if (!defined("APP_DIR")) {
+    define('APP_DIR', '/web-restaurant-app');
+}
+
 if (!defined('BASE_PATH')) {
     define('BASE_PATH', ROOT);
 }

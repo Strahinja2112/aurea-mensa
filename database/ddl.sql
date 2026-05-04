@@ -50,6 +50,7 @@ CREATE TABLE verification_tokens
     CONSTRAINT fk_reset_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
+-- TODO: ovo nije ni blizu gotovo, popravi fuj
 CREATE TABLE restaurant_tables
 (
     id                   INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,9 +69,14 @@ CREATE TABLE reservations
     start_time       TIME        NOT NULL,
     end_time         TIME        NOT NULL,
     status           ENUM ('ACTIVE', 'CANCELLED', 'COMPLETED') DEFAULT 'ACTIVE',
+    arrived          BOOLEAN                                   DEFAULT FALSE,
+    arrived_at       DATETIME,
+    arrival_staff_id INT,
+    comment          TEXT,
     created_at       TIMESTAMP                                 DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_res_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    CONSTRAINT fk_res_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_arrival_staff FOREIGN KEY (arrival_staff_id) REFERENCES users (id)
 );
 
 CREATE TABLE reservation_tables
@@ -82,19 +88,6 @@ CREATE TABLE reservation_tables
 
     CONSTRAINT fk_rt_res FOREIGN KEY (reservation_id) REFERENCES reservations (id) ON DELETE CASCADE,
     CONSTRAINT fk_rt_table FOREIGN KEY (table_id) REFERENCES restaurant_tables (id) ON DELETE CASCADE
-);
-
-CREATE TABLE reservation_logs
-(
-    id             INT AUTO_INCREMENT PRIMARY KEY,
-    reservation_id INT NOT NULL,
-    staff_id       INT NOT NULL,
-    arrived        BOOLEAN   DEFAULT FALSE,
-    comment        TEXT,
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_log_res FOREIGN KEY (reservation_id) REFERENCES reservations (id) ON DELETE CASCADE,
-    CONSTRAINT fk_log_staff FOREIGN KEY (staff_id) REFERENCES users (id)
 );
 
 CREATE INDEX idx_reservation_date ON reservations (reservation_date);

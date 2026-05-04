@@ -40,15 +40,18 @@ CREATE TABLE auth_sessions
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
+CREATE INDEX idx_auth_session_user ON auth_sessions (user_id);
+
 CREATE TABLE verification_tokens
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     user_id    INT          NOT NULL,
     token      VARCHAR(255) NOT NULL,
     expires_at DATETIME     NOT NULL,
-
     CONSTRAINT fk_reset_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_verification_token_expires ON verification_tokens (expires_at);
 
 -- TODO: ovo nije ni blizu gotovo, popravi fuj
 CREATE TABLE restaurant_tables

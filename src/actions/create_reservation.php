@@ -9,6 +9,8 @@ ob_start();
 try {
     require_once '../../autoload.php';
 
+    require_once Helpers::getRelativePath('src/classes/Mailer.php');
+
     header('Content-Type: application/json; charset=UTF-8');
 
     $user = Auth::getUser();
@@ -135,6 +137,15 @@ try {
         }
 
         db()->commit();
+
+        Mailer::sendReservationConfirmationEmail(
+            $user->email,
+            $reservationCode,
+            $reservationDateFormatted,
+            $startTimeFormatted,
+            $endTimeFormatted,
+            count($tableIds)
+        );
     } catch (Exception $e) {
         db()->rollBack();
         throw $e;

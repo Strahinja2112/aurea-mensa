@@ -5,15 +5,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url("../../public/images/landing.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
-
-main {
-    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../../public/images/landing-blur.png") no-repeat center center fixed;
-    background-size: cover;
 }
 
 #hero {

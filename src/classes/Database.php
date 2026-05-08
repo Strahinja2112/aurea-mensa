@@ -14,7 +14,6 @@ final class Database
     public ORMTable $restaurantTables;
     public ORMTable $reservations;
     public ORMTable $reservationTables;
-    public ORMTable $reservationLogs;
     private PDO $pdo;
     /**
      * @var array<string, list<string>>
@@ -60,19 +59,15 @@ final class Database
             'start_time',
             'end_time',
             'status',
+            'arrived',
+            'arrived_at',
+            'arrival_staff_id',
+            'comment',
             'created_at',
         ],
         'reservation_tables' => [
             'reservation_id',
             'table_id',
-        ],
-        'reservation_logs' => [
-            'id',
-            'reservation_id',
-            'staff_id',
-            'arrived',
-            'comment',
-            'created_at',
         ],
     ];
 
@@ -103,7 +98,6 @@ final class Database
         $this->restaurantTables = new ORMTable($this->pdo, 'restaurant_tables', $this->schema['restaurant_tables']);
         $this->reservations = new ORMTable($this->pdo, 'reservations', $this->schema['reservations']);
         $this->reservationTables = new ORMTable($this->pdo, 'reservation_tables', $this->schema['reservation_tables']);
-        $this->reservationLogs = new ORMTable($this->pdo, 'reservation_logs', $this->schema['reservation_logs']);
     }
 
     public static function getNewOrExistingInstance(): Database

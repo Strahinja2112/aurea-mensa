@@ -6,7 +6,6 @@ declare(strict_types=1);
  * @param array{
  *     reservation: array,
  *     arrived: bool,
- *     log: array|null,
  *     user: array|null
  * } $data
  */
@@ -15,8 +14,8 @@ function renderReservationCard(array $data): void
 {
     $res = $data['reservation'];
     $arrived = $data['arrived'];
-    $log = $data['log'];
     $resUser = $data['user'];
+    $hasComment = !empty($res['comment']);
 
     $time = substr($res['start_time'], 0, 5);
     $endTime = substr($res['end_time'], 0, 5);
@@ -27,14 +26,13 @@ function renderReservationCard(array $data): void
     ?>
 
     <div class="res-card <?= $arrived ? 'checked-in' : '' ?>"
-         onclick="fillCode('<?= htmlspecialchars($res['reservation_code']) ?>')"
          data-reservation-id="<?= $res['id'] ?>">
 
         <div class="res-card-header">
             <div class="res-time">
-                <span class="time-start"><?= htmlspecialchars($time) ?></span>
-                <span class="time-separator">-</span>
-                <span class="time-end"><?= htmlspecialchars($endTime) ?></span>
+                <span class="time-start fs-1 fw-medium"><?= htmlspecialchars($time) ?></span>
+                <span class="time-separator fs-1">-</span>
+                <span class="time-end fs-1 fw-medium"><?= htmlspecialchars($endTime) ?></span>
             </div>
             <div class="res-status <?= $arrived ? 'arrived' : 'pending' ?>">
                 <?= $arrived ? 'Prijavljen' : 'Na cekanju' ?>
@@ -61,20 +59,37 @@ function renderReservationCard(array $data): void
                 <span><?= htmlspecialchars($resUser['phone'] ?? 'Bez telefona') ?></span>
             </div>
 
-            <?php if (!empty($log['comment'])): ?>
-                <div class="res-subtitle">Komentar</div>
-                <div class="res-comment">
-                    <i class="fa-solid fa-comment"></i>
-                    <span><?= htmlspecialchars($log['comment']) ?></span>
+            <?php if (!empty($data['tables'])): ?>
+                <div class="res-subtitle">Sto</div>
+                <div class="res-tables">
+                    <i class="fa-solid fa-chair"></i>
+                    <span><?= htmlspecialchars(implode(', ', $data['tables'])) ?></span>
                 </div>
             <?php endif; ?>
 
-            <?php if ($arrived): ?>
-                <button type="button" class="btn btn-sm btn-outline-light mt-2"
-                        onclick="event.stopPropagation(); openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
-                    <i class="fa-solid fa-plus me-1"></i>Dodaj komentar
-                </button>
+            <?php if ($hasComment): ?>
+                <div class="res-subtitle">Komentar</div>
+                <div class="res-comment">
+                    <i class="fa-solid fa-comment"></i>
+                    <span><?= htmlspecialchars($res['comment']) ?></span>
+                </div>
             <?php endif; ?>
+
+            <div class="res-actions mt-3">
+                <?php if (!$arrived): ?>
+                    <button type="button" class="btn btn-success btn-sm"
+                            onclick="event.stopPropagation(); quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                        <i class="fa-solid fa-check me-1"></i>Prijavi
+                    </button>
+                <?php endif; ?>
+
+                <?php if ($arrived && !$hasComment): ?>
+                    <button type="button" class="btn btn-outline-light btn-sm"
+                            onclick="event.stopPropagation(); openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                        <i class="fa-solid fa-plus me-1"></i>Komentar
+                    </button>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
     <?php

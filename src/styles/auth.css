@@ -1,14 +1,10 @@
-body {
-    background: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../../public/images/landing-blur.png") no-repeat center center fixed;
-    background-size: cover;
-}
-
 main {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-block: 100px !important;
-    min-height: 100vh !important;
+    padding-top: 200px !important;
+    padding-bottom: 50px !important;
+    /*min-height: 100vh !important;*/
 }
 
 .register-btn-wrapper {

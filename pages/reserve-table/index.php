@@ -206,6 +206,7 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
                     `;
                 }
             } catch (error) {
+                console.log(error);
                 messageBox.innerHTML = `
                     <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3">
                         Greška pri komunikaciji sa serverom.

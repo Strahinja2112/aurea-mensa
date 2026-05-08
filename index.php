@@ -1,4 +1,5 @@
 <?php
+
 require_once 'autoload.php';
 ?>
 
@@ -13,6 +14,7 @@ include Helpers::getRelativePath("src/components/header.php") ?>
 
 <main>
     <section id="hero" class="d-flex align-items-center justify-content-center text-center px-3">
+        <h1 class="text-white"><?= var_dump(DBConfig::getCredentials()) ?></h1>
         <div class="">
             <h1 id="hero-title" class="display-2 text-white font-serif mb-3"><?= Helpers::WEBSITE_NAME ?></h1>
             <p class="h4 fw-light text-white opacity-75 mb-5 ls-1"

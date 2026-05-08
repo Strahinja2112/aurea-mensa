@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require __DIR__ . "/../db_config.php";
+require __DIR__ . "/../DBConfig.php";
 
 final class Database
 {

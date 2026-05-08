@@ -10,6 +10,12 @@ class Env
     public static string $MAILTRAP_USERNAME;
     public static string $MAILTRAP_PORT;
     
+    public static string $DB_HOST;
+    public static string $DB_USER;
+    public static string $DB_PASSWORD;
+    public static string $DB_NAME;
+    
+    
     public static function load(): void
     {
         $path = __DIR__ . '/../../.env';
@@ -30,6 +36,11 @@ class Env
             self::$MAILTRAP_PASSWORD = $env['MAILTRAP_PASSWORD'] ?? throw new Exception('Mailtrap password is missing');
             self::$MAILTRAP_USERNAME = $env['MAILTRAP_USERNAME'] ?? throw new Exception('Mailtrap username is missing');
             self::$MAILTRAP_PORT = $env['MAILTRAP_PORT'] ?? throw new Exception('Mailtrap port is missing');
+            
+            self::$DB_HOST = $env['DB_HOST'] ?? throw new Exception('Database host is missing');
+            self::$DB_USER = $env['DB_USER'] ?? throw new Exception('Database user is missing');
+            self::$DB_PASSWORD = $env['DB_PASSWORD'] ?? throw new Exception('Database password is missing');
+            self::$DB_NAME = $env['DB_NAME'] ?? throw new Exception('Database name is missing');
         } catch (Exception $exception) {
             echo "Error: " . $exception->getMessage();
             exit;

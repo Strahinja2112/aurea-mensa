@@ -2,46 +2,37 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/classes/Env.php';
+
 class DBConfig
 {
     public static function getCredentials(): array
     {
-        $hostname = $_SERVER['HTTP_HOST'] ?? '';
-        
-        if ($hostname === 'sn.stud.vts.su.ac.rs') {
-            return [
-                    'DB_HOST' => 'localhost',
-                    'DB_USER' => 'sn',
-                    'DB_PASSWORD' => '7v1zTOMzp3aHZ3g',
-                    'DB_NAME' => 'sn',
-            ];
-        }
-        
         return [
-                'DB_HOST' => 'localhost',
-                'DB_USER' => 'root',
-                'DB_PASSWORD' => '',
-                'DB_NAME' => 'Restaurant',
+                'DB_HOST' => Env::$DB_HOST,
+                'DB_USER' => Env::$DB_USER,
+                'DB_PASSWORD' => Env::$DB_PASSWORD,
+                'DB_NAME' => Env::$DB_NAME,
         ];
     }
     
     public static function getDbHost(): string
     {
-        return self::getCredentials()['DB_HOST'];
+        return Env::$DB_HOST;
     }
     
     public static function getDbUser(): string
     {
-        return self::getCredentials()['DB_USER'];
+        return Env::$DB_USER;
     }
     
     public static function getDbPassword(): string
     {
-        return self::getCredentials()['DB_PASSWORD'];
+        return Env::$DB_PASSWORD;
     }
     
     public static function getDbName(): string
     {
-        return self::getCredentials()['DB_NAME'];
+        return Env::$DB_NAME;
     }
 }

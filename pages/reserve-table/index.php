@@ -15,7 +15,8 @@ $today = date('Y-m-d');
 
 <!doctype html>
 <html lang="sr">
-<?php Helpers::renderHead("Rezervacija", ['auth.css']); ?>
+<?php
+Helpers::renderHead("Rezervacija", ['auth.css']); ?>
 <body>
 
 <?php
@@ -67,7 +68,8 @@ require_once Helpers::getFullPath('src/components/header.php'); ?>
                     <label class="form-label">Izaberite sto</label>
 
                     <div class="row g-3">
-                        <?php foreach ($tables as $table): ?>
+                        <?php
+                        foreach ($tables as $table): ?>
                             <div class="col-md-6">
                                 <label class="table-card d-block p-3 rounded-3">
                                     <input
@@ -93,7 +95,8 @@ require_once Helpers::getFullPath('src/components/header.php'); ?>
                                     </div>
                                 </label>
                             </div>
-                        <?php endforeach; ?>
+                        <?php
+                        endforeach; ?>
                     </div>
                 </div>
 
@@ -167,6 +170,8 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
                 duration_hours: Number(formData.get("duration_hours"))
             };
 
+            console.log(payload);
+
             submitBtn.disabled = true;
             btnText.classList.add("d-none");
             btnSpinner.classList.remove("d-none");
@@ -180,7 +185,15 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
                     body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
+                const resultText = await response.text();
+                // const result = JSON.parse(resultText);
+                console.log(resultText); // Check what the server actually returns
+
+                // const result = await response.json();
+                //
+                // console.log({result});
+
+                return;
 
                 if (result.success) {
                     messageBox.innerHTML = `

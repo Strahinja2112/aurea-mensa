@@ -16,41 +16,41 @@ $oldPhone = $_POST['phone'] ?? ($user->phone ?? '');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     try {
         db()->beginTransaction();
-
+        
         $updateData = [
                 'first_name' => $oldFirstName,
                 'last_name' => $oldLastName,
                 'phone' => $oldPhone
         ];
-
+        
         if (!empty($oldPhone) && !Helpers::isValidPhone($oldPhone)) {
             throw new Exception("Format broja telefona nije ispravan.");
         }
-
+        
         $oldPassword = $_POST['old_password'] ?? '';
         $newPassword = $_POST['new_password'] ?? '';
-
+        
         if (!empty($oldPassword) || !empty($newPassword)) {
             if (empty($oldPassword) || empty($newPassword)) {
                 throw new Exception("Popunite i trenutnu i novu lozinku za promenu.");
             }
-
+            
             if (!password_verify($oldPassword, $user->passwordHash)) {
                 throw new Exception("Trenutna lozinka nije ispravna.");
             }
-
+            
             if (!Helpers::isStrongPassword($newPassword)) {
                 throw new Exception("Nova lozinka mora imati bar 8 karaktera, veliko slovo i broj.");
             }
-
+            
             $updateData['password_hash'] = password_hash($newPassword, PASSWORD_BCRYPT);
         }
-
+        
         db()->users->update([
                 'where' => ['id' => $user->id],
                 'data' => $updateData
         ]);
-
+        
         db()->commit();
         $success = "Izmene su uspešno sačuvane.";
         $user = Auth::getUser();
@@ -87,7 +87,7 @@ require_once Helpers::getRelativePath('src/components/header.php'); ?>
         <div class="col-12 col-lg-5">
             <div class="glass-card h-100" style="max-width: 1000px !important;">
                 <h2 class="text-center mb-4">Izmena Profila</h2>
-
+                
                 <?php
                 if ($error): ?>
                     <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
@@ -95,7 +95,7 @@ require_once Helpers::getRelativePath('src/components/header.php'); ?>
                     </div>
                 <?php
                 endif; ?>
-
+                
                 <?php
                 if ($success): ?>
                     <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
@@ -172,9 +172,9 @@ require_once Helpers::getRelativePath('src/components/header.php'); ?>
                         $now = time();
                         $deadlineTimestamp = $resTimestamp - 14400;
                         $secondsLeftToCancel = $deadlineTimestamp - $now;
-
+                        
                         $canCancel = ($res['status'] === 'ACTIVE' && $secondsLeftToCancel > 0);
-
+                        
                         $timerText = "";
                         if ($canCancel) {
                             if ($secondsLeftToCancel >= 86400) {
@@ -189,7 +189,7 @@ require_once Helpers::getRelativePath('src/components/header.php'); ?>
                                 $timerText = "{$mins} min";
                             }
                         }
-
+                        
                         $time = substr($res['start_time'], 0, 5);
                         $day = date('d', $resTimestamp);
                         $month = date('M', $resTimestamp);
@@ -244,7 +244,7 @@ require_once Helpers::getRelativePath('src/components/header.php'); ?>
                         </div>
                     <?php
                     endforeach; ?>
-
+                    
                     <?php
                     if (empty($myReservations)): ?>
                         <div class="text-center py-5">

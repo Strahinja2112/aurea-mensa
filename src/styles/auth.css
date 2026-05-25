@@ -2,7 +2,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 200px !important;
+    padding-top: 150px !important;
     padding-bottom: 50px !important;
     /*min-height: 100vh !important;*/
 }

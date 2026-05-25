@@ -30,6 +30,16 @@ CREATE TABLE users
     CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
+INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, email_verified)
+VALUES ('katjatodic@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Katja', 'Todic',
+        '0600000003',
+        1, TRUE),
+       ('pavicevicstrahinja99@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Strahinja',
+        'Pavicevic',
+        '0600000002', 2, TRUE),
+       ('admin@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Admin', 'Adminović',
+        '0600000001', 3, TRUE);
+
 CREATE TABLE auth_sessions
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,6 +72,13 @@ CREATE TABLE restaurant_tables
     location_description VARCHAR(255),
     is_smoking           BOOLEAN DEFAULT FALSE
 );
+
+INSERT
+INTO restaurant_tables (name, seats, location_description, is_smoking)
+VALUES ('Sto 1', 2, 'Pored prozora', FALSE),
+       ('Sto 2', 4, 'Sredina restorana', FALSE),
+       ('Sto 3', 6, 'Pušački deo', TRUE),
+       ('Sto 4', 8, 'VIP kutak', FALSE);
 
 CREATE TABLE reservations
 (

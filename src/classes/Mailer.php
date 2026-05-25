@@ -9,7 +9,7 @@ require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/Exception.php';
 require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require_once BASE_PATH . '/vendor/phpmailer/phpmailer/src/SMTP.php';
 
-require_once BASE_PATH . '/Env.php';
+require_once BASE_PATH . '/src/classes/Env.php';
 
 final class Mailer
 {
@@ -17,18 +17,18 @@ final class Mailer
     {
         $baseUrl = self::getAppUrl();
         $url = "{$baseUrl}/pages/auth/activate-account/index.php?token={$token}";
-
+        
         $body = self::getEmailTemplate(
-            "Dobrodošli",
-            "Već imate nalog? <a href='{$baseUrl}/pages/auth/login' style='color: #a0c4ff; text-decoration: none;'>Prijavite se</a>",
-            "Hvala vam što ste postali deo naše priče. Kliknite na dugme ispod kako biste aktivirali svoj nalog i potvrdili registraciju.",
-            "Aktiviraj nalog",
-            $url
+                "Dobrodošli",
+                "Već imate nalog? <a href='{$baseUrl}/pages/auth/login' style='color: #a0c4ff; text-decoration: none;'>Prijavite se</a>",
+                "Hvala vam što ste postali deo naše priče. Kliknite na dugme ispod kako biste aktivirali svoj nalog i potvrdili registraciju.",
+                "Aktiviraj nalog",
+                $url
         );
-
+        
         return self::send($email, "Aktivacija vašeg naloga - Aurea Mensa", $body);
     }
-
+    
     private static function getAppUrl(): string
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
@@ -36,14 +36,19 @@ final class Mailer
         if ($host == 'localhost') {
             $host .= ':3000';
         }
-
+        
         return "{$protocol}://{$host}/" . APP_DIR;
     }
-
-    private static function getEmailTemplate(string $title, string $subtitle, string $description, string $buttonText, string $buttonUrl): string
-    {
+    
+    private static function getEmailTemplate(
+            string $title,
+            string $subtitle,
+            string $description,
+            string $buttonText,
+            string $buttonUrl
+    ): string {
         $baseUrl = self::getAppUrl();
-
+        
         return "
             <div style='margin: 0; padding: 0; background-color: #121212; font-family: \"PT Sans Narrow\", sans-serif;'>
                 <table role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%' style='padding: 60px 0;'>
@@ -92,11 +97,11 @@ final class Mailer
                 </table>
             </div>";
     }
-
+    
     public static function send(string $to, string $subject, string $body): bool
     {
         $mail = new PHPMailer(true);
-
+        
         try {
             $mail->isSMTP();
             $mail->Host = Env::$MAILTRAP_DOMAIN;
@@ -106,74 +111,74 @@ final class Mailer
             $mail->Password = Env::$MAILTRAP_PASSWORD;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->CharSet = 'UTF-8';
-
+            
             $mail->setFrom('no-reply@restoran.rs', 'Restoran Rezervacije');
             $mail->addAddress($to);
-
+            
             $mail->isHTML(true);
             $mail->Subject = $subject;
             $mail->Body = $body;
-
-             return $mail->send();
+            
+            return $mail->send();
         } catch (Exception $e) {
             return false;
         }
-
+        
         // Ovo je da ne bi poslao mail zapravo da ne trosim, default kada kreira korisnika je da stavi da je emial_verified = 1
         return true;
     }
-
+    
     public static function sendPasswordResetEmail(string $email, string $token): bool
     {
         $baseUrl = self::getAppUrl();
         $url = "{$baseUrl}/pages/auth/forgot-password/index.php?token={$token}";
-
+        
         $body = self::getEmailTemplate(
-            "Reset lozinke",
-            "Setili ste se lozinke? <a href='{$baseUrl}/pages/auth/login' style='color: #a0c4ff; text-decoration: none;'>Prijavite se</a>",
-            "Dobili smo zahtev za promenu lozinke na vašem nalogu. Kliknite na dugme ispod da biste postavili novu lozinku.",
-            "Postavi novu lozinku",
-            $url
+                "Reset lozinke",
+                "Setili ste se lozinke? <a href='{$baseUrl}/pages/auth/login' style='color: #a0c4ff; text-decoration: none;'>Prijavite se</a>",
+                "Dobili smo zahtev za promenu lozinke na vašem nalogu. Kliknite na dugme ispod da biste postavili novu lozinku.",
+                "Postavi novu lozinku",
+                $url
         );
-
+        
         return self::send($email, "Resetovanje vaše lozinke - Aurea Mensa", $body);
     }
-
+    
     public static function sendReservationConfirmationEmail(
-        string $email,
-        string $reservationCode,
-        string $reservationDate,
-        string $startTime,
-        string $endTime,
-        int $tableCount
+            string $email,
+            string $reservationCode,
+            string $reservationDate,
+            string $startTime,
+            string $endTime,
+            int $tableCount
     ): bool {
         $baseUrl = self::getAppUrl();
         $profileUrl = "{$baseUrl}/pages/profile";
-
+        
         $formattedDate = (DateTime::createFromFormat('Y-m-d', $reservationDate))->format('d. m. Y.');
         $formattedTime = date('H:i', strtotime($startTime)) . ' - ' . date('H:i', strtotime($endTime));
-
+        
         $body = self::getReservationEmailTemplate(
-            "Potvrda rezervacije",
-            "Vaša rezervacija je potvrđena!",
-            $reservationCode,
-            $formattedDate,
-            $formattedTime,
-            $tableCount,
-            $profileUrl
+                "Potvrda rezervacije",
+                "Vaša rezervacija je potvrđena!",
+                $reservationCode,
+                $formattedDate,
+                $formattedTime,
+                $tableCount,
+                $profileUrl
         );
-
+        
         return self::send($email, "Potvrda rezervacije - {$reservationCode} - Aurea Mensa", $body);
     }
-
+    
     private static function getReservationEmailTemplate(
-        string $title,
-        string $subtitle,
-        string $code,
-        string $date,
-        string $time,
-        int $tableCount,
-        string $profileUrl
+            string $title,
+            string $subtitle,
+            string $code,
+            string $date,
+            string $time,
+            int $tableCount,
+            string $profileUrl
     ): string {
         return "
             <div style='margin: 0; padding: 0; background-color: #121212; font-family: \"PT Sans Narrow\", sans-serif;'>

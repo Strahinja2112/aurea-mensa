@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require __DIR__ . "/../DBConfig.php";
+require __DIR__ . "/../db_config.php";
 
 final class Database
 {
@@ -109,6 +109,9 @@ final class Database
         return self::$instance;
     }
 
+    /**
+     * @throws Exception
+     */
     public function __wakeup()
     {
         throw new Exception("Cannot unserialize singleton");

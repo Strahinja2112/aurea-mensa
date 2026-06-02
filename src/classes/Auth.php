@@ -143,7 +143,7 @@ final class Auth
     public static function requireAuth(): void
     {
         if (!self::isSignedIn()) {
-            http_response_code(401);
+            header("Location: ". Helpers::getRelativePath()  . "pages/auth/login/");
             exit;
         }
     }

@@ -3,7 +3,8 @@ html, body {
     margin: 0;
     padding: 0;
     background-color: rgb(5, 5, 5);
-    background-image: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../../public/images/landing-blur.png");
+    background-image: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../../public/images/AI_Background2.png");
+    /*background-image: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../../public/images/landing-blur.png");*/
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;

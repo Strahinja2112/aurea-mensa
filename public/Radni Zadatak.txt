@@ -1,0 +1,103 @@
+1
+WEB PROGRAMIRANJE - Projekat
+Rezervacija stolova u restoranu
+Opis projekta:
+Cilj projekta je da se kreira web aplikacija-sajt za rezervaciju stolova u jednom restoranu.
+Aplikacija razlikuje četiri nivoa pristupa: gost, registrovan/prijavljen korisnik, radnik restorana
+i administrator.
+Gost
+• može da pogleda ponuđene informacije na sajtu
+• može da izvrši registraciju na sajtu
+Registrovan/prijavljen korisnik
+• može da rezerviše stol(ove) u restoranu za željeni termin
+• može da promeni svoje profilne podatke (lozinka, ime, prezime, broj telefona)
+• može da izmeni, pregleda i obriše svoje rezervacije
+• može da odjavi rezervaciju (najmanje do 4 sata pre termina rezervacije)
+• može da zahteva promenu lozinke (zaboravljena lozinka)
+Radnik restorana
+• može da evidentira dolazak gosta u rezervisanom terminu (proverava kôd rezervacije) i
+da unese opciono komentar za svaku rezervaciju
+Administrator
+• može da unosi, menja i briše informacije o stolovima
+• može da pregleda sve rezervacije
+• može da unosi, menja i briše podatke o radnicima restorana
+• može da na osnovu odabira datum pregleda rezervacije za taj datum. Sve rezervacije
+ostaju u bazi podataka.
+Registraciju korisnika mora biti urađena na bezbedan način i obaveznim slanjem aktivacionog
+linka putem e-maila. Slanje linka koristiti i kod zahteva za promenu lozinke. Ne sme se
+dozvoliti registracija više korisničkih naloga sa istom e-mail adresom. E-mail adresa mora
+biti jedinstvena i ona predstavlja korisničko ime.
+Prijavljeni korisnik vrši odabir stola ili stolova, datuma i termina rezervacije kao i vremenskog
+perioda rezervacije (na primer 1 sat, 2 sata ...). Za svaki stol treba da postoji informacija koliko
+mesta poseduje, opis lokacije unutar restorana i da li je u pušačkom/nepušačkom delu. Poželjno
+bi bilo da postoji neka mapa restorana sa rasporedom stolova. Vremenski periodi rezervacije da
+budu ograničeni na sate (minimum 1 sat i maximum 6 sati). Pre rezervacije obavezno
+proveravati da li je termin zauzet kao i da li se preklapaju vremenski periodi sa postojećim
+rezervacijama. Korisnik može da otkaže rezervaciju ali najmanje 4 sata pre početka termina.
+Nakon uspešne rezervacije slati e-mail korisniku koji je rezervisao stol sa kôdom rezervacija.
+Ovaj kôd prikazuje korisnik prilikom dolaska u restoran.
+Administratorski deo zaštiti upotrebom sesija (PHP). Sve korisničke lozinke „hešovati“ bcrypt
+algoritmom.
+2
+Kreirati bazu podataka pod imenom restaurant i unutar nje tabele koje će zadovoljiti sve
+funkcionalnosti projekta.
+Zahtevi i smernice
+• Pored navedenih obaveznih funkcionalnosti studenti mogu dodati i neku svoju
+funkcionalnost koja će po njihovom mišljenju unaprediti projekat.
+• Upotreba spoljašnjeg fajla sa JavaScript kodom je obavezna. Programski kod
+(promenljive, funkcije, objekte…) pisati na engleskom jeziku, koristiti komentare u
+kodu, držati se uputstva koje je dato u posebnom fajlu coding_style_guide_sr.pdf
+• Obavezna upotreba spoljašnjeg fajla sa CSS kodom.
+• Pristupne parametre za povezivanje sa MySQL serverom definisati u spoljašnjem fajlu
+db_config.php. Za rad sa MySQL bazom koristiti PDO ekstenziju unutar PHP jezika.
+Deo PHP programskog koda mora biti objektno orijentisan.
+• Projekat treba da bude multiplatformski (Responsive) i da bude prilagođen računarima
+i mobilnim uređajima.
+• U okviru projekta obavezno treba koristiti sledeće tehnike i tehnologije: HTML, CSS,
+JavaScript, AJAX ili Fetch API, JSON, Bootstrap, PHP i MySQL. Za slanje mailova
+koristiti PHPMailer klasu (https://github.com/PHPMailer/PHPMailer).
+• Programski deo koji koristi AJAX ili Fetch API tehniku mora da manipuliše sa
+podacima iz baze podataka. Preporuka za korišćenje AJAX ili Fetch API tehnika:
+provera validnosti podataka, nabavljanje podataka iz baze podataka, registracija i
+provere kod registracije.
+• Na stranicama gde se radi validacija podataka obavezno uraditi validaciju na klijentskoj
+i serverskoj strani.
+• Projekat je potrebno postaviti na školski web server. Svaki pojedinac ili tim će dobiti
+svoje pristupne parametre putem e-maila.
+• Upotreba ostalih tehnologija, biblioteka i API-a je opciona.
+• Koristiti Trello sistem unutar tima i dodeliti pristup predmetnom nastavniku
+(prowebing@gmail.com i szakall.edina@gmail.com). Tokom rada na projektu
+definisati zadatke i dodeliti ih članovima tima. Potrebne liste u Trello sistemu:
+Additional Documents (Info), Brainstorming, To do, Doing, Testing, Done, To be
+Archived. Opise zadataka možete pisati na srpskom jeziku.
+• Svaki tim ili pojedinac treba da koristi Git VCS sistem (Version Control System) i
+zajedno sa njim neko hosting rešenje (GitHub, BitBucket, GitLab…). Dodeliti pristup
+3
+predmetnom nastavniku (chole@vts.su.ac.rs, szakall.edina@vts.su.ac.rs). Tokom rada
+na projektu potrebno je postavljati programski kod na svoj Git repozitorijum.
+• Projekat se predaje u elektronskom obliku (programski kod, .sql fajlovi, i projektna
+dokumentacija). Dokumentacija se izrađuje prema datom šablonu. Sve je potrebno
+postaviti na svoj Git repozitorijum.
+• Tokom realizacije projekta veliki naglasak treba da bude na sigurnosti i proveri unetih
+podataka.
+• Mogu se koristiti BESPLATNI šabloni za Bootstrap 5, koji SE MORAJU
+MODIFIKOVATI ZA POTREBE PROJEKTA, ne možete koristi u potpunosti isti
+šablon. Ukoliko je korišćen šablon, navesti kao informaciju u dokumentaciji! Na
+web server se mogu postavljati samo besplatni materijali! Možete koristiti samo
+BESPLATNE fotografije (sopstvene, preuzete sa sajtova poput
+www.freeimages.com i/ili www.unsplash.com ili generisane upotrebom veštačke
+inteligencije).
+Prezentacija projekata
+I prezentacija
+Termin će biti blagovremeno objavljen: Prikaz kreirane baze podataka, prikaz dizajna
+projekta, informacije o eventualnom korišćenju dodatnih tehnologija, biblioteka i/ili API-a,
+opis dodatnih funkcionalnosti (ovo je opciono). Prezentacija traje maksimum 10 minuta.
+Redosled prezentovanja po grupama će biti blagovremeno objavljen.
+II prezentacija
+Termin će biti blagovremeno objavljen: Prezentovanje trenutnog stanja projekta,
+prikazati funkcionalnosti koje su urađene. Prezentacija traje maksimum 10 minuta. Poželjno
+je da 40% od projekta bude urađeno. Redosled prezentovanja po grupama će biti
+blagovremeno objavljen.
+Završeni projekat se predaje u ispitnom roku uz prethodnu prijavu ispita. Projekat se može
+predati do kraja školske 2025/2026 godine.
+Subotica, 22.03.2026.

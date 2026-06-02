@@ -56,11 +56,11 @@ final class Auth
                     ]
             ]);
             
-            //$mailSent = Mailer::sendActivationEmail($user['email'], $token);
+            $mailSent = Mailer::sendActivationEmail($user['email'], $token);
             
-            //if (!$mailSent) {
-                //throw new Exception("Greška prilikom slanja aktivacionog emaila.");
-            //}
+            if (!$mailSent) {
+                throw new Exception("Greška prilikom slanja aktivacionog emaila.");
+            }
             
             db()->commit();
             return $user;

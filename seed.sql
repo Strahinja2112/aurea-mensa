@@ -24,7 +24,7 @@ CREATE TABLE users
     role_id        INT          NOT NULL,
 
     -- TODO: zameni kad zapravo budes koristio MAILER
-    email_verified BOOLEAN   DEFAULT TRUE,
+    email_verified BOOLEAN   DEFAULT FALSE,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles (id)

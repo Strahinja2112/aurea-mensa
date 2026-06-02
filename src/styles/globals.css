@@ -54,12 +54,26 @@ p a {
     display: inline;
     position: relative;
     color: inherit;
-    border-bottom: solid 1px #ffa07f;
+    border-bottom: solid 1px rgba(74, 106, 106, 0.3);
     -webkit-transition: all 200ms ease;
     -moz-transition: all 200ms ease;
     -ms-transition: all 200ms ease;
     -o-transition: all 200ms ease;
     transition: all 200ms ease;
+}
+
+p a:active {
+    position: relative;
+    color: #4A6A6A;
+}
+
+p a:hover {
+    color: #E6E6E6;
+    background: transparent;
+}
+
+p a:hover::after {
+    opacity: 0.2;
 }
 
 p:last-of-type {
@@ -84,11 +98,6 @@ a, a:hover, a:visited, a:active, a:link {
 p a:active {
     position: relative;
     color: #FF6347;
-}
-
-p a:hover {
-    color: #FFFFFF;
-    background: #ffa07f;
 }
 
 p a:hover::after {
@@ -182,14 +191,6 @@ section {
     font-size: 18px;
     color: #b49383;
     line-height: 44px;
-}
-
-.button:hover {
-    background: #c4ab9f;
-}
-
-.button:hover a {
-    color: #FFFFFF;
 }
 
 #mainNavbar {

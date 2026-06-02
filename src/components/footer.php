@@ -127,16 +127,12 @@ $relativePath = Helpers::getRelativePath('pages');
     }
 
     .footer-links i {
-        color: #ffa07f;
+        color: #4A6A6A;
         margin-top: 3px;
     }
 
     .footer-links a {
         color: #a5a5a5;
-    }
-
-    .footer-links a:hover {
-        color: #ffa07f;
     }
 
     .social-links {

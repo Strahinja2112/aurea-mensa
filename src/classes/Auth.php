@@ -43,7 +43,7 @@ final class Auth
                     'last_name' => $data['last_name'] ?? null,
                     'phone' => $data['phone'] ?? null,
                     'role_id' => $role['id'],
-                    'email_verified' => 1,
+                    'email_verified' => 0,
                 ]
             ]);
             

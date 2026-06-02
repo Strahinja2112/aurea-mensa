@@ -185,15 +185,8 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
                     body: JSON.stringify(payload)
                 });
 
-                const resultText = await response.text();
-                // const result = JSON.parse(resultText);
-                console.log(resultText); // Check what the server actually returns
 
-                // const result = await response.json();
-                //
-                // console.log({result});
-
-                return;
+                const result = await response.json();
 
                 if (result.success) {
                     messageBox.innerHTML = `

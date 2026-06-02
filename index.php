@@ -22,7 +22,7 @@ include Helpers::getRelativePath("src/components/header.php") ?>
                 ambijenta koji je stvoren da vas izoluje od svakodnevice.
             </p>
             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                <a href="pages/reserve-table/" class="btn btn-cta px-5 py-3 fw-bold fs-3">
+                <a href="pages/reserve-table/" class="btn btn-cta px-5 py-3 fw-bold fs-4">
                     REZERVIŠI STO
                 </a>
             </div>

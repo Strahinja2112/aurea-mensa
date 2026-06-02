@@ -194,7 +194,7 @@ section {
 
 #mainNavbar {
     padding-block: 30px;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(5px);
     transition: all 500ms;
     z-index: 100;
 }
@@ -224,13 +224,47 @@ section {
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.03) !important;
-    backdrop-filter: blur(15px) !important;
+    /*background: rgba(255, 255, 255, 0.03) !important;*/
+    backdrop-filter: blur(5px) !important;
     padding: 35px;
     width: 100%;
     max-width: 550px;
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+#mainNavbar .btn-outline-light {
+    color: #E6E6E6;
+}
+
+#mainNavbar .btn-outline-light:hover {
+    background: #4A6A6A;
+    border-color: #4A6A6A;
+    color: #E6E6E6;
+}
+
+#mainNavbar .btn-light {
+    background: #4A6A6A;
+    border-color: #4A6A6A;
+    color: #E6E6E6;
+}
+
+#mainNavbar .btn-light:hover {
+    background: #5A7A7A;
+    border-color: #5A7A7A;
+    color: #E6E6E6;
+}
+
+#mainNavbar .btn-success {
+    background: #4A6A6A;
+    border-color: #4A6A6A;
+    color: #E6E6E6;
+}
+
+#mainNavbar .btn-success:hover {
+    background: #5A7A7A;
+    border-color: #5A7A7A;
+    color: #E6E6E6;
 }
 
 .glass-card h2 {
@@ -275,24 +309,21 @@ section {
     background: rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Specifični stilovi za landing */
 .ls-1 {
     letter-spacing: 1px;
 }
 
-/* Glavno CTA dugme koje prati tvoj stil */
 .btn-cta {
-    background: #ffa07f; /* Tvoja narandžasta boja */
-    color: white !important;
+    background: #4A6A6A;
+    color: #E6E6E6 !important;
     border: none;
-    border-radius: 0; /* Minimalizam bez zaobljenja kao tvoje ostale komponente */
     transition: all 0.3s ease;
     letter-spacing: 2px;
 }
 
 .btn-cta:hover {
-    background: white;
-    color: #ffa07f !important;
+    background: #5A7A7A;
+    color: #E6E6E6 !important;
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }

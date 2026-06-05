@@ -29,7 +29,7 @@ if (!$user || !$user->isAdmin()) {
 
             <div class="row g-4 mb-5">
                 <div class="col-6 col-lg-3">
-                    <a href="tables.php" class="text-decoration-none d-block h-100">
+                    <a href="tables/" class="text-decoration-none d-block h-100">
                         <div class="glass-card text-center p-4 border-0 admin-card h-100">
                             <i class="fa-solid fa-chair fa-3x d-block mb-3 admin-card-icon"></i>
                             <span class="fw-semibold d-block text-white fs-5">Stolovi</span>
@@ -38,7 +38,7 @@ if (!$user || !$user->isAdmin()) {
                     </a>
                 </div>
                 <div class="col-6 col-lg-3">
-                    <a href="reservations.php" class="text-decoration-none d-block h-100">
+                    <a href="reservations/" class="text-decoration-none d-block h-100">
                         <div class="glass-card text-center p-4 border-0 admin-card h-100">
                             <i class="fa-solid fa-calendar-check fa-3x d-block mb-3 admin-card-icon"></i>
                             <span class="fw-semibold d-block text-white fs-5">Rezervacije</span>
@@ -47,7 +47,7 @@ if (!$user || !$user->isAdmin()) {
                     </a>
                 </div>
                 <div class="col-6 col-lg-3">
-                    <a href="staff.php" class="text-decoration-none d-block h-100">
+                    <a href="staff/" class="text-decoration-none d-block h-100">
                         <div class="glass-card text-center p-4 border-0 admin-card h-100">
                             <i class="fa-solid fa-users-gear fa-3x d-block mb-3 admin-card-icon"></i>
                             <span class="fw-semibold d-block text-white fs-5">Radnici</span>

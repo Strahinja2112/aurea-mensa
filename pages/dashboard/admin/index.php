@@ -31,9 +31,6 @@ if (!$user->isAdmin()) {
                     <h1 class="admin-title">Admin Panel</h1>
                     <p class="admin-subtitle">Dobrodošli, <?= htmlspecialchars($user->getFullName()) ?></p>
                 </div>
-                <a href="<?= Helpers::getRelativePath() ?>" class="btn btn-outline-light btn-lg">
-                    <i class="fa-solid fa-house me-2"></i> Početna
-                </a>
             </div>
 
             <div class="row g-4 mb-5">

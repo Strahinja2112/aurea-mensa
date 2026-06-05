@@ -1,86 +1,395 @@
-#about-hero {
-    background-size: cover;
-    min-height: 50vh;
-    padding-top: 140px;
+/* ─── Masthead ─── */
+.about-masthead {
+    padding-top: 160px;
+    padding-bottom: 80px;
 }
 
-#about-hero .page-subtitle {
-    font-size: 14px;
+.about-tag {
+    display: inline-block;
+    font-size: 0.7rem;
     letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    margin-bottom: 20px;
+    font-weight: 500;
 }
 
-.page-subtitle {
+.about-heading {
     font-family: serif;
-    font-size: 14px;
-    letter-spacing: 3px;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: #f8f9fa;
+    margin: 0 0 24px;
 }
 
-.about-image-wrapper {
-    position: relative;
-    overflow: hidden;
-    border-radius: 4px;
+.about-heading-accent {
+    color: #4a6a6a;
+    font-style: italic;
 }
 
-.about-image-wrapper img {
-    width: 100%;
+.about-lead {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.55);
+    max-width: 480px;
+    line-height: 1.7;
+}
+
+.about-hero-stat {
+    display: inline-block;
+    text-align: right;
+}
+
+.about-hero-number {
     display: block;
-    transition: transform 0.5s ease;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-}
-
-.about-image-wrapper:hover img {
-    transform: scale(1.03);
-}
-
-#values .glass-card {
-    transition: transform 0.3s ease, background 0.3s ease;
-}
-
-#values .glass-card:hover {
-    transform: translateY(-8px);
-    background: rgba(255, 255, 255, 0.06) !important;
-}
-
-.text-accent {
-    color: #ffa07f;
-}
-
-.stats-section {
-    background: rgba(255, 255, 255, 0.02);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.stat-number {
+    font-family: serif;
     font-size: 3.5rem;
+    font-weight: 300;
+    color: #f8f9fa;
     line-height: 1;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 }
 
-.stat-label {
-    font-size: 11px;
+.about-hero-label {
+    display: block;
+    font-size: 0.7rem;
     letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
 }
 
-.cta-section {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 8px;
+/* ─── Mission ─── */
+.about-mission {
+    padding: 60px 0;
+}
+
+.about-mission-inner {
+    max-width: 720px;
     margin: 0 auto;
-    max-width: 90%;
+    position: relative;
+    padding: 48px 40px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
 }
 
-@media (max-width: 768px) {
-    .stat-number {
-        font-size: 2.5rem;
+.about-quote-mark {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+    font-size: 4rem;
+    line-height: 1;
+    color: #4a6a6a;
+    font-family: serif;
+    opacity: 0.3;
+}
+
+.about-mission-text {
+    font-family: serif;
+    font-size: 1.4rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 0 28px;
+    font-style: italic;
+}
+
+.about-mission-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.about-mission-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #4a6a6a;
+    color: #e6e6e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.about-mission-name {
+    font-size: 0.9rem;
+    color: #f8f9fa;
+    font-weight: 500;
+}
+
+.about-mission-role {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+/* ─── Section title ─── */
+.about-section-title {
+    font-family: serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 300;
+    color: #f8f9fa;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* ─── Steps ─── */
+.about-steps {
+    padding: 80px 0;
+}
+
+.about-steps-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: start;
+    gap: 0;
+}
+
+.about-step {
+    text-align: center;
+    padding: 32px 20px;
+}
+
+.about-step-num {
+    display: block;
+    font-family: serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4a6a6a;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.about-step-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(74, 106, 106, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 1.4rem;
+    color: #4a6a6a;
+    transition: background 0.3s ease;
+}
+
+.about-step:hover .about-step-icon {
+    background: rgba(74, 106, 106, 0.2);
+}
+
+.about-step-title {
+    font-family: serif;
+    font-size: 1.15rem;
+    color: #f8f9fa;
+    font-weight: 400;
+    margin: 0 0 10px;
+}
+
+.about-step-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 260px;
+    margin: 0 auto;
+}
+
+.about-step-connector {
+    width: 60px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    align-self: center;
+    margin-top: 70px;
+}
+
+/* ─── Features ─── */
+.about-features {
+    padding: 60px 0;
+}
+
+.about-feature-row {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    padding: 48px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.about-feature-row:last-child {
+    border-bottom: none;
+}
+
+.about-feature-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.about-feature-content p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 16px 0 0;
+    max-width: 520px;
+}
+
+.about-feature-visual {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(74, 106, 106, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-feature-icon {
+    font-size: 2.5rem;
+    color: #4a6a6a;
+}
+
+/* ─── Numbers ─── */
+.about-numbers {
+    padding: 60px 0;
+}
+
+.about-numbers-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 40px 20px;
+}
+
+.about-number-item {
+    text-align: center;
+    flex: 1;
+    padding: 0 16px;
+}
+
+.about-number-value {
+    display: block;
+    font-family: serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #f8f9fa;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.about-number-label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.about-number-divider {
+    width: 1px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+/* ─── CTA ─── */
+.about-cta {
+    padding: 80px 0 120px;
+}
+
+.about-cta-inner {
+    text-align: center;
+    padding: 64px 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.015);
+}
+
+.about-cta-title {
+    font-family: serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 300;
+    color: #f8f9fa;
+    margin: 0 0 12px;
+}
+
+.about-cta-text {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0 0 32px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+    .about-masthead {
+        padding-top: 130px;
+        padding-bottom: 50px;
     }
 
-    .stat-label {
-        font-size: 10px;
+    .about-hero-stat {
+        text-align: left;
     }
 
-    #about-hero {
-        min-height: 40vh;
-        padding-top: 120px;
+    .about-steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-step-connector {
+        display: none;
+    }
+
+    .about-step {
+        padding: 24px 16px;
+    }
+
+    .about-feature-row {
+        flex-direction: column !important;
+        gap: 28px;
+        padding: 32px 0;
+    }
+
+    .about-feature-content p {
+        max-width: 100%;
+    }
+
+    .about-feature-visual {
+        width: 80px;
+        height: 80px;
+    }
+
+    .about-feature-icon {
+        font-size: 1.8rem;
+    }
+
+    .about-numbers-grid {
+        flex-wrap: wrap;
+        gap: 24px 0;
+        padding: 28px 16px;
+    }
+
+    .about-number-divider {
+        display: none;
+    }
+
+    .about-number-item {
+        flex: 0 0 50%;
+    }
+
+    .about-mission-inner {
+        padding: 36px 24px;
+    }
+
+    .about-mission-text {
+        font-size: 1.15rem;
+    }
+
+    .about-cta-inner {
+        padding: 40px 24px;
     }
 }

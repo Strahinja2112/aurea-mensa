@@ -13,126 +13,172 @@ Helpers::renderHead("O nama", ["about.css"]); ?>
 require_once Helpers::getFullPath('src/components/header.php'); ?>
 
 <main>
-    <section id="about-hero" class="d-flex align-items-center justify-content-center text-center px-3">
+    <section class="about-masthead">
         <div class="container">
-            <p class="page-subtitle text-uppercase ls-1 text-white opacity-50 mb-3">Upoznajte nas</p>
-            <h1 class="display-2 text-white font-serif mb-4">O nama</h1>
-            <p class="lead text-white opacity-75 mx-auto" style="max-width: 650px;">
-                Već više od decenije, Aurea Mensa predstavlja sinonim za vrhunsku gastronomsku kulturu u srcu Subotice.
-            </p>
-        </div>
-    </section>
-
-    <section id="story" class="container py-5 my-5">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6">
-                <p class="text-uppercase ls-1 text-white opacity-50 mb-3">Naša priča</p>
-                <h2 class="h1 text-white font-serif mb-4">Tradicija koja se poštuje, kvalitet koji se očekuje</h2>
-                <p class="lead opacity-75">
-                    Osnovani 2012. godine sa skromnom vizijom - da donesemo jedinstveno kulinarsko iskustvo u srce
-                    Subotice. Danas, posle više od decenije posvećenosti, Aurea Mensa se čvrsto usidrio kao jedan od
-                    najprestižnijih restorana u regionu.
-                </p>
-                <p class="mt-4 opacity-75">
-                    Naš tim čine strastveni kuvari, sommelieri i profesionalci koji dele istu misiju: da svakim obrokom
-                    stvaraju nezaboravno iskustvo. Odabir samo najsvežijih lokalnih sastojaka, kombinovan sa tehnikama
-                    koje
-                    nasleđujemo iz generacije u generaciju, čini našu kuhinju prepoznatljivom.
-                </p>
-                <p class="mt-4 opacity-75">
-                    Bilo da dolazite na romantičnu večeru, poslovni ručak ili svečanu priliku, naš cilj je isti - da vas
-                    dočekamo sa toplinom i posvetimo svaki trenutak vašeg boravka u našem restoranu.
-                </p>
-            </div>
-            <div class="col-lg-6">
-                <div class="about-image-wrapper">
-                    <img src="<?= Helpers::getRelativePath('public/images/anotheronethankyou.jpg') ?>"
-                         alt="Enterijer restorana Aurea Mensa" class="img-fluid">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="values" class="container py-5 my-5">
-        <div class="text-center mb-5">
-            <p class="text-uppercase ls-1 text-white opacity-50 mb-3">Naše vrednosti</p>
-            <h2 class="h1 text-white font-serif">Šta nas definiše</h2>
-        </div>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="glass-card text-center p-4 h-100">
-                    <i class="fa-solid fa-leaf fa-2x mb-4 text-accent"></i>
-                    <h3 class="h3 text-white font-serif mb-3">Svežina Sastojaka</h3>
-                    <p class="small opacity-75 mb-0">
-                        Sarađujemo isključivo sa lokalnim proizvođačima. Svaki sastojak prolazi strogu selekciju pre
-                        nego
-                        što dospe do naše kuhinje. Sezonska jela su sastavni deo naše ponude.
+            <div class="row align-items-end g-5">
+                <div class="col-lg-7">
+                    <span class="about-tag">Aurea Mensa</span>
+                    <h1 class="about-heading">
+                        Rezervacije<br>
+                        <span class="about-heading-accent">bez granica.</span>
+                    </h1>
+                    <p class="about-lead">
+                        Povezujemo goste sa najboljim restoranima u Subotici — brzo, jednostavno, pouzdano.
                     </p>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="glass-card text-center p-4 h-100">
-                    <i class="fa-solid fa-users fa-2x mb-4 text-accent"></i>
-                    <h3 class="h3 text-white font-serif mb-3">Posvećenost Gostima</h3>
-                    <p class="small opacity-75 mb-0">
-                        Svaki gost je za nas poseban. Naš tim je obučen da prepozna i ispuni i najzahtevnije želje.
-                        Pažnja prema detalju je ono što nas razlikuje.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="glass-card text-center p-4 h-100">
-                    <i class="fa-solid fa-fire fa-2x mb-4 text-accent"></i>
-                    <h3 class="h3 text-white font-serif mb-3">Majstorstvo Kuvara</h3>
-                    <p class="small opacity-75 mb-0">
-                        Naš glavni kuvar, sa preko 20 godina iskustva u elitnim kuhinjama širom Evrope, donosi znanje i
-                        strast koje se ogledaju u svakom jelu na meniju.
-                    </p>
+                <div class="col-lg-5 text-lg-end">
+                    <div class="about-hero-stat">
+                        <span class="about-hero-number">10k+</span>
+                        <span class="about-hero-label">uspelih rezervacija</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="stats" class="stats-section py-5 my-5">
+    <section class="about-mission">
         <div class="container">
-            <div class="row g-4 text-center">
-                <div class="col-6 col-md-3">
-                    <div class="stat-number font-serif text-white">10+</div>
-                    <div class="stat-label text-uppercase ls-1 opacity-50">Godina iskustva</div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-number font-serif text-white">50+</div>
-                    <div class="stat-label text-uppercase ls-1 opacity-50">Jela na meniju</div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-number font-serif text-white">15k+</div>
-                    <div class="stat-label text-uppercase ls-1 opacity-50">Zadovoljnih gostiju</div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-number font-serif text-white">4.8</div>
-                    <div class="stat-label text-uppercase ls-1 opacity-50">Prosečna ocena</div>
+            <div class="about-mission-inner">
+                <span class="about-quote-mark">&ldquo;</span>
+                <p class="about-mission-text">
+                    Naša misija je da svako ko želi da izađe na ručak ili večeru to može da uradi
+                    bez napora — bez čekanja na telefonu, bez neizvesnosti, bez gubljenja vremena.
+                </p>
+                <div class="about-mission-author">
+                    <div class="about-mission-avatar">AM</div>
+                    <div>
+                        <div class="about-mission-name">Aurea Mensa Tim</div>
+                        <div class="about-mission-role">Osnivači</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="cta" class="cta-section d-flex align-items-center justify-content-center text-center py-5 my-5">
+    <section class="about-steps">
         <div class="container">
-            <p class="text-uppercase ls-1 text-white opacity-50 mb-3">Pridružite nam se</p>
-            <h2 class="h1 text-white font-serif mb-4">Doživite Aurea Mensa</h2>
-            <p class="lead text-white opacity-75 mx-auto mb-4" style="max-width: 550px;">
-                Pozivamo vas da rezervišete sto i lično doživite kulinarsko putovanje koje smo pripremili za vas.
-            </p>
-            <a href="<?= Helpers::getRelativePath('pages/reserve-table') ?>" class="btn btn-cta px-5 py-3 fw-bold">
-                REZERVIŠI STO
-            </a>
+            <div class="text-center mb-5">
+                <span class="about-tag">Kako funkcioniše</span>
+                <h2 class="about-section-title">Tri koraka do savršene večeri</h2>
+            </div>
+            <div class="about-steps-grid">
+                <div class="about-step">
+                    <span class="about-step-num">01</span>
+                    <div class="about-step-icon">
+                        <i class="fa-regular fa-building"></i>
+                    </div>
+                    <h3 class="about-step-title">Izaberite restoran</h3>
+                    <p class="about-step-desc">Pregledajte ponudu restorana i pronađite onaj koji vam odgovara.</p>
+                </div>
+                <div class="about-step-connector"></div>
+                <div class="about-step">
+                    <span class="about-step-num">02</span>
+                    <div class="about-step-icon">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+                    <h3 class="about-step-title">Odaberite termin</h3>
+                    <p class="about-step-desc">Vidite slobodne stolove u realnom vremenu i izaberite savršeno vreme.</p>
+                </div>
+                <div class="about-step-connector"></div>
+                <div class="about-step">
+                    <span class="about-step-num">03</span>
+                    <div class="about-step-icon">
+                        <i class="fa-regular fa-circle-check"></i>
+                    </div>
+                    <h3 class="about-step-title">Potvrdite rezervaciju</h3>
+                    <p class="about-step-desc">Trenutna potvrda bez čekanja. Spremni ste za izlazak!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-features">
+        <div class="container">
+            <div class="about-feature-row">
+                <div class="about-feature-content">
+                    <span class="about-tag">Prednosti</span>
+                    <h2 class="about-section-title">Rezervišite 24/7</h2>
+                    <p>
+                        Bez obzira na doba dana ili noći, naš sistem je uvek dostupan.
+                        Zaboravite na radno vreme i pozive — sve što vam treba je internet.
+                    </p>
+                </div>
+                <div class="about-feature-visual">
+                    <i class="fa-regular fa-clock about-feature-icon"></i>
+                </div>
+            </div>
+            <div class="about-feature-row about-feature-row-reverse">
+                <div class="about-feature-content">
+                    <span class="about-tag">Pouzdanost</span>
+                    <h2 class="about-section-title">Trenutna potvrda</h2>
+                    <p>
+                        Više ne morate da čekate povratni poziv. Sistem potvrđuje vašu rezervaciju
+                        istog momenta — onlajn, bez dvostrukog bookiranja.
+                    </p>
+                </div>
+                <div class="about-feature-visual">
+                    <i class="fa-regular fa-bell about-feature-icon"></i>
+                </div>
+            </div>
+            <div class="about-feature-row">
+                <div class="about-feature-content">
+                    <span class="about-tag">Fleksibilnost</span>
+                    <h2 class="about-section-title">Otkazivanje u par klikova</h2>
+                    <p>
+                        Planovi se menjaju? Bez brige. Otkažite ili izmenite rezervaciju
+                        direktno sa vašeg profila — brzo i bez pitanja.
+                    </p>
+                </div>
+                <div class="about-feature-visual">
+                    <i class="fa-regular fa-pen-to-square about-feature-icon"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-numbers">
+        <div class="container">
+            <div class="about-numbers-grid">
+                <div class="about-number-item">
+                    <span class="about-number-value">100+</span>
+                    <span class="about-number-label">dnevnih rezervacija</span>
+                </div>
+                <div class="about-number-divider"></div>
+                <div class="about-number-item">
+                    <span class="about-number-value">10+</span>
+                    <span class="about-number-label">restorana</span>
+                </div>
+                <div class="about-number-divider"></div>
+                <div class="about-number-item">
+                    <span class="about-number-value">98%</span>
+                    <span class="about-number-label">zadovoljstva</span>
+                </div>
+                <div class="about-number-divider"></div>
+                <div class="about-number-item">
+                    <span class="about-number-value">5★</span>
+                    <span class="about-number-label">podrška</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-cta">
+        <div class="container">
+            <div class="about-cta-inner">
+                <h2 class="about-cta-title">Spremni za večeru?</h2>
+                <p class="about-cta-text">
+                    Rezervišite sto i prepustite se uživanju. Mi smo tu za sve ostalo.
+                </p>
+                <a href="<?= Helpers::getRelativePath('pages/reserve-table') ?>" class="btn btn-cta btn-lg px-5">
+                    REZERVIŠI STO
+                </a>
+            </div>
         </div>
     </section>
 </main>
 
 <?php
 require_once Helpers::getFullPath('src/components/footer.php'); ?>
-
 
 </body>
 </html>

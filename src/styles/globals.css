@@ -21,12 +21,9 @@ html {
 body {
 	display: flex;
 	flex-direction: column;
+	font-family: "Poppins";
 	color: #a5a5a5;
 	min-height: 100vh;
-}
-
-* {
-	font-family: "Poppins", sans-serif;
 }
 
 .font-serif {
@@ -55,7 +52,6 @@ ul {
 }
 
 p {
-	font-family: sans-serif;
 	font-size: 16px;
 	line-height: 1.875;
 	font-weight: 400;
@@ -157,7 +153,6 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-webkit-text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
 	text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
@@ -359,4 +354,9 @@ section {
 .btn-outline-light {
 	backdrop-filter: blur(5px);
 }
-x
+
+@media (max-width: 768px) {
+	body {
+		background-position: 85% center;
+	}
+}

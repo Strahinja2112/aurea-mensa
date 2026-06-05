@@ -192,7 +192,7 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                             <input type="date" name="date" class="form-control custom-input"
                                 value="<?= htmlspecialchars($filterDate) ?>"
                                 style="min-width: 0; flex: 1; padding-top: 6px; padding-bottom: 6px;">
-                            <button type="submit" class="btn btn-cta" style="white-space: nowrap;">Filtriraj</button>
+                            <button type="submit" class="btn btn-cta" style="white-space: nowrap; padding-top: 6px; padding-bottom: 6px;">Filtriraj</button>
                             <?php if ($filterDate): ?>
                                 <a href="." class="btn btn-outline-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px; min-width: 38px;" title="Poništi filter">
                                     <i class="fa-solid fa-xmark"></i>

@@ -336,15 +336,13 @@ section {
 .btn-cta {
 	background: #4a6a6a;
 	color: #e6e6e6 !important;
-	border: none;
+	border: 1px solid transparent;
 	transition: all 0.3s ease;
 }
 
 .btn-cta:hover {
 	background: #5a7a7a;
 	color: #e6e6e6 !important;
-	transform: translateY(-3px);
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* Responzivnost za naslov */

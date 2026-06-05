@@ -13,9 +13,41 @@ if (!$user || !$user->isAdmin()) {
 }
 
 $selectedDate = $_GET['date'] ?? date('Y-m-d');
+$search = trim($_GET['search'] ?? '');
+
+$reservationWhere = ['reservation_date' => $selectedDate];
+
+if ($search !== '') {
+    $matchingUsers = db()->users->findMany([
+        'where' => [
+            'OR' => [
+                ['email' => ['contains' => $search]],
+                ['first_name' => ['contains' => $search]],
+                ['last_name' => ['contains' => $search]],
+                ['phone' => ['contains' => $search]],
+            ]
+        ]
+    ]);
+    $userIds = array_map(fn($u) => $u['id'], $matchingUsers);
+    if (!empty($userIds)) {
+        $reservationWhere = [
+            'AND' => [
+                ['reservation_date' => $selectedDate],
+                ['user_id' => ['in' => $userIds]],
+            ]
+        ];
+    } else {
+        $reservationWhere = [
+            'AND' => [
+                ['reservation_date' => $selectedDate],
+                ['user_id' => 0],
+            ]
+        ];
+    }
+}
 
 $reservations = db()->reservations->findMany([
-    'where' => ['reservation_date' => $selectedDate],
+    'where' => $reservationWhere,
     'orderBy' => ['start_time' => 'ASC'],
 ]);
 
@@ -61,10 +93,23 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
 
             <div class="glass-card p-4 border-0" style="max-width: 100%;">
                 <form method="GET" class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <label class="form-label small opacity-50">Izaberite datum</label>
-                    <div class="d-flex gap-2">
-                        <input type="date" name="date" class="form-control custom-input" value="<?= htmlspecialchars($selectedDate) ?>" required style="padding-top: 6px; padding-bottom: 6px;">
-                        <button type="submit" class="btn btn-cta">Prikaži</button>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-12 col-md-4">
+                            <label class="form-label small opacity-50 mb-1">Izaberite datum</label>
+                            <input type="date" name="date" class="form-control custom-input" value="<?= htmlspecialchars($selectedDate) ?>" required style="padding-top: 6px; padding-bottom: 6px;">
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <label class="form-label small opacity-50 mb-1">Pretraga (email, ime, telefon)</label>
+                            <input type="text" name="search" class="form-control custom-input" value="<?= htmlspecialchars($search) ?>" placeholder="Pretraži..." style="padding-top: 6px; padding-bottom: 6px;">
+                        </div>
+                        <div class="col-12 col-md-3 d-flex gap-2">
+                            <button type="submit" class="btn btn-cta flex-fill" style="padding-top: 7px; padding-bottom: 6px;">Prikaži</button>
+                            <?php if ($search !== ''): ?>
+                                <a href="?date=<?= urlencode($selectedDate) ?>" class="btn btn-outline-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px; min-width: 38px;" title="Poništi pretragu">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </form>
 

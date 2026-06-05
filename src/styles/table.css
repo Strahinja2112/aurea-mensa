@@ -82,13 +82,13 @@
 }
 
 .status-active {
-	background: rgba(255, 193, 7, 0.12);
-	color: #ffc107;
+	background: rgba(200, 164, 92, 0.15);
+	color: #c8a45c;
 }
 
 .status-completed {
-	background: rgba(46, 204, 113, 0.12);
-	color: #2ecc71;
+	background: rgba(74, 106, 106, 0.12);
+	color: #4a6a6a;
 }
 
 .status-cancelled {

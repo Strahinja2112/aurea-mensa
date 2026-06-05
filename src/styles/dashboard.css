@@ -121,9 +121,9 @@ main {
 }
 
 .filter-buttons .btn-filter.active {
-	background: rgba(46, 204, 113, 0.2);
-	border-color: #2ecc71;
-	color: #2ecc71;
+	background: rgba(74, 106, 106, 0.2);
+	border-color: #4a6a6a;
+	color: #4a6a6a;
 }
 
 .search-bar {

@@ -173,7 +173,7 @@ $pageTitle = 'Staff Dashboard';
                                 </div>
                                 <div class="rt-cell rt-cell-arrival" data-label="Akcije" style="text-align: right;">
                                     <?php if (!$arrived): ?>
-                                        <button type="button" class="btn btn-success btn-sm"
+                                        <button type="button" class="btn btn-cta btn-sm"
                                             onclick="quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
                                             <i class="fa-solid fa-check me-1"></i>Prijavi
                                         </button>
@@ -219,7 +219,7 @@ $pageTitle = 'Staff Dashboard';
                             </div>
                             <div style="min-width: 0;">
                                 <div class="text-white fw-medium" id="modalGuestName" style="font-size: 0.95rem;"></div>
-                                <code class="text-warning opacity-75" id="modalReservationCode" style="font-size: 0.75rem;"></code>
+                                <code class="fs-5" id="modalReservationCode" style="color: rgba(74,106,106)"></code>
                             </div>
                         </div>
                         <div class="d-flex flex-wrap gap-3 mt-3 pt-2" style="border-top: 1px solid rgba(255,255,255,0.04);">
@@ -253,7 +253,7 @@ $pageTitle = 'Staff Dashboard';
                         <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); white-space: pre-wrap; font-size: 0.9rem; color: rgba(255,255,255,0.8);" id="modalCommentDisplay"></div>
                     </div>
                     <div id="commentError" class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-2 text-center d-none"></div>
-                    <div id="commentSuccess" class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-2 text-center d-none"></div>
+                    <div id="commentSuccess" class="alert border-0 text-white small rounded-3 mb-2 text-center d-none" style="background: rgba(74,106,106,0.2);"></div>
                 </div>
                 <div class="modal-footer border-0 pt-0 px-4 pb-4">
                     <button type="button" class="btn btn-outline-light btn-sm px-3" data-bs-dismiss="modal">Zatvori</button>

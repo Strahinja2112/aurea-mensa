@@ -63,8 +63,8 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 <form method="GET" class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
                     <label class="form-label small opacity-50">Izaberite datum</label>
                     <div class="d-flex gap-2">
-                        <input type="date" name="date" class="form-control custom-input" value="<?= htmlspecialchars($selectedDate) ?>" required>
-                        <button type="submit" class="btn btn-light px-4 fw-bold">Prikaži</button>
+                        <input type="date" name="date" class="form-control custom-input" value="<?= htmlspecialchars($selectedDate) ?>" required style="padding-top: 6px; padding-bottom: 6px;">
+                        <button type="submit" class="btn btn-cta">Prikaži</button>
                     </div>
                 </form>
 

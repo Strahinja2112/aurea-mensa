@@ -115,7 +115,7 @@
 }
 
 .rt-table-profile .rt-row {
-    grid-template-columns: minmax(auto, 1fr) 70px 120px 130px;
+    grid-template-columns: minmax(auto, 1fr) 70px 120px 90px 130px;
 }
 
 .rt-table-profile .rt-cell-code {
@@ -124,13 +124,20 @@
     text-overflow: clip;
 }
 
+.rt-table-profile .rt-cell-tables {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
 .rt-cell-date {
     text-align: center;
     line-height: 1.2;
 }
 
 .rt-table-profile .rt-cell-arrival {
-    text-align: right;
+    text-align: left;
     white-space: nowrap;
 }
 
@@ -165,8 +172,12 @@
         order: 2;
     }
 
-    .rt-table-profile .rt-cell-arrival {
+    .rt-table-profile .rt-cell-tables {
         order: 3;
+    }
+
+    .rt-table-profile .rt-cell-arrival {
+        order: 4;
     }
 
     .rt-head {
@@ -199,6 +210,14 @@
     .rt-table-profile .rt-row {
         grid-template-columns: 1fr;
         gap: 6px;
+    }
+
+    .rt-table-profile .rt-cell-tables {
+        white-space: normal;
+    }
+
+    .rt-table-profile .rt-cell-arrival {
+        text-align: right;
     }
 }
 

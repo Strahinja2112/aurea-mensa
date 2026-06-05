@@ -338,7 +338,6 @@ section {
 	color: #e6e6e6 !important;
 	border: none;
 	transition: all 0.3s ease;
-	letter-spacing: 2px;
 }
 
 .btn-cta:hover {
@@ -353,4 +352,8 @@ section {
 	.display-2 {
 		font-size: 2.5rem;
 	}
+}
+
+.btn-outline-light {
+	backdrop-filter: blur(5px);
 }

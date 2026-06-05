@@ -191,10 +191,10 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                         <div class="d-flex gap-2">
                             <input type="date" name="date" class="form-control custom-input"
                                 value="<?= htmlspecialchars($filterDate) ?>"
-                                style="min-width: 0; flex: 1;">
-                            <button type="submit" class="btn btn-light fw-bold" style="white-space: nowrap;">Filtriraj</button>
+                                style="min-width: 0; flex: 1; padding-top: 6px; padding-bottom: 6px;">
+                            <button type="submit" class="btn btn-cta" style="white-space: nowrap;">Filtriraj</button>
                             <?php if ($filterDate): ?>
-                                <a href="." class="btn btn-outline-light px-3">
+                                <a href="." class="btn btn-outline-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px; min-width: 38px;" title="Poništi filter">
                                     <i class="fa-solid fa-xmark"></i>
                                 </a>
                             <?php endif; ?>
@@ -213,6 +213,7 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                                     <div class="rt-cell rt-cell-code">Kod</div>
                                     <div class="rt-cell rt-cell-date">Datum</div>
                                     <div class="rt-cell rt-cell-time">Vreme</div>
+                                    <div class="rt-cell rt-cell-tables">Stolovi</div>
                                     <div class="rt-cell rt-cell-arrival">Akcije</div>
                                 </div>
                             </div>
@@ -253,7 +254,10 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                                         <div class="rt-cell rt-cell-time" data-label="Vreme">
                                             <?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>
                                         </div>
-                                        <div class="rt-cell rt-cell-arrival" data-label="Akcije" style="text-align: right;">
+                                        <div class="rt-cell rt-cell-tables" data-label="Stolovi">
+                                            <?= !empty($tables) ? htmlspecialchars(implode(', ', $tables)) : '—' ?>
+                                        </div>
+                                        <div class="rt-cell rt-cell-arrival" data-label="Akcije">
                                             <?php if ($canCancel): ?>
                                                 <div class="opacity-50" style="font-size: 0.65rem; margin-bottom: 4px;">
                                                     Još <?= $timerText ?>

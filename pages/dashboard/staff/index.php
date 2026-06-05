@@ -114,11 +114,24 @@ $pageTitle = 'Staff Dashboard';
                 </button>
             </div>
 
-            <div class="search-bar mb-4">
-                <input type="text" id="searchInput" class="form-control custom-input"
-                    placeholder="Pretraži po kodu, imenu, emailu ili telefonu..."
-                    value="<?= htmlspecialchars($searchQuery) ?>">
-            </div>
+            <form method="GET" class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                <input type="hidden" name="status" value="<?= htmlspecialchars($statusFilter) ?>">
+                <div class="d-flex align-items-end gap-2">
+                    <div style="flex: 1; min-width: 0;">
+                        <label class="form-label small opacity-50 mb-1">Pretraga (ime, email, telefon)</label>
+                        <input type="text" name="search" id="searchInput" class="form-control custom-input"
+                            placeholder="Pretraži po kodu, imenu, emailu ili telefonu..."
+                            value="<?= htmlspecialchars($searchQuery) ?>"
+                            style="padding-top: 6px; padding-bottom: 6px;">
+                    </div>
+                    <button type="submit" class="btn btn-cta flex-shrink-0" style="padding-top: 6px; padding-bottom: 6px;">Pretraži</button>
+                    <?php if ($searchQuery !== ''): ?>
+                        <a href="?status=<?= urlencode($statusFilter) ?>" class="btn btn-outline-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; min-width: 38px;" title="Poništi pretragu">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </form>
 
             <?php if (empty($todayReservations)): ?>
                 <div class="text-center py-5">
@@ -296,16 +309,6 @@ $pageTitle = 'Staff Dashboard';
             if (search) url += '&search=' + encodeURIComponent(search);
             window.location.href = url;
         }
-
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const status = new URLSearchParams(window.location.search).get('status') || 'all';
-                const search = document.getElementById('searchInput').value;
-                let url = '?status=' + status;
-                if (search) url += '&search=' + encodeURIComponent(search);
-                window.location.href = url;
-            }
-        });
 
         document.getElementById('modalComment').addEventListener('input', function() {
             document.getElementById('saveCommentBtn').disabled = !this.value.trim();

@@ -221,6 +221,30 @@
     }
 }
 
+.rt-table-staff .rt-row {
+    grid-template-columns: 1fr 1.5fr 1fr 100px;
+}
+
+.rt-table-staff .rt-cell:last-child {
+    text-align: right;
+}
+
+@media (max-width: 900px) {
+    .rt-table-staff .rt-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .rt-table-staff .rt-row {
+        grid-template-columns: 1fr;
+    }
+
+    .rt-table-staff .rt-cell:last-child {
+        text-align: left;
+    }
+}
+
 .pagination-wrap {
 	display: flex;
 	justify-content: center;

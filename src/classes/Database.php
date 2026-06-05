@@ -15,6 +15,7 @@ final class Database
     public ORMTable $reservations;
     public ORMTable $reservationTables;
     private PDO $pdo;
+
     /**
      * @var array<string, list<string>>
      */
@@ -93,7 +94,9 @@ final class Database
         $this->authSessions = new ORMTable($this->pdo, 'auth_sessions', $this->schema['auth_sessions']);
         $this->users = new ORMTable($this->pdo, 'users', $this->schema['users']);
         $this->verificationTokens = new ORMTable(
-            $this->pdo, 'verification_tokens', $this->schema['verification_tokens']
+            $this->pdo,
+            'verification_tokens',
+            $this->schema['verification_tokens']
         );
         $this->restaurantTables = new ORMTable($this->pdo, 'restaurant_tables', $this->schema['restaurant_tables']);
         $this->reservations = new ORMTable($this->pdo, 'reservations', $this->schema['reservations']);

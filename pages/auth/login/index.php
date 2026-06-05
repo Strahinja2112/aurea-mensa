@@ -30,8 +30,7 @@ Helpers::renderHead("Prijava", ['auth.css']); ?>
 <body>
 
     <?php
-    // require_once Helpers::getFullPath('src/components/header.php'); 
-    ?>
+    require_once Helpers::getFullPath('src/components/header.php'); ?>
 
     <main>
         <div class="container d-flex justify-content-center">

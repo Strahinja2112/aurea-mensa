@@ -59,19 +59,17 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 </a>
             </div>
 
-            <div class="glass-card p-4 mb-4 border-0" style="max-width: 400px;">
-                <form method="GET">
+            <div class="glass-card p-4 border-0" style="max-width: 100%;">
+                <form method="GET" class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
                     <label class="form-label small opacity-50">Izaberite datum</label>
                     <div class="d-flex gap-2">
                         <input type="date" name="date" class="form-control custom-input" value="<?= htmlspecialchars($selectedDate) ?>" required>
                         <button type="submit" class="btn btn-light px-4 fw-bold">Prikaži</button>
                     </div>
                 </form>
-            </div>
 
-            <div class="glass-card p-4 border-0" style="max-width: 100%;">
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h5 class="text-white mb-0 font-serif">
+                    <h5 class="text-white mb-0" style="font-weight: 300; letter-spacing: 0.5px;">
                         Rezervacije za <?= (DateTime::createFromFormat('Y-m-d', $selectedDate))->format('d. m. Y.') ?>
                     </h5>
                     <span class="small opacity-50">
@@ -85,63 +83,65 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                         <p class="text-white opacity-25 fw-light mb-0">Nema rezervacija za ovaj datum.</p>
                     </div>
                 <?php else: ?>
-                    <div class="table-responsive">
-                        <table class="table table-dark table-borderless align-middle mb-0" style="background: transparent;">
-                            <thead>
-                                <tr class="opacity-50 small text-uppercase" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                    <th class="py-2 ps-0">Kod</th>
-                                    <th class="py-2">Vreme</th>
-                                    <th class="py-2">Gost</th>
-                                    <th class="py-2">Email</th>
-                                    <th class="py-2">Stolovi</th>
-                                    <th class="py-2">Status</th>
-                                    <th class="py-2 text-end pe-0">Dolazak</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($reservations as $res): ?>
-                                    <?php
-                                    $u = $reservationUsers[$res['id']] ?? null;
-                                    $tables = $reservationTables[$res['id']] ?? [];
+                    <div class="reservations-table">
+                        <div class="rt-head">
+                            <div class="rt-row">
+                                <div class="rt-cell rt-cell-code">Kod</div>
+                                <div class="rt-cell rt-cell-time">Vreme</div>
+                                <div class="rt-cell rt-cell-guest">Gost</div>
+                                <div class="rt-cell rt-cell-email">Email</div>
+                                <div class="rt-cell rt-cell-tables">Stolovi</div>
+                                <div class="rt-cell rt-cell-status">Status</div>
+                                <div class="rt-cell rt-cell-arrival">Dolazak</div>
+                            </div>
+                        </div>
+                        <div class="rt-body">
+                            <?php foreach ($reservations as $res):
+                                $u = $reservationUsers[$res['id']] ?? null;
+                                $tables = $reservationTables[$res['id']] ?? [];
 
-                                    $statusLabel = match ($res['status']) {
-                                        'ACTIVE' => 'Aktivna',
-                                        'COMPLETED' => 'Realizovana',
-                                        'CANCELLED' => 'Otkazana',
-                                        default => $res['status'],
-                                    };
-                                    $statusClass = match ($res['status']) {
-                                        'ACTIVE' => 'text-success',
-                                        'COMPLETED' => 'text-info',
-                                        'CANCELLED' => 'text-danger opacity-50',
-                                        default => 'text-white',
-                                    };
-                                    $arrivedIcon = $res['arrived']
-                                        ? '<i class="fa-solid fa-check-circle text-success"></i>'
-                                        : '<span class="opacity-25">—</span>';
-                                    ?>
-                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                        <td class="py-3 ps-0"><code class="text-white"><?= htmlspecialchars($res['reservation_code']) ?></code></td>
-                                        <td class="py-3 text-white"><?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?></td>
-                                        <td class="py-3 text-white">
-                                            <?php if ($u): ?>
-                                                <?= htmlspecialchars($u['first_name'] . ' ' . $u['last_name']) ?>
-                                            <?php else: ?>
-                                                <span class="opacity-25">Nepoznat</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="py-3 text-white opacity-75 small">
-                                            <?= $u ? htmlspecialchars($u['email']) : '—' ?>
-                                        </td>
-                                        <td class="py-3 text-white small">
-                                            <?= !empty($tables) ? htmlspecialchars(implode(', ', $tables)) : '—' ?>
-                                        </td>
-                                        <td class="py-3 <?= $statusClass ?> fw-medium"><?= $statusLabel ?></td>
-                                        <td class="py-3 text-end pe-0"><?= $arrivedIcon ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                $statusLabel = match ($res['status']) {
+                                    'ACTIVE' => 'Aktivna',
+                                    'COMPLETED' => 'Realizovana',
+                                    'CANCELLED' => 'Otkazana',
+                                    default => $res['status'],
+                                };
+                                ?>
+                                <div class="rt-row">
+                                    <div class="rt-cell rt-cell-code" data-label="Kod">
+                                        <code><?= htmlspecialchars($res['reservation_code']) ?></code>
+                                    </div>
+                                    <div class="rt-cell rt-cell-time" data-label="Vreme">
+                                        <?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>
+                                    </div>
+                                    <div class="rt-cell rt-cell-guest" data-label="Gost">
+                                        <?php if ($u): ?>
+                                            <?= htmlspecialchars($u['first_name'] . ' ' . $u['last_name']) ?>
+                                        <?php else: ?>
+                                            <span class="opacity-25">Nepoznat</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="rt-cell rt-cell-email" data-label="Email">
+                                        <?= $u ? htmlspecialchars($u['email']) : '—' ?>
+                                    </div>
+                                    <div class="rt-cell rt-cell-tables" data-label="Stolovi">
+                                        <?= !empty($tables) ? htmlspecialchars(implode(', ', $tables)) : '—' ?>
+                                    </div>
+                                    <div class="rt-cell rt-cell-status" data-label="Status">
+                                        <span class="status-badge status-<?= strtolower($res['status']) ?>">
+                                            <?= $statusLabel ?>
+                                        </span>
+                                    </div>
+                                    <div class="rt-cell rt-cell-arrival" data-label="Dolazak">
+                                        <?php if ($res['arrived']): ?>
+                                            <i class="fa-solid fa-check-circle" style="color: #2ecc71;"></i>
+                                        <?php else: ?>
+                                            <span class="opacity-25">—</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 <?php endif; ?>
             </div>
@@ -149,6 +149,155 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
     </main>
 
     <?php include Helpers::getRelativePath('src/components/footer.php') ?>
+
+    <style>
+        .reservations-table {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .rt-head {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .rt-row {
+            display: grid;
+            grid-template-columns: 140px 100px 1fr 1fr 120px 100px 70px;
+            align-items: center;
+            padding: 14px 20px;
+            gap: 12px;
+        }
+
+        .rt-body .rt-row {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: background 0.2s ease;
+        }
+
+        .rt-body .rt-row:last-child {
+            border-bottom: none;
+        }
+
+        .rt-body .rt-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .rt-head .rt-cell {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .rt-cell {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .rt-cell code {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .rt-cell-time {
+            font-weight: 300;
+            color: #f8f9fa;
+            letter-spacing: 0.3px;
+        }
+
+        .rt-cell-email {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .rt-cell-tables {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .status-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(255, 193, 7, 0.12);
+            color: #ffc107;
+        }
+
+        .status-completed {
+            background: rgba(46, 204, 113, 0.12);
+            color: #2ecc71;
+        }
+
+        .status-cancelled {
+            background: rgba(255, 77, 77, 0.1);
+            color: #ff4d4d;
+        }
+
+        .rt-cell-arrival {
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .rt-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 4px 12px;
+                padding: 12px 16px;
+            }
+
+            .rt-head {
+                display: none;
+            }
+
+            .rt-cell::before {
+                content: attr(data-label);
+                font-size: 0.6rem;
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                color: rgba(255, 255, 255, 0.3);
+                display: block;
+                margin-bottom: 2px;
+            }
+
+            .rt-cell-code,
+            .rt-cell-time,
+            .rt-cell-guest,
+            .rt-cell-email,
+            .rt-cell-tables,
+            .rt-cell-status,
+            .rt-cell-arrival {
+                grid-column: auto;
+            }
+
+            .rt-cell-arrival {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .rt-row {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+        }
+    </style>
+
 </body>
 
 </html>

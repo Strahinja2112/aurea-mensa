@@ -56,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $tables = db()->restaurantTables->findMany(['orderBy' => ['id' => 'ASC']]);
+$relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -71,7 +73,7 @@ $tables = db()->restaurantTables->findMany(['orderBy' => ['id' => 'ASC']]);
                     <h1 class="admin-title">Stolovi</h1>
                     <p class="admin-subtitle">Upravljanje stolovima u restoranu</p>
                 </div>
-                <a href="index.php" class="btn btn-outline-light btn-lg">
+                <a href="<?= $relativePath . '/dashboard/admin' ?>" class="btn btn-outline-light btn-lg">
                     <i class="fa-solid fa-arrow-left me-2"></i> Nazad
                 </a>
             </div>
@@ -210,48 +212,6 @@ $tables = db()->restaurantTables->findMany(['orderBy' => ['id' => 'ASC']]);
     <?php endforeach; ?>
 
     <?php include Helpers::getRelativePath('src/components/footer.php') ?>
-
-    <style>
-        .admin-title {
-            font-size: 42px;
-            line-height: 1;
-            font-family: serif;
-            font-weight: 300;
-            color: #f8f9fa;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .admin-subtitle {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 1rem;
-            margin: 0;
-        }
-
-        main {
-            padding-top: 150px !important;
-            padding-bottom: 80px !important;
-            padding-inline: 0;
-        }
-
-        .dashboard-container {
-            padding: 0 20px;
-        }
-
-        .glass-card {
-            max-width: none;
-        }
-
-        .form-check-input {
-            accent-color: #4A6A6A;
-        }
-
-        .modal-content.glass-card {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-    </style>
-
 </body>
 
 </html>

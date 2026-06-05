@@ -23,6 +23,8 @@ $seeds = [
 ];
 
 $pageTitle = 'Seed Database';
+$relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -35,7 +37,7 @@ $pageTitle = 'Seed Database';
         <div class="container py-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="text-white font-serif">Seed Database</h1>
-                <a href="<?= Helpers::getRelativePath('pages/dashboard/admin') ?>" class="btn btn-outline-light">
+                <a href="<?= $relativePath . '/dashboard/admin' ?>" class="btn btn-outline-light btn-lg">
                     <i class="fa-solid fa-arrow-left me-2"></i> Nazad
                 </a>
             </div>

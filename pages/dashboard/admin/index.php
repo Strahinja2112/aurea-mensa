@@ -26,9 +26,14 @@ if (!$user->isAdmin()) {
 
     <main>
         <div class="dashboard-container">
-            <div class="admin-header text-center mb-5">
-                <h1 class="admin-title">Admin Panel</h1>
-                <p class="admin-subtitle">Dobrodošli, <?= htmlspecialchars($user->getFullName()) ?></p>
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <div class="admin-header text-center">
+                    <h1 class="admin-title">Admin Panel</h1>
+                    <p class="admin-subtitle">Dobrodošli, <?= htmlspecialchars($user->getFullName()) ?></p>
+                </div>
+                <a href="<?= Helpers::getRelativePath() ?>" class="btn btn-outline-light btn-lg">
+                    <i class="fa-solid fa-house me-2"></i> Početna
+                </a>
             </div>
 
             <div class="row g-4 mb-5">

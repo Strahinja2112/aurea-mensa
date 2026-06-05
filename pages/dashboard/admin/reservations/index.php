@@ -36,6 +36,9 @@ foreach ($reservations as $res) {
     }
     $reservationTables[$res['id']] = $tableNames;
 }
+
+$relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -51,7 +54,7 @@ foreach ($reservations as $res) {
                     <h1 class="admin-title">Rezervacije</h1>
                     <p class="admin-subtitle">Pregled rezervacija po datumu</p>
                 </div>
-                <a href="index.php" class="btn btn-outline-light btn-lg">
+                <a href="<?= $relativePath . '/dashboard/admin' ?>" class="btn btn-outline-light btn-lg">
                     <i class="fa-solid fa-arrow-left me-2"></i> Nazad
                 </a>
             </div>
@@ -146,39 +149,6 @@ foreach ($reservations as $res) {
     </main>
 
     <?php include Helpers::getRelativePath('src/components/footer.php') ?>
-
-    <style>
-        .admin-title {
-            font-size: 42px;
-            line-height: 1;
-            font-family: serif;
-            font-weight: 300;
-            color: #f8f9fa;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .admin-subtitle {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 1rem;
-            margin: 0;
-        }
-
-        main {
-            padding-top: 150px !important;
-            padding-bottom: 80px !important;
-            padding-inline: 0;
-        }
-
-        .dashboard-container {
-            padding: 0 20px;
-        }
-
-        .glass-card {
-            max-width: none;
-        }
-    </style>
-
 </body>
 
 </html>

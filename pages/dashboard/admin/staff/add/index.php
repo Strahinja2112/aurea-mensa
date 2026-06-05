@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'email_verified' => 1,
             ]
         ]);
-        $message = 'Radnik je uspešno dodat.';
-        $messageType = 'success';
+        header('Location: ' . Helpers::getRelativePath('pages/dashboard/admin/staff') . '?added=1');
+        exit;
     } catch (Exception $e) {
         $message = $e->getMessage();
         $messageType = 'danger';

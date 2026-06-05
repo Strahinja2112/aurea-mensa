@@ -15,6 +15,11 @@ if (!$user || !$user->isAdmin()) {
 $message = null;
 $messageType = null;
 
+if (isset($_GET['added'])) {
+    $message = 'Radnik je uspešno dodat.';
+    $messageType = 'success';
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 

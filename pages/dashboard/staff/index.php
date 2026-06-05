@@ -180,8 +180,14 @@ $pageTitle = 'Staff Dashboard';
                                     <?php endif; ?>
                                     <?php if ($arrived && !$hasComment): ?>
                                         <button type="button" class="btn btn-outline-light btn-sm"
-                                            onclick="openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                                            onclick="openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>', '<?= htmlspecialchars($userName) ?>', '<?= htmlspecialchars($resUser['email'] ?? '') ?>', '<?= htmlspecialchars($resUser['phone'] ?? '') ?>', '<?= htmlspecialchars(implode(', ', $tables)) ?>', '<?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>', '')">
                                             <i class="fa-solid fa-plus me-1"></i>Komentar
+                                        </button>
+                                    <?php endif; ?>
+                                    <?php if ($arrived && $hasComment): ?>
+                                        <button type="button" class="btn btn-outline-light btn-sm"
+                                            onclick="openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>', '<?= htmlspecialchars($userName) ?>', '<?= htmlspecialchars($resUser['email'] ?? '') ?>', '<?= htmlspecialchars($resUser['phone'] ?? '') ?>', '<?= htmlspecialchars(implode(', ', $tables)) ?>', '<?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>', '<?= htmlspecialchars($res['comment']) ?>')">
+                                            <i class="fa-regular fa-note-sticky me-1"></i>Komentar
                                         </button>
                                     <?php endif; ?>
                                 </div>
@@ -195,26 +201,63 @@ $pageTitle = 'Staff Dashboard';
 
     <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-card">
-                <div class="modal-header border-bottom border-white border-opacity-10">
-                    <h5 class="modal-title text-white">Dodaj Komentar</h5>
+            <div class="modal-content glass-card p-0" style="max-width: 520px;">
+                <div class="modal-header border-0 pb-0 d-flex align-items-center justify-content-between px-4 pt-4">
+                    <h5 class="modal-title text-white m-0 fs-5">
+                        <i class="fa-regular fa-note-sticky me-2 opacity-50"></i>Komentar
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Zatvori"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body px-4 py-3">
                     <input type="hidden" id="modalReservationId" value="">
-                    <p class="text-white mb-3">Rezervacija: <code class="text-warning" id="modalReservationCode"></code></p>
-                    <div class="mb-3">
-                        <label for="modalComment" class="form-label text-white">Komentar</label>
-                        <textarea class="form-control custom-input" id="modalComment" rows="3"
-                            placeholder="Unesite komentar..." required></textarea>
+
+                    <div class="p-3 rounded-3 mb-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width: 40px; height: 40px; background: rgba(74,106,106,0.3);">
+                                <i class="fa-solid fa-user text-white" style="opacity: 0.75;"></i>
+                            </div>
+                            <div style="min-width: 0;">
+                                <div class="text-white fw-medium" id="modalGuestName" style="font-size: 0.95rem;"></div>
+                                <code class="text-warning opacity-75" id="modalReservationCode" style="font-size: 0.75rem;"></code>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-3 mt-3 pt-2" style="border-top: 1px solid rgba(255,255,255,0.04);">
+                            <div class="d-flex align-items-center gap-2" style="font-size: 0.8rem;">
+                                <i class="fa-regular fa-envelope" style="width: 14px; opacity: 0.3;"></i>
+                                <span style="opacity: 0.6;" id="modalGuestEmail"></span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2" style="font-size: 0.8rem;">
+                                <i class="fa-regular fa-clock" style="width: 14px; opacity: 0.3;"></i>
+                                <span style="opacity: 0.6;" id="modalReservationTime"></span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-phone" style="width: 14px; opacity: 0.3;"></i>
+                                <span style="opacity: 0.6;" id="modalGuestPhone"></span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2" style="font-size: 0.8rem;">
+                                <i class="fa-solid fa-chair" style="width: 14px; opacity: 0.3;"></i>
+                                <span style="opacity: 0.6;" id="modalGuestTables"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div id="commentError" class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-3 text-center d-none"></div>
-                    <div id="commentSuccess" class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-3 text-center d-none"></div>
+
+                    <div class="mb-2" id="commentInputGroup">
+                        <label for="modalComment" class="form-label small mb-2" style="opacity: 0.6;">Unesite komentar</label>
+                        <textarea class="form-control custom-input" id="modalComment" rows="3"
+                            placeholder="Zabeleška o gostu..." required
+                            style="resize: vertical; min-height: 80px;"></textarea>
+                    </div>
+                    <div class="mb-2 d-none" id="commentDisplayGroup">
+                        <label class="form-label small mb-2" style="opacity: 0.6;">Komentar</label>
+                        <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); white-space: pre-wrap; font-size: 0.9rem; color: rgba(255,255,255,0.8);" id="modalCommentDisplay"></div>
+                    </div>
+                    <div id="commentError" class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-2 text-center d-none"></div>
+                    <div id="commentSuccess" class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-2 text-center d-none"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Otkaži</button>
-                    <button disabled class="btn btn-success" id="saveCommentBtn">Sačuvaj</button>
+                <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                    <button type="button" class="btn btn-outline-light btn-sm px-3" data-bs-dismiss="modal">Zatvori</button>
+                    <button class="btn btn-cta btn-sm px-4" id="saveCommentBtn">Sačuvaj</button>
                 </div>
             </div>
         </div>
@@ -264,10 +307,38 @@ $pageTitle = 'Staff Dashboard';
             }
         });
 
-        function openCommentModal(reservationId, reservationCode) {
+        document.getElementById('modalComment').addEventListener('input', function() {
+            document.getElementById('saveCommentBtn').disabled = !this.value.trim();
+        });
+
+        function openCommentModal(reservationId, reservationCode, guestName, guestEmail, guestPhone, guestTables, reservationTime, existingComment) {
             document.getElementById('modalReservationId').value = reservationId;
             document.getElementById('modalReservationCode').textContent = reservationCode;
-            document.getElementById('modalComment').value = '';
+            document.getElementById('modalGuestName').textContent = guestName || 'Nepoznat gost';
+            document.getElementById('modalGuestEmail').textContent = guestEmail || '—';
+            document.getElementById('modalGuestPhone').textContent = guestPhone || '—';
+            document.getElementById('modalGuestTables').textContent = guestTables || '—';
+            document.getElementById('modalReservationTime').textContent = reservationTime || '—';
+
+            const inputGroup = document.getElementById('commentInputGroup');
+            const displayGroup = document.getElementById('commentDisplayGroup');
+            const commentDisplay = document.getElementById('modalCommentDisplay');
+            const textarea = document.getElementById('modalComment');
+            const saveBtn = document.getElementById('saveCommentBtn');
+
+            if (existingComment) {
+                inputGroup.classList.add('d-none');
+                displayGroup.classList.remove('d-none');
+                commentDisplay.textContent = existingComment;
+                saveBtn.classList.add('d-none');
+            } else {
+                inputGroup.classList.remove('d-none');
+                displayGroup.classList.add('d-none');
+                textarea.value = '';
+                saveBtn.classList.remove('d-none');
+                saveBtn.disabled = true;
+            }
+
             document.getElementById('commentError').classList.add('d-none');
             document.getElementById('commentSuccess').classList.add('d-none');
             const modal = new bootstrap.Modal(document.getElementById('commentModal'));

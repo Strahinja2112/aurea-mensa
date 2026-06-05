@@ -68,11 +68,11 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                     </div>
                 </form>
 
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h5 class="text-white mb-0">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <span class="opacity-50">
                         Rezervacije za <?= (DateTime::createFromFormat('Y-m-d', $selectedDate))->format('d. m. Y.') ?>
-                    </h5>
-                    <span class="small opacity-50">
+                    </span>
+                    <span class="opacity-50">
                         Ukupno: <?= count($reservations) ?> rezervacija
                     </span>
                 </div>

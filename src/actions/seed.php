@@ -213,6 +213,50 @@ function seedReservations(string $redirectUrl): void
         }
     }
 
+    // Create ~40 reservations for today starting one hour from now (pagination testing)
+    $now = new DateTime();
+    $startHour = (int)$now->format('H') + 1;
+    if ($startHour < 8) $startHour = 8;
+    if ($startHour > 22) $startHour = 22;
+
+    for ($i = 0; $i < 40; $i++) {
+        $user = $users[array_rand($users)];
+        $status = 'ACTIVE';
+        $table = $tables[array_rand($tables)];
+
+        $offsetMinutes = $i * 12;
+        $h = $startHour + (int)($offsetMinutes / 60);
+        $m = $offsetMinutes % 60;
+        if ($h >= 23) break;
+
+        $startTime = sprintf('%02d:%02d:00', $h, $m);
+        $endH = min($h + 1, 23);
+        $endM = $endH === 23 ? min($m, 59) : $m;
+        $endTime = sprintf('%02d:%02d:00', $endH, $endM);
+
+        $reservationCode = 'RES' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+
+        $reservation = db()->reservations->create([
+            'data' => [
+                'user_id' => $user['id'],
+                'reservation_code' => $reservationCode,
+                'reservation_date' => $today,
+                'start_time' => $startTime,
+                'end_time' => $endTime,
+                'status' => $status,
+                'arrived' => 0,
+                'arrived_at' => null,
+            ]
+        ]);
+
+        db()->reservationTables->create([
+            'data' => [
+                'reservation_id' => $reservation['id'],
+                'table_id' => $table['id'],
+            ]
+        ]);
+    }
+
     header('Location: ' . $redirectUrl . '?success=Rezervacije su uspešno dodate');
     exit;
 }

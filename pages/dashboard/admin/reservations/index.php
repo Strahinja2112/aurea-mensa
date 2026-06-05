@@ -42,7 +42,7 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
 ?>
 <!doctype html>
 <html lang="en">
-<?php Helpers::renderHead("Rezervacije", ['dashboard.css']) ?>
+<?php Helpers::renderHead("Rezervacije", ['dashboard.css', 'table.css']) ?>
 
 <body>
     <?php include Helpers::getRelativePath('src/components/header.php') ?>
@@ -69,7 +69,7 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 </form>
 
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h5 class="text-white mb-0" style="font-weight: 300; letter-spacing: 0.5px;">
+                    <h5 class="text-white mb-0">
                         Rezervacije za <?= (DateTime::createFromFormat('Y-m-d', $selectedDate))->format('d. m. Y.') ?>
                     </h5>
                     <span class="small opacity-50">
@@ -106,7 +106,7 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                                     'CANCELLED' => 'Otkazana',
                                     default => $res['status'],
                                 };
-                                ?>
+                            ?>
                                 <div class="rt-row">
                                     <div class="rt-cell rt-cell-code" data-label="Kod">
                                         <code><?= htmlspecialchars($res['reservation_code']) ?></code>
@@ -149,154 +149,6 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
     </main>
 
     <?php include Helpers::getRelativePath('src/components/footer.php') ?>
-
-    <style>
-        .reservations-table {
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .rt-head {
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .rt-row {
-            display: grid;
-            grid-template-columns: 140px 100px 1fr 1fr 120px 100px 70px;
-            align-items: center;
-            padding: 14px 20px;
-            gap: 12px;
-        }
-
-        .rt-body .rt-row {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            transition: background 0.2s ease;
-        }
-
-        .rt-body .rt-row:last-child {
-            border-bottom: none;
-        }
-
-        .rt-body .rt-row:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .rt-head .rt-cell {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .rt-cell {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .rt-cell code {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .rt-cell-time {
-            font-weight: 300;
-            color: #f8f9fa;
-            letter-spacing: 0.3px;
-        }
-
-        .rt-cell-email {
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
-
-        .rt-cell-tables {
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-
-        .status-badge {
-            display: inline-block;
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            padding: 4px 10px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        .status-active {
-            background: rgba(255, 193, 7, 0.12);
-            color: #ffc107;
-        }
-
-        .status-completed {
-            background: rgba(46, 204, 113, 0.12);
-            color: #2ecc71;
-        }
-
-        .status-cancelled {
-            background: rgba(255, 77, 77, 0.1);
-            color: #ff4d4d;
-        }
-
-        .rt-cell-arrival {
-            text-align: center;
-        }
-
-        @media (max-width: 900px) {
-            .rt-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 4px 12px;
-                padding: 12px 16px;
-            }
-
-            .rt-head {
-                display: none;
-            }
-
-            .rt-cell::before {
-                content: attr(data-label);
-                font-size: 0.6rem;
-                font-weight: 600;
-                letter-spacing: 1px;
-                text-transform: uppercase;
-                color: rgba(255, 255, 255, 0.3);
-                display: block;
-                margin-bottom: 2px;
-            }
-
-            .rt-cell-code,
-            .rt-cell-time,
-            .rt-cell-guest,
-            .rt-cell-email,
-            .rt-cell-tables,
-            .rt-cell-status,
-            .rt-cell-arrival {
-                grid-column: auto;
-            }
-
-            .rt-cell-arrival {
-                text-align: left;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .rt-row {
-                grid-template-columns: 1fr;
-                gap: 6px;
-            }
-        }
-    </style>
 
 </body>
 

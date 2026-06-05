@@ -17,9 +17,12 @@ body {
 body {
 	display: flex;
 	flex-direction: column;
-	font-family: "Poppins", sans-serif;
 	color: #a5a5a5;
 	min-height: 100vh;
+}
+
+* {
+	font-family: "Poppins", sans-serif;
 }
 
 .font-serif {

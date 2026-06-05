@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../../autoload.php';
-require_once Helpers::getRelativePath('src/components/reservation-card.php');
 
 $user = Auth::getUser();
 
@@ -21,7 +20,7 @@ $reservations = db()->reservations->findMany([
     'where' => [
         'reservation_date' => $today,
     ],
-    'order' => ['start_time' => 'ASC'],
+    'orderBy' => ['start_time' => 'ASC'],
 ]);
 
 $todayReservations = [];
@@ -88,7 +87,7 @@ $pageTitle = 'Staff Dashboard';
 ?>
 <!doctype html>
 <html lang="sr">
-<?php Helpers::renderHead($pageTitle, ['auth.css', 'dashboard.css']) ?>
+<?php Helpers::renderHead($pageTitle, ['auth.css', 'dashboard.css', 'table.css']) ?>
 
 <body>
     <?php include Helpers::getRelativePath('src/components/header.php') ?>
@@ -127,10 +126,69 @@ $pageTitle = 'Staff Dashboard';
                     <h3 class="text-white opacity-25 fw-light">Nema rezervacija.</h3>
                 </div>
             <?php else: ?>
-                <div class="res-cards-grid">
-                    <?php foreach ($todayReservations as $item): ?>
-                        <?php renderReservationCard($item); ?>
-                    <?php endforeach; ?>
+                <div class="reservations-table rt-table-actions">
+                    <div class="rt-head">
+                        <div class="rt-row">
+                            <div class="rt-cell rt-cell-code">Kod</div>
+                            <div class="rt-cell rt-cell-time">Vreme</div>
+                            <div class="rt-cell rt-cell-guest">Gost</div>
+                            <div class="rt-cell rt-cell-email">Kontakt</div>
+                            <div class="rt-cell rt-cell-tables">Stolovi</div>
+                            <div class="rt-cell rt-cell-status">Status</div>
+                            <div class="rt-cell rt-cell-arrival">Akcije</div>
+                        </div>
+                    </div>
+                    <div class="rt-body">
+                        <?php foreach ($todayReservations as $item):
+                            $res = $item['reservation'];
+                            $resUser = $item['user'];
+                            $arrived = $item['arrived'];
+                            $tables = $item['tables'];
+                            $hasComment = !empty($res['comment']);
+                            $userName = trim(($resUser['first_name'] ?? '') . ' ' . ($resUser['last_name'] ?? ''));
+                            if (!$userName) {
+                                $userName = $resUser['email'] ?? 'Nepoznat';
+                            }
+                            ?>
+                            <div class="rt-row">
+                                <div class="rt-cell rt-cell-code" data-label="Kod">
+                                    <code><?= htmlspecialchars($res['reservation_code']) ?></code>
+                                </div>
+                                <div class="rt-cell rt-cell-time" data-label="Vreme">
+                                    <?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>
+                                </div>
+                                <div class="rt-cell rt-cell-guest" data-label="Gost">
+                                    <?= htmlspecialchars($userName) ?>
+                                </div>
+                                <div class="rt-cell rt-cell-email" data-label="Kontakt">
+                                    <div><?= htmlspecialchars($resUser['email'] ?? '') ?></div>
+                                    <div class="opacity-50" style="font-size: 0.75rem;"><?= htmlspecialchars($resUser['phone'] ?? '') ?></div>
+                                </div>
+                                <div class="rt-cell rt-cell-tables" data-label="Stolovi">
+                                    <?= !empty($tables) ? htmlspecialchars(implode(', ', $tables)) : '—' ?>
+                                </div>
+                                <div class="rt-cell rt-cell-status" data-label="Status">
+                                    <span class="status-badge <?= $arrived ? 'status-completed' : 'status-active' ?>">
+                                        <?= $arrived ? 'Prijavljen' : 'Na čekanju' ?>
+                                    </span>
+                                </div>
+                                <div class="rt-cell rt-cell-arrival" data-label="Akcije" style="text-align: right;">
+                                    <?php if (!$arrived): ?>
+                                        <button type="button" class="btn btn-success btn-sm"
+                                                onclick="quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                                            <i class="fa-solid fa-check me-1"></i>Prijavi
+                                        </button>
+                                    <?php endif; ?>
+                                    <?php if ($arrived && !$hasComment): ?>
+                                        <button type="button" class="btn btn-outline-light btn-sm"
+                                                onclick="openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                                            <i class="fa-solid fa-plus me-1"></i>Komentar
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
@@ -270,9 +328,6 @@ $pageTitle = 'Staff Dashboard';
             }
         });
     </script>
-
-    <?php require_once Helpers::getRelativePath('src/components/reservation-card.php'); ?>
-
 
 </body>
 

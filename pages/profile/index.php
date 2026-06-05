@@ -61,6 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 }
 
 $filterDate = $_GET['date'] ?? '';
+$page = max(1, (int)($_GET['page'] ?? 1));
+$perPage = 6;
 
 $where = [
     'AND' => [
@@ -72,9 +74,15 @@ if ($filterDate) {
     $where['AND'][] = ['reservation_date' => $filterDate];
 }
 
+$totalProfile = db()->reservations->count(['where' => $where]);
+$totalProfilePages = max(1, (int)ceil($totalProfile / $perPage));
+$page = min($page, $totalProfilePages);
+
 $myReservations = db()->reservations->findMany([
     'where' => $where,
-    'orderBy' => ['reservation_date' => 'DESC', 'start_time' => 'DESC']
+    'orderBy' => ['reservation_date' => 'DESC', 'start_time' => 'DESC'],
+    'take' => $perPage,
+    'skip' => ($page - 1) * $perPage,
 ]);
 
 $reservationTables = [];
@@ -169,7 +177,7 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                             </div>
                         </div>
 
-                        <div class="d-flex gap-3 w-100">
+                        <div class="d-flex flex-column flex-sm-row gap-3 w-100">
                             <a href="<?= $relativePath . '/auth/logout' ?>" class="btn btn-danger btn-lg flex-fill">
                                 <i class="fa-solid fa-right-from-bracket me-2"></i>
                                 Odjavi se
@@ -259,12 +267,11 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                                         </div>
                                         <div class="rt-cell rt-cell-arrival" data-label="Akcije">
                                             <?php if ($canCancel): ?>
-                                                <div class="opacity-50" style="font-size: 0.65rem; margin-bottom: 4px;">
-                                                    Još <?= $timerText ?>
-                                                </div>
                                                 <button onclick="cancelReservation(<?= $res['id'] ?>)"
                                                     class="btn btn-sm btn-outline-danger">
-                                                    <i class="fa-solid fa-xmark me-1"></i> Otkaži
+                                                    <i class="fa-solid fa-xmark me-1"></i>
+                                                    <span>Otkaži</span>
+                                                    <span style="font-size: 9px;">(<?= $timerText ?>)</span>
                                                 </button>
                                             <?php else: ?>
                                                 <span class="opacity-25" style="font-size: 0.65rem;">
@@ -276,6 +283,27 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                                 <?php endforeach; ?>
                             </div>
                         </div>
+
+                        <?php if ($totalProfilePages > 1): ?>
+                            <div class="pagination-wrap">
+                                <?php if ($page > 1): ?>
+                                    <a href="?date=<?= urlencode($filterDate) ?>&page=<?= $page - 1 ?>" class="page-btn">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </a>
+                                <?php endif; ?>
+                                <?php for ($i = 1; $i <= $totalProfilePages; $i++): ?>
+                                    <a href="?date=<?= urlencode($filterDate) ?>&page=<?= $i ?>"
+                                        class="page-btn <?= $i === $page ? 'active' : '' ?>">
+                                        <?= $i ?>
+                                    </a>
+                                <?php endfor; ?>
+                                <?php if ($page < $totalProfilePages): ?>
+                                    <a href="?date=<?= urlencode($filterDate) ?>&page=<?= $page + 1 ?>" class="page-btn">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
             </div>

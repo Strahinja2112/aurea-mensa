@@ -221,4 +221,39 @@
     }
 }
 
+.pagination-wrap {
+	display: flex;
+	justify-content: center;
+	gap: 4px;
+	margin-top: 24px;
+}
+
+.pagination-wrap .page-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 36px;
+	height: 36px;
+	padding: 0 10px;
+	font-size: 0.85rem;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.04);
+	color: rgba(255, 255, 255, 0.6);
+	text-decoration: none;
+	transition: all 0.2s ease;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pagination-wrap .page-btn:hover {
+	background: rgba(255, 255, 255, 0.08);
+	color: #f8f9fa;
+	border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pagination-wrap .page-btn.active {
+	background: #4a6a6a;
+	color: #e6e6e6;
+	border-color: #4a6a6a;
+}
+
 

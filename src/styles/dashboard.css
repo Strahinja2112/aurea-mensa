@@ -10,8 +10,6 @@
 	font-family: serif;
 	font-weight: 300;
 	color: #f8f9fa;
-	letter-spacing: 1px;
-	margin-bottom: 12px;
 }
 
 .admin-subtitle {
@@ -26,10 +24,6 @@ main {
 	padding-inline: 0;
 	display: flex;
 	justify-content: center;
-}
-
-body {
-	min-height: 100vh;
 }
 
 .dashboard-container {

@@ -6,9 +6,13 @@ require_once __DIR__ . '/../../../autoload.php';
 
 $user = Auth::getUser();
 
-if (!$user || !$user->isAdmin()) {
-    http_response_code(403);
+if (!$user) {
     header('Location: ' . Helpers::getRelativePath('pages/auth/login'));
+    exit;
+}
+
+if (!$user->isAdmin()) {
+    Helpers::redirectToError(ErrorType::FORBIDDEN);
     exit;
 }
 

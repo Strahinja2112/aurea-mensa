@@ -2,8 +2,8 @@
 
 $user = Auth::getUser();
 $navLinks = [
-        'about' => 'O nama',
-        'reserve-table' => "Rezervacija",
+    'about' => 'O nama',
+    'reserve-table' => "Rezervacija",
 ];
 
 $relativePath = Helpers::getRelativePath('pages');
@@ -18,7 +18,7 @@ $relativePath = Helpers::getRelativePath('pages');
             </a>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
-                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon no-border"></span>
         </button>
 
@@ -28,7 +28,7 @@ $relativePath = Helpers::getRelativePath('pages');
                 foreach ($navLinks as $file => $name): ?>
                     <li class="nav-item">
                         <a class="nav-link fs-5 px-lg-3 mt-3 mt-lg-0 py-lg-0"
-                           href="<?= $relativePath . '/' . $file ?>">
+                            href="<?= $relativePath . '/' . $file ?>">
                             <?= $name ?>
                         </a>
                     </li>
@@ -52,13 +52,13 @@ $relativePath = Helpers::getRelativePath('pages');
                     endif ?>
                 <?php
                 else: ?>
-                    <a href="<?= $relativePath . '/auth/login' ?>" class="btn btn-outline-light btn-lg">
-                        <i class="fa-solid fa-right-to-bracket me-2"></i>
-                        Login
-                    </a>
-                    <a href="<?= $relativePath . '/auth/register' ?>" class="btn btn-light btn-lg">
+                    <a href="<?= $relativePath . '/auth/register' ?>" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-user-plus me-2"></i>
                         Registracija
+                    </a>
+                    <a href="<?= $relativePath . '/auth/login' ?>" class="btn btn-light btn-lg">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>
+                        Login
                     </a>
                 <?php
                 endif; ?>

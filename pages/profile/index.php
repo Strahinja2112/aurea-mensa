@@ -76,7 +76,7 @@ $relativePath = Helpers::getRelativePath("pages/auth/")
 <!DOCTYPE html>
 <html lang="sr">
 <?php
-Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css']); ?>
+Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
 <body>
 
 <?php

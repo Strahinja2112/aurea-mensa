@@ -149,7 +149,7 @@ $pageTitle = 'Staff Dashboard';
                             if (!$userName) {
                                 $userName = $resUser['email'] ?? 'Nepoznat';
                             }
-                            ?>
+                        ?>
                             <div class="rt-row">
                                 <div class="rt-cell rt-cell-code" data-label="Kod">
                                     <code><?= htmlspecialchars($res['reservation_code']) ?></code>
@@ -162,7 +162,6 @@ $pageTitle = 'Staff Dashboard';
                                 </div>
                                 <div class="rt-cell rt-cell-email" data-label="Kontakt">
                                     <div><?= htmlspecialchars($resUser['email'] ?? '') ?></div>
-                                    <div class="opacity-50" style="font-size: 0.75rem;"><?= htmlspecialchars($resUser['phone'] ?? '') ?></div>
                                 </div>
                                 <div class="rt-cell rt-cell-tables" data-label="Stolovi">
                                     <?= !empty($tables) ? htmlspecialchars(implode(', ', $tables)) : '—' ?>
@@ -175,13 +174,13 @@ $pageTitle = 'Staff Dashboard';
                                 <div class="rt-cell rt-cell-arrival" data-label="Akcije" style="text-align: right;">
                                     <?php if (!$arrived): ?>
                                         <button type="button" class="btn btn-success btn-sm"
-                                                onclick="quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                                            onclick="quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
                                             <i class="fa-solid fa-check me-1"></i>Prijavi
                                         </button>
                                     <?php endif; ?>
                                     <?php if ($arrived && !$hasComment): ?>
                                         <button type="button" class="btn btn-outline-light btn-sm"
-                                                onclick="openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
+                                            onclick="openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
                                             <i class="fa-solid fa-plus me-1"></i>Komentar
                                         </button>
                                     <?php endif; ?>

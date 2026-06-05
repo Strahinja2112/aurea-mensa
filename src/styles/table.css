@@ -114,6 +114,24 @@
     padding: 4px 10px;
 }
 
+.rt-table-profile .rt-row {
+    grid-template-columns: 1fr 120px 120px 110px 130px;
+}
+
+.rt-table-profile .rt-cell-code code {
+    display: inline-block;
+}
+
+.rt-table-profile .rt-cell-arrival {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.rt-table-profile .rt-cell-arrival .btn {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+}
+
 @media (max-width: 900px) {
     .rt-row {
         grid-template-columns: 1fr 1fr;

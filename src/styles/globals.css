@@ -14,6 +14,10 @@ body {
 	background-size: cover;
 }
 
+html {
+	scroll-behavior: smooth !important;
+}
+
 body {
 	display: flex;
 	flex-direction: column;
@@ -355,3 +359,4 @@ section {
 .btn-outline-light {
 	backdrop-filter: blur(5px);
 }
+x

@@ -14,6 +14,8 @@ if (!$user || !$user->isAdmin()) {
 
 $selectedDate = $_GET['date'] ?? date('Y-m-d');
 $search = trim($_GET['search'] ?? '');
+$page = max(1, (int)($_GET['page'] ?? 1));
+$perPage = 10;
 
 $reservationWhere = ['reservation_date' => $selectedDate];
 
@@ -46,9 +48,15 @@ if ($search !== '') {
     }
 }
 
+$total = db()->reservations->count(['where' => $reservationWhere]);
+$totalPages = max(1, (int)ceil($total / $perPage));
+$page = min($page, $totalPages);
+
 $reservations = db()->reservations->findMany([
     'where' => $reservationWhere,
     'orderBy' => ['start_time' => 'ASC'],
+    'take' => $perPage,
+    'skip' => ($page - 1) * $perPage,
 ]);
 
 $reservationUsers = [];
@@ -103,7 +111,7 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                             <input type="text" name="search" class="form-control custom-input" value="<?= htmlspecialchars($search) ?>" placeholder="Pretraži..." style="padding-top: 6px; padding-bottom: 6px;">
                         </div>
                         <div class="col-12 col-md-3 d-flex gap-2">
-                            <button type="submit" class="btn btn-cta flex-fill" style="padding-top: 7px; padding-bottom: 6px;">Prikaži</button>
+                            <button type="submit" class="btn btn-cta flex-fill" style="padding-top: 6px; padding-bottom: 6px;">Prikaži</button>
                             <?php if ($search !== ''): ?>
                                 <a href="?date=<?= urlencode($selectedDate) ?>" class="btn btn-outline-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px; min-width: 38px;" title="Poništi pretragu">
                                     <i class="fa-solid fa-xmark"></i>
@@ -118,7 +126,10 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                         Rezervacije za <?= (DateTime::createFromFormat('Y-m-d', $selectedDate))->format('d. m. Y.') ?>
                     </span>
                     <span class="opacity-50">
-                        Ukupno: <?= count($reservations) ?> rezervacija
+                        Ukupno: <?= $total ?> rezervacija
+                        <?php if ($totalPages > 1): ?>
+                            (strana <?= $page ?> od <?= $totalPages ?>)
+                        <?php endif; ?>
                     </span>
                 </div>
 
@@ -188,6 +199,27 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                             <?php endforeach; ?>
                         </div>
                     </div>
+
+                    <?php if ($totalPages > 1): ?>
+                        <div class="pagination-wrap">
+                            <?php if ($page > 1): ?>
+                                <a href="?date=<?= urlencode($selectedDate) ?>&search=<?= urlencode($search) ?>&page=<?= $page - 1 ?>" class="page-btn">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </a>
+                            <?php endif; ?>
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <a href="?date=<?= urlencode($selectedDate) ?>&search=<?= urlencode($search) ?>&page=<?= $i ?>"
+                                    class="page-btn <?= $i === $page ? 'active' : '' ?>">
+                                    <?= $i ?>
+                                </a>
+                            <?php endfor; ?>
+                            <?php if ($page < $totalPages): ?>
+                                <a href="?date=<?= urlencode($selectedDate) ?>&search=<?= urlencode($search) ?>&page=<?= $page + 1 ?>" class="page-btn">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>

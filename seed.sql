@@ -31,13 +31,13 @@ CREATE TABLE users
 );
 
 INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, email_verified)
-VALUES ('katjatodic@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Katja', 'Todic',
+VALUES ('novakpavicevic@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Novak', 'Pavicevic',
         '0600000003',
         1, TRUE),
        ('pavicevicstrahinja99@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Strahinja',
         'Pavicevic',
         '0600000002', 2, TRUE),
-       ('admin@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Admin', 'Adminović',
+       ('admin@gmail.com', '$2a$04$M1wJu6e1JxtMnLbi0N5VC..xmYefn8bD2xkM/Lewk/3/8IeokOn2i', 'Katja', 'Todic',
         '0600000001', 3, TRUE);
 
 CREATE TABLE auth_sessions

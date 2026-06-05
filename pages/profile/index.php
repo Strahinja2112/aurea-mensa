@@ -186,6 +186,21 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                 <div class="glass-card h-100 w-100" style="max-width: 1000px !important;">
                     <h2 class="text-center mb-4">Rezervacije</h2>
 
+                    <form method="GET" class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                        <label class="form-label small opacity-50 mb-2">Filter po datumu</label>
+                        <div class="d-flex gap-2">
+                            <input type="date" name="date" class="form-control custom-input"
+                                value="<?= htmlspecialchars($filterDate) ?>"
+                                style="min-width: 0; flex: 1;">
+                            <button type="submit" class="btn btn-light fw-bold" style="white-space: nowrap;">Filtriraj</button>
+                            <?php if ($filterDate): ?>
+                                <a href="." class="btn btn-outline-light px-3">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </form>
+
                     <?php if (empty($myReservations)): ?>
                         <div class="text-center py-5">
                             <i class="fa-solid fa-calendar-xmark fa-3x mb-3 opacity-10"></i>
@@ -196,9 +211,8 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                             <div class="rt-head">
                                 <div class="rt-row">
                                     <div class="rt-cell rt-cell-code">Kod</div>
+                                    <div class="rt-cell rt-cell-date">Datum</div>
                                     <div class="rt-cell rt-cell-time">Vreme</div>
-                                    <div class="rt-cell rt-cell-tables">Stolovi</div>
-                                    <div class="rt-cell rt-cell-status">Status</div>
                                     <div class="rt-cell rt-cell-arrival">Akcije</div>
                                 </div>
                             </div>
@@ -228,25 +242,16 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'profile.css', 'table.css']); ?>
                                     <div class="rt-row">
                                         <div class="rt-cell rt-cell-code" data-label="Kod">
                                             <code><?= htmlspecialchars($res['reservation_code']) ?></code>
-                                            <div class="opacity-50" style="font-size: 0.7rem; margin-top: 2px;">
-                                                <?= date('d. M', $resTimestamp) ?>
-                                            </div>
+                                        </div>
+                                        <div class="rt-cell rt-cell-date" data-label="Datum">
+                                            <?php
+                                            $d = new DateTime($res['reservation_date']);
+                                            echo '<span style="font-size: 1.1rem; font-weight: 300; color: #f8f9fa;">' . $d->format('d') . '</span>';
+                                            echo '<span class="opacity-50" style="font-size: 0.65rem; display: block; text-transform: uppercase; letter-spacing: 1px;">' . $d->format('M') . '</span>';
+                                            ?>
                                         </div>
                                         <div class="rt-cell rt-cell-time" data-label="Vreme">
                                             <?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>
-                                        </div>
-                                        <div class="rt-cell rt-cell-tables" data-label="Stolovi">
-                                            <?= !empty($tables) ? htmlspecialchars(implode(', ', $tables)) : '—' ?>
-                                        </div>
-                                        <div class="rt-cell rt-cell-status" data-label="Status">
-                                            <span class="status-badge status-<?= strtolower($res['status']) ?>">
-                                                <?= match ($res['status']) {
-                                                    'ACTIVE' => 'Aktivna',
-                                                    'COMPLETED' => 'Realizovana',
-                                                    'CANCELLED' => 'Otkazana',
-                                                    default => $res['status'],
-                                                } ?>
-                                            </span>
                                         </div>
                                         <div class="rt-cell rt-cell-arrival" data-label="Akcije" style="text-align: right;">
                                             <?php if ($canCancel): ?>

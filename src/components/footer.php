@@ -73,10 +73,8 @@ $relativePath = Helpers::getRelativePath('pages');
 
 <style>
     .site-footer {
-        backdrop-filter: blur(20px);
+        backdrop-filter: blur(5px);
         padding: 60px 0 30px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        /*margin-top: 100px;*/
     }
 
     .footer-logo a {
@@ -84,13 +82,13 @@ $relativePath = Helpers::getRelativePath('pages');
         color: white;
     }
 
-    .footer-logo a > div:first-child {
+    .footer-logo a>div:first-child {
         font-size: 36px;
         line-height: 0.75;
         font-family: serif;
     }
 
-    .footer-logo a > div:last-child {
+    .footer-logo a>div:last-child {
         font-size: 10px;
         text-transform: uppercase;
         letter-spacing: 0.3em;
@@ -175,7 +173,7 @@ $relativePath = Helpers::getRelativePath('pages');
             padding: 40px 0 20px;
         }
 
-        .footer-logo a > div:first-child {
+        .footer-logo a>div:first-child {
             font-size: 28px;
         }
     }

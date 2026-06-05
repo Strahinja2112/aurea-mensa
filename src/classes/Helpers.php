@@ -106,6 +106,27 @@ if (!class_exists('Helpers')) {
 
             return $hasUppercase && $hasNumber && $isLongEnough;
         }
+
+        public static function getErrorUrl(ErrorType $type, ?string $message = null, ?string $redirectTo = null): string
+        {
+            $params = ['type' => $type->value];
+
+            if ($message !== null) {
+                $params['message'] = $message;
+            }
+
+            if ($redirectTo !== null) {
+                $params['redirect'] = $redirectTo;
+            }
+
+            return self::getRelativePath('pages/error') . '?' . http_build_query($params);
+        }
+
+        public static function redirectToError(ErrorType $type, ?string $message = null, ?string $redirectTo = null): never
+        {
+            header('Location: ' . self::getErrorUrl($type, $message, $redirectTo));
+            exit;
+        }
     }
 }
 

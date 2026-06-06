@@ -42,20 +42,14 @@ Helpers::renderHead("Home") ?>
                 </div>
                 <div class="flow-grid">
                     <article class="flow-card">
-                        <span>01</span>
-                        <i class="fa-solid fa-user-check" aria-hidden="true"></i>
                         <h3>Napravite siguran nalog</h3>
                         <p>Aktivirajte nalog preko e-maila i svaki sledeći dolazak zakažite brže, bez ponovnog unošenja osnovnih podataka.</p>
                     </article>
                     <article class="flow-card">
-                        <span>02</span>
-                        <i class="fa-solid fa-chair" aria-hidden="true"></i>
                         <h3>Birajte ono što vam odgovara</h3>
                         <p>Odaberite datum, vreme, trajanje i sto koji odgovara društvu, povodu i delu restorana koji preferirate.</p>
                     </article>
                     <article class="flow-card">
-                        <span>03</span>
-                        <i class="fa-solid fa-ticket" aria-hidden="true"></i>
                         <h3>Dolazite sa potvrdom</h3>
                         <p>Dobijate kod rezervacije i jasne detalje termina, pa osoblje može brzo da pronađe vaš sto pri dolasku.</p>
                     </article>

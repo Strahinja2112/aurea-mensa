@@ -40,7 +40,7 @@ if (!class_exists('Helpers')) {
         {
             $siteName = self::WEBSITE_NAME;
 
-            $defaultGlobalCss = ["globals.css", "landing.css", "responsive.css"];
+            $defaultGlobalCss = ["globals.css", "landing.css"];
             $allGlobalCss = array_merge($defaultGlobalCss, $extraGlobalCss);
 
             $cssLinks = "";

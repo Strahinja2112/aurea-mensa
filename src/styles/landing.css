@@ -56,15 +56,6 @@
 	flex-direction: column;
 }
 
-.hero-copy {
-	max-width: 830px;
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	background: rgba(5, 5, 5, 0.58);
-	padding: clamp(24px, 4vw, 42px);
-	box-shadow: 0 26px 90px rgba(0, 0, 0, 0.28);
-}
-
 #hero-title {
 	font-size: clamp(4rem, 11vw, 9.4rem);
 	padding-top: 32px !important;
@@ -127,105 +118,6 @@
 	color: #ffffff;
 }
 
-.hero-note {
-	display: inline-flex;
-	gap: 10px;
-	align-items: flex-start;
-	max-width: 640px;
-	margin-top: 26px;
-	color: var(--muted);
-	font-size: 0.94rem;
-}
-
-.hero-note i {
-	color: var(--accent);
-	margin-top: 4px;
-}
-
-.booking-preview {
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	background: var(--panel-bg);
-	padding: 24px;
-	box-shadow: 0 26px 90px rgba(0, 0, 0, 0.38);
-}
-
-.preview-topbar {
-	display: flex;
-	gap: 8px;
-	margin-bottom: 24px;
-}
-
-.preview-topbar span {
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: rgba(196, 171, 159, 0.42);
-}
-
-.preview-header {
-	padding-bottom: 20px;
-	border-bottom: 1px solid var(--border);
-}
-
-.preview-header p {
-	color: var(--faint);
-	font-size: 0.86rem;
-	text-transform: uppercase;
-	letter-spacing: 0.14em;
-}
-
-.preview-header strong {
-	display: block;
-	margin-top: 8px;
-	color: var(--text);
-	font-family: "Libre Baskerville", Georgia, serif;
-	font-size: clamp(1.5rem, 3vw, 2.25rem);
-	font-weight: 400;
-}
-
-.preview-fields {
-	display: grid;
-	gap: 12px;
-	margin: 24px 0;
-}
-
-.preview-fields div {
-	display: flex;
-	justify-content: space-between;
-	gap: 18px;
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	background: rgba(255, 255, 255, 0.045);
-	padding: 14px 16px;
-}
-
-.preview-fields span {
-	color: var(--faint);
-	font-size: 0.9rem;
-}
-
-.preview-fields strong {
-	color: var(--text);
-	font-weight: 600;
-	text-align: right;
-}
-
-.preview-status {
-	display: flex;
-	gap: 10px;
-	align-items: center;
-	border-radius: 8px;
-	background: rgba(74, 106, 106, 0.26);
-	color: #dfe8e6;
-	padding: 14px 16px;
-	font-size: 0.94rem;
-}
-
-.preview-status i {
-	color: var(--accent);
-}
-
 .landing-section {
 	padding: clamp(68px, 9vw, 112px) 0;
 }
@@ -237,9 +129,7 @@
 }
 
 .section-heading h2,
-.rules-grid h2,
-.cta-band h2,
-.visit-section h2 {
+.rules-grid div h2 {
 	margin-top: 12px;
 	font-size: clamp(2rem, 5vw, 4rem);
 	line-height: 1.08;
@@ -247,7 +137,7 @@
 }
 
 .section-heading p:not(.section-kicker),
-.rules-grid p {
+.rules-grid div p:not(.section-kicker) {
 	margin-top: 18px;
 	font-size: 1.02rem;
 	text-align: center;
@@ -317,19 +207,6 @@
 	align-items: center;
 }
 
-.text-link {
-	display: inline-flex;
-	align-items: center;
-	gap: 10px;
-	margin-top: 28px;
-	color: var(--accent);
-	font-weight: 700;
-}
-
-.text-link:hover {
-	color: #ffffff;
-}
-
 .rules-panel {
 	display: grid;
 	gap: 16px;
@@ -359,93 +236,9 @@
 	color: var(--muted);
 }
 
-.cta-band {
-	padding: clamp(34px, 5vw, 54px) 0;
-	background: var(--accent-strong);
-}
-
-.cta-band .container-xl {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 24px;
-}
-
-.cta-band .section-kicker,
-.cta-band h2 {
-	color: #f4f1ea !important;
-}
-
-.cta-band h2 {
-	font-size: clamp(1.8rem, 3.5vw, 3rem);
-}
-
-.cta-band .btn-cta {
-	background: #f4f1ea;
-	border-color: #f4f1ea;
-	color: #17201f !important;
-	white-space: nowrap;
-}
-
-.cta-band .btn-cta:hover {
-	background: #ffffff;
-	border-color: #ffffff;
-	color: #17201f !important;
-}
-
-.visit-section {
-	padding: clamp(48px, 7vw, 80px) 0;
-	background: url("../../public/images/AI_Background2.png") center / cover
-		no-repeat;
-}
-
-.visit-grid {
-	display: grid;
-	grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.7fr);
-	gap: 28px;
-	align-items: start;
-}
-
-.visit-section h2 {
-	max-width: 780px;
-}
-
-.visit-details {
-	display: grid;
-	gap: 14px;
-	padding-top: 10px;
-}
-
-.visit-details p {
-	display: flex;
-	gap: 12px;
-	align-items: flex-start;
-	color: var(--muted);
-}
-
-.visit-details i {
-	color: var(--accent);
-	margin-top: 6px;
-	width: 18px;
-}
-
-.visit-details a {
-	color: var(--text);
-}
-
-.visit-details a:hover {
-	color: var(--accent);
-}
-
 @media (max-width: 1100px) {
-	.hero-grid,
-	.rules-grid,
-	.visit-grid {
+	.rules-grid {
 		grid-template-columns: 1fr;
-	}
-
-	.booking-preview {
-		max-width: 680px;
 	}
 
 	.roles-grid {
@@ -472,22 +265,8 @@
 		grid-template-columns: 1fr;
 	}
 
-	.hero-actions .btn,
-	.cta-band .btn {
+	.hero-actions .btn {
 		width: 100%;
-	}
-
-	.cta-band .container-xl {
-		display: grid;
-	}
-
-	.preview-fields div {
-		display: grid;
-		gap: 4px;
-	}
-
-	.preview-fields strong {
-		text-align: left;
 	}
 }
 
@@ -501,7 +280,6 @@
 		padding-inline: 16px;
 	}
 
-	.booking-preview,
 	.flow-card,
 	.role-card,
 	.rules-panel {

@@ -121,11 +121,9 @@ final class Mailer
 
             return $mail->send();
         } catch (Exception $e) {
+            var_dump($e);
             return false;
         }
-
-        // Ovo je da ne bi poslao mail zapravo da ne trosim, default kada kreira korisnika je da stavi da je emial_verified = 1
-        return true;
     }
 
     public static function sendPasswordResetEmail(string $email, string $token): bool

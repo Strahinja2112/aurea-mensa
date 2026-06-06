@@ -27,11 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $data = [
-                'email' => $oldEmail,
-                'password' => $password,
-                'first_name' => $oldFirstName,
-                'last_name' => $oldLastName,
-                'phone' => $oldPhone,
+            'email' => $oldEmail,
+            'password' => $password,
+            'first_name' => $oldFirstName,
+            'last_name' => $oldLastName,
+            'phone' => $oldPhone,
         ];
 
         Auth::registerNewUser($data);
@@ -49,118 +49,121 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="sr">
 <?php
 Helpers::renderHead("Registracija", ['auth.css']); ?>
+
 <body>
 
-<?php
-require_once Helpers::getFullPath('src/components/header.php'); ?>
+    <?php
+    // require_once Helpers::getFullPath('src/components/header.php'); 
+    ?>
 
-<main>
-    <div class="container d-flex justify-content-center">
-        <div class="glass-card">
-            <h2 class="text-center">
+    <main>
+        <div class="container d-flex justify-content-center">
+            <div class="glass-card">
+                <h2 class="text-center">
+                    <?php
+                    echo $success ? "Nalog uspešno kreiran" : "Kreirajte vaš nalog" ?>
+                </h2>
+
                 <?php
-                echo $success ? "Nalog uspešno kreiran" : "Kreirajte vaš nalog" ?>
-            </h2>
+                if ($error): ?>
+                    <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
+                        <i class="fas fa-exclamation-triangle me-2"></i> <?= $error ?>
+                    </div>
+                <?php
+                endif; ?>
 
-            <?php
-            if ($error): ?>
-                <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mb-4">
-                    <i class="fas fa-exclamation-triangle me-2"></i> <?= $error ?>
+                <?php
+                if ($success): ?>
+                    <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
+                        <i class="fas fa-check-circle me-2"></i> <?= $success ?>
+                    </div>
+                <?php
+                endif; ?>
+
+                <?php
+                if (!$success): ?>
+                    <form id="registerForm" method="POST" action="">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label class="form-label">Ime</label>
+                                <input type="text" name="first_name" class="form-control custom-input"
+                                    placeholder="npr. Marko" value="<?= htmlspecialchars($oldFirstName) ?>" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="form-label">Prezime</label>
+                                <input type="text" name="last_name" class="form-control custom-input"
+                                    placeholder="npr. Marković" value="<?= htmlspecialchars($oldLastName) ?>" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email adresa</label>
+                            <input type="email" name="email" class="form-control custom-input"
+                                placeholder="marko@primer.com" value="<?= htmlspecialchars($oldEmail) ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Broj telefona</label>
+                            <input type="text" name="phone" class="form-control custom-input"
+                                placeholder="06x xxx xxxx" value="<?= htmlspecialchars($oldPhone) ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Lozinka</label>
+                            <input type="password" name="password" class="form-control custom-input"
+                                placeholder="Unesite lozinku" required>
+                        </div>
+
+                        <div class="register-btn-wrapper">
+                            <div class="button">
+                                <button type="submit" id="submitBtn">
+                                    <span id="btnText">NAPRAVI NALOG</span>
+                                    <span id="btnSpinner" class="d-none">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        SLANJE...
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                <?php
+                endif; ?>
+
+                <div class="text-center mt-5 login-link-text d-flex justify-content-between">
+                    <p class="small mb-2 text-white">
+                        Već imate nalog? <a href="../login/">Prijavite se</a>
+                    </p>
+                    <p class="small opacity-75 text-white">
+                        Nema mejla? <a href="../resend-activation/">Pošalji novi link</a>
+                    </p>
                 </div>
-            <?php
-            endif; ?>
-
-            <?php
-            if ($success): ?>
-                <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 mb-4 text-center">
-                    <i class="fas fa-check-circle me-2"></i> <?= $success ?>
-                </div>
-            <?php
-            endif; ?>
-
-            <?php
-            if (!$success): ?>
-                <form id="registerForm" method="POST" action="">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label class="form-label">Ime</label>
-                            <input type="text" name="first_name" class="form-control custom-input"
-                                   placeholder="npr. Marko" value="<?= htmlspecialchars($oldFirstName) ?>" required>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label class="form-label">Prezime</label>
-                            <input type="text" name="last_name" class="form-control custom-input"
-                                   placeholder="npr. Marković" value="<?= htmlspecialchars($oldLastName) ?>" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Email adresa</label>
-                        <input type="email" name="email" class="form-control custom-input"
-                               placeholder="marko@primer.com" value="<?= htmlspecialchars($oldEmail) ?>" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Broj telefona</label>
-                        <input type="text" name="phone" class="form-control custom-input"
-                               placeholder="06x xxx xxxx" value="<?= htmlspecialchars($oldPhone) ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Lozinka</label>
-                        <input type="password" name="password" class="form-control custom-input"
-                               placeholder="Unesite lozinku" required>
-                    </div>
-
-                    <div class="register-btn-wrapper">
-                        <div class="button">
-                            <button type="submit" id="submitBtn">
-                                <span id="btnText">NAPRAVI NALOG</span>
-                                <span id="btnSpinner" class="d-none">
-                                    <span class="spinner-border spinner-border-sm" role="status"
-                                          aria-hidden="true"></span>
-                                    SLANJE...
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            <?php
-            endif; ?>
-
-            <div class="text-center mt-5 login-link-text d-flex justify-content-between">
-                <p class="small mb-2 text-white">
-                    Već imate nalog? <a href="../login/">Prijavite se</a>
-                </p>
-                <p class="small opacity-75 text-white">
-                    Nema mejla? <a href="../resend-activation/">Pošalji novi link</a>
-                </p>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<?php
-require_once Helpers::getFullPath('src/components/footer.php'); ?>
+    <?php
+    require_once Helpers::getFullPath('src/components/footer.php'); ?>
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("registerForm");
-        const btn = document.getElementById("submitBtn");
-        const btnText = document.getElementById("btnText");
-        const btnSpinner = document.getElementById("btnSpinner");
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("registerForm");
+            const btn = document.getElementById("submitBtn");
+            const btnText = document.getElementById("btnText");
+            const btnSpinner = document.getElementById("btnSpinner");
 
-        if (form) {
-            form.addEventListener("submit", () => {
-                btn.disabled = true;
-                btnText.classList.add("d-none");
-                btnSpinner.classList.remove("d-none");
-                btn.style.opacity = "0.7";
-                btn.style.cursor = "not-allowed";
-            });
-        }
-    });
-</script>
+            if (form) {
+                form.addEventListener("submit", () => {
+                    btn.disabled = true;
+                    btnText.classList.add("d-none");
+                    btnSpinner.classList.remove("d-none");
+                    btn.style.opacity = "0.7";
+                    btn.style.cursor = "not-allowed";
+                });
+            }
+        });
+    </script>
 </body>
+
 </html>

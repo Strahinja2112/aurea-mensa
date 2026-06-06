@@ -27,7 +27,3 @@ spl_autoload_register(function (string $class): void {
         }
     }
 });
-
-//if (!Auth::getUser()) {
-//    header("Location: /pages/auth/logout/");
-//}

@@ -1,6 +1,8 @@
 <?php
 
 $relativePath = Helpers::getRelativePath('pages');
+$homePath = Helpers::getRelativePath() . 'index.php';
+$phoneHref = preg_replace('/\s+/', '', Helpers::WEBSITE_PHONE);
 ?>
 
 <footer class="site-footer">
@@ -8,7 +10,7 @@ $relativePath = Helpers::getRelativePath('pages');
         <div class="row g-4">
             <div class="col-lg-4 col-md-12">
                 <div class="footer-logo">
-                    <a href="<?= $relativePath . '/index.php' ?>">
+                    <a href="<?= $homePath ?>">
                         <div><?php echo Helpers::WEBSITE_NAME ?></div>
                         <div>RESTORAN</div>
                     </a>
@@ -29,7 +31,7 @@ $relativePath = Helpers::getRelativePath('pages');
                     </li>
                     <li>
                         <i class="fa-solid fa-phone me-2"></i>
-                        <a href="tel:<?php echo Helpers::WEBSITE_PHONE ?>">
+                        <a href="tel:<?php echo $phoneHref ?>">
                             <?php echo Helpers::WEBSITE_PHONE ?>
                         </a>
                     </li>

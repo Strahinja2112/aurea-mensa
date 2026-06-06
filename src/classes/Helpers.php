@@ -7,7 +7,7 @@ if (!defined('ROOT')) {
 }
 
 if (!defined("APP_DIR")) {
-    define('APP_DIR', '/web-restaurant-app');
+    define('APP_DIR', '/aurea-mensa');
 }
 
 if (!defined('BASE_PATH')) {

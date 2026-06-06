@@ -53,7 +53,7 @@ Helpers::renderHead("Registracija", ['auth.css']); ?>
 <body>
 
     <?php
-    // require_once Helpers::getFullPath('src/components/header.php'); 
+    require_once Helpers::getFullPath('src/components/header.php');
     ?>
 
     <main>

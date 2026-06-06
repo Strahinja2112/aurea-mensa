@@ -28,3 +28,31 @@ section#about .glass-card:hover {
 #hero-title {
     font-size: 10em;
 }
+
+@media (max-width: 992px) {
+    #hero-title {
+        font-size: 6em;
+    }
+    #hero p.h4 {
+        font-size: 1.1rem;
+        max-width: 100% !important;
+        margin-bottom: 2rem !important;
+    }
+    #hero .btn-cta {
+        font-size: 1.1rem !important;
+        padding: 12px 40px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    #hero-title {
+        font-size: 3.2em;
+    }
+    #hero p.h4 {
+        font-size: 0.95rem;
+    }
+    #hero .btn-cta {
+        font-size: 1rem !important;
+        padding: 10px 30px !important;
+    }
+}

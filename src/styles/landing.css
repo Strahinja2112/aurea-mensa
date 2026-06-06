@@ -53,6 +53,7 @@
 	font-weight: 700 !important;
 	letter-spacing: 0.2em;
 	text-transform: uppercase;
+	text-align: center;
 }
 
 .landing-hero {
@@ -62,8 +63,9 @@
 	justify-content: center;
 	min-height: 100vh;
 	flex-direction: column;
-	background: url("../../public/images/AI_Background2.png") center / cover
-		no-repeat;
+	background:
+		linear-gradient(to bottom, transparent 70%, rgb(5 5 5 / 40%) 100%),
+		url("../../public/images/AI_Background2.png") center / cover no-repeat;
 }
 
 .hero-copy {
@@ -241,12 +243,14 @@
 
 .landing-section {
 	padding: clamp(68px, 9vw, 112px) 0;
-	background: rgba(5, 5, 5, 0.96);
+	background: rgba(5, 5, 5, 0.05);
+	backdrop-filter: blur(5px);
 }
 
 .section-heading {
 	max-width: 780px;
 	margin-bottom: 38px;
+	margin-inline: auto;
 }
 
 .section-heading h2,
@@ -256,12 +260,14 @@
 	margin-top: 12px;
 	font-size: clamp(2rem, 5vw, 4rem);
 	line-height: 1.08;
+	text-align: center;
 }
 
 .section-heading p:not(.section-kicker),
 .rules-grid p {
 	margin-top: 18px;
 	font-size: 1.02rem;
+	text-align: center;
 }
 
 .flow-grid {

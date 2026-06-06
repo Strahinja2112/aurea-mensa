@@ -33,7 +33,7 @@ Helpers::renderHead("Home") ?>
             </div>
         </section>
 
-        <section id="about" class="landing-section flow-section" aria-labelledby="flow-title">
+        <section id="about" class="landing-section" aria-labelledby="flow-title">
             <div class="container-fluid container-xl">
                 <div class="section-heading">
                     <p class="section-kicker">Jednostavan tok</p>
@@ -100,10 +100,6 @@ Helpers::renderHead("Home") ?>
                     <p class="section-kicker">Pouzdano zakazivanje</p>
                     <h2 id="rules-title">Rezervacija ima jasna pravila</h2>
                     <p>Pre potvrde se proverava zauzetost izabranih stolova, a vi dobijate pregled trajanja, termina i koda koji važi pri dolasku.</p>
-                    <a href="pages/reserve-table/" class="text-link">
-                        Otvori formu za rezervaciju
-                        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                    </a>
                 </div>
                 <div class="rules-panel">
                     <div>
@@ -118,33 +114,6 @@ Helpers::renderHead("Home") ?>
                         <strong>Kod</strong>
                         <span>Potvrda koju pokazujete osoblju pri dolasku</span>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cta-band" aria-labelledby="reservation-title">
-            <div class="container-fluid container-xl">
-                <div>
-                    <p class="section-kicker">Spremni za izlazak</p>
-                    <h2 id="reservation-title">Izaberite sto pre nego što krenete</h2>
-                </div>
-                <a href="pages/reserve-table/" class="btn btn-cta btn-lg">
-                    <i class="fa-solid fa-calendar-plus" aria-hidden="true"></i>
-                    Započni rezervaciju
-                </a>
-            </div>
-        </section>
-
-        <section class="visit-section" aria-label="Kontakt i radno vreme">
-            <div class="container-fluid container-xl visit-grid">
-                <div>
-                    <p class="section-kicker">Posetite nas</p>
-                    <h2><?= Helpers::WEBSITE_ADDRESS ?></h2>
-                </div>
-                <div class="visit-details">
-                    <p><i class="fa-solid fa-phone" aria-hidden="true"></i><a href="tel:<?= $phoneHref ?>"><?= Helpers::WEBSITE_PHONE ?></a></p>
-                    <p><i class="fa-solid fa-envelope" aria-hidden="true"></i><a href="mailto:<?= Helpers::WEBSITE_EMAIL ?>"><?= Helpers::WEBSITE_EMAIL ?></a></p>
-                    <p><i class="fa-solid fa-clock" aria-hidden="true"></i>Pon - Pet <?= Helpers::WEBSITE_WORKING_DAYS ?>, Sub - Ned <?= Helpers::WEBSITE_WORKING_WEEKEND ?></p>
                 </div>
             </div>
         </section>

@@ -16,148 +16,122 @@ Helpers::renderHead("Home") ?>
 
     <main class="landing-page">
         <section id="hero" class="landing-hero" aria-labelledby="hero-title">
-            <div class="container-fluid container-xl">
-                <div class="hero-grid">
-                    <div class="hero-copy">
-                        <p class="section-kicker">Subotica fine dining</p>
-                        <h1 id="hero-title"><?= Helpers::WEBSITE_NAME ?></h1>
-                        <p class="hero-lead">
-                            Ekskluzivna kulinarska avantura za večere koje ne žure. Rezervišite sto u ambijentu koji spaja sezonsku kuhinju, pažljivu uslugu i miran ritam grada.
-                        </p>
-                        <div class="hero-actions" aria-label="Glavne akcije">
-                            <a href="pages/reserve-table/" class="btn btn-cta btn-lg">
-                                <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-                                Rezerviši sto
-                            </a>
-                            <a href="pages/about/" class="btn btn-ghost btn-lg">
-                                <i class="fa-solid fa-utensils" aria-hidden="true"></i>
-                                Pogledaj priču
-                            </a>
-                        </div>
-                        <dl class="hero-proof" aria-label="Kratke informacije">
-                            <div>
-                                <dt>4.9</dt>
-                                <dd>Ocena gostiju</dd>
-                            </div>
-                            <div>
-                                <dt>18</dt>
-                                <dd>Sezonskih tanjira</dd>
-                            </div>
-                            <div>
-                                <dt>15 min</dt>
-                                <dd>Online rezervacija</dd>
-                            </div>
-                        </dl>
-                    </div>
-                    <aside class="hero-panel" aria-label="Informacije za rezervaciju">
-                        <div class="hero-panel-card">
-                            <span class="panel-label">Danas služimo</span>
-                            <h2>Degustacioni meni i večernji a la carte</h2>
-                            <p>Stolovi za dvoje, porodične večere i diskretne poslovne susrete.</p>
-                            <div class="panel-meta">
-                                <span><i class="fa-solid fa-clock" aria-hidden="true"></i><?= Helpers::WEBSITE_WORKING_DAYS ?></span>
-                                <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><?= Helpers::WEBSITE_ADDRESS ?></span>
-                            </div>
-                        </div>
-                    </aside>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="landing-section experience-section" aria-labelledby="experience-title">
-            <div class="container-fluid container-xl">
-                <div class="section-heading">
-                    <p class="section-kicker">Iskustvo</p>
-                    <h2 id="experience-title">Veče oblikovano oko detalja</h2>
-                    <p>Od prvog pozdrava do poslednjeg zalogaja, Aurea Mensa je zamišljena kao restoran za razgovor, slavlje i miran luksuz.</p>
-                </div>
-                <div class="experience-grid">
-                    <article class="feature-card">
-                        <i class="fa-solid fa-seedling" aria-hidden="true"></i>
-                        <h3>Sezonski kvalitet</h3>
-                        <p>Sveže namirnice, pažljivo izabrani dobavljači i jelovnik koji prati najbolje trenutke sezone.</p>
-                    </article>
-                    <article class="feature-card">
-                        <i class="fa-solid fa-wine-glass" aria-hidden="true"></i>
-                        <h3>Uparena pića</h3>
-                        <p>Preporuke uz svako jelo, od lokalnih etiketa do elegantnih klasika za posebne prilike.</p>
-                    </article>
-                    <article class="feature-card">
-                        <i class="fa-solid fa-concierge-bell" aria-hidden="true"></i>
-                        <h3>Diskretna usluga</h3>
-                        <p>Tim koji vodi računa o tempu večere, alergijama, željama i svakom važnom povodu.</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="landing-section signature-section" aria-labelledby="signature-title">
-            <div class="container-fluid container-xl">
-                <div class="signature-grid">
-                    <div class="signature-image">
-                        <img src="public/images/register.jpg" alt="Elegantno postavljeni stolovi u restoranu Aurea Mensa">
-                    </div>
-                    <div class="signature-copy">
-                        <p class="section-kicker">Preporuka kuće</p>
-                        <h2 id="signature-title">Meni koji daje večeri ritam</h2>
-                        <p>Birajte između degustacionog toka i a la carte tanjira. Naš tim će predložiti tempo služenja, uparivanje pića i raspored stola prema povodu.</p>
-                        <div class="menu-list" aria-label="Izdvojena jela">
-                            <div>
-                                <span>01</span>
-                                <strong>Jadranska riba, maslinovo ulje, bilje</strong>
-                            </div>
-                            <div>
-                                <span>02</span>
-                                <strong>Sporo pečena junetina, redukcija vina</strong>
-                            </div>
-                            <div>
-                                <span>03</span>
-                                <strong>Čokolada, malina, hrskavi lešnik</strong>
-                            </div>
-                        </div>
-                        <a href="pages/reserve-table/" class="text-link">
-                            Rezerviši večeru
-                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="reservation-band" aria-labelledby="reservation-title">
-            <div class="container-fluid container-xl">
-                <div>
-                    <p class="section-kicker">Rezervacije</p>
-                    <h2 id="reservation-title">Sto je udaljen nekoliko klikova</h2>
-                </div>
-                <p>Izaberite datum, vreme i broj gostiju. Otkazivanje je moguće do 4 sata pre termina.</p>
+            <p class="section-kicker">Rezervacije bez poziva i čekanja</p>
+            <h1 id="hero-title"><?= Helpers::WEBSITE_NAME ?></h1>
+            <p class="hero-lead">
+                Izaberite sto, vreme i trajanje večere kada vama odgovara. Aurea Mensa vam odmah pomaže da pošaljete sigurnu rezervaciju i sačuvate sve detalje na jednom mestu.
+            </p>
+            <div class="hero-actions" aria-label="Glavne akcije">
                 <a href="pages/reserve-table/" class="btn btn-cta btn-lg">
-                    <i class="fa-solid fa-calendar-plus" aria-hidden="true"></i>
-                    Započni rezervaciju
+                    <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                    Rezerviši sto
+                </a>
+                <a href="pages/auth/register/" class="btn btn-ghost btn-lg">
+                    <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                    Napravi nalog
                 </a>
             </div>
         </section>
 
-        <section class="landing-section testimonials-section" aria-labelledby="testimonials-title">
+        <section id="about" class="landing-section flow-section" aria-labelledby="flow-title">
             <div class="container-fluid container-xl">
-                <div class="section-heading compact">
-                    <p class="section-kicker">Utisci</p>
-                    <h2 id="testimonials-title">Gosti pamte atmosferu</h2>
+                <div class="section-heading">
+                    <p class="section-kicker">Jednostavan tok</p>
+                    <h2 id="flow-title">Rezervacija koja ne prekida vaš dan</h2>
+                    <p>Ne morate da pamtite radno vreme recepcije, ponavljate podatke telefonom ili se pitate da li je sto zaista slobodan.</p>
                 </div>
-                <div class="testimonial-grid">
-                    <figure class="testimonial-card">
-                        <blockquote>Odličan balans privatnosti, hrane i usluge. Rezervacija je prošla bez čekanja.</blockquote>
-                        <figcaption>Milica R. <span>porodična večera</span></figcaption>
-                    </figure>
-                    <figure class="testimonial-card">
-                        <blockquote>Ambijent je tih, elegantan i idealan za poslovni ručak koji ne deluje formalno.</blockquote>
-                        <figcaption>Ivan P. <span>poslovni susret</span></figcaption>
-                    </figure>
-                    <figure class="testimonial-card">
-                        <blockquote>Osoblje je pogodilo tempo večere i preporučilo sjajno uparivanje uz glavno jelo.</blockquote>
-                        <figcaption>Nina S. <span>degustacioni meni</span></figcaption>
-                    </figure>
+                <div class="flow-grid">
+                    <article class="flow-card">
+                        <span>01</span>
+                        <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                        <h3>Napravite siguran nalog</h3>
+                        <p>Aktivirajte nalog preko e-maila i svaki sledeći dolazak zakažite brže, bez ponovnog unošenja osnovnih podataka.</p>
+                    </article>
+                    <article class="flow-card">
+                        <span>02</span>
+                        <i class="fa-solid fa-chair" aria-hidden="true"></i>
+                        <h3>Birajte ono što vam odgovara</h3>
+                        <p>Odaberite datum, vreme, trajanje i sto koji odgovara društvu, povodu i delu restorana koji preferirate.</p>
+                    </article>
+                    <article class="flow-card">
+                        <span>03</span>
+                        <i class="fa-solid fa-ticket" aria-hidden="true"></i>
+                        <h3>Dolazite sa potvrdom</h3>
+                        <p>Dobijate kod rezervacije i jasne detalje termina, pa osoblje može brzo da pronađe vaš sto pri dolasku.</p>
+                    </article>
                 </div>
+            </div>
+        </section>
+
+        <section class="landing-section roles-section" aria-labelledby="roles-title">
+            <div class="container-fluid container-xl">
+                <div class="section-heading">
+                    <p class="section-kicker">Zašto vredi koristiti</p>
+                    <h2 id="roles-title">Manje neizvesnosti pre izlaska</h2>
+                </div>
+                <div class="roles-grid">
+                    <article class="role-card">
+                        <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                        <h3>Rezervišete kad god želite</h3>
+                        <p>Forma je dostupna online, pa termin možete poslati i kada nemate vremena za poziv.</p>
+                    </article>
+                    <article class="role-card">
+                        <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
+                        <h3>Vidite bitne detalje stola</h3>
+                        <p>Broj mesta, lokacija i pušački ili nepušački deo pomažu da izaberete sto pre dolaska.</p>
+                    </article>
+                    <article class="role-card">
+                        <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        <h3>Planovi mogu da se promene</h3>
+                        <p>Svoje rezervacije možete pregledati, izmeniti ili otkazati na vreme direktno iz profila.</p>
+                    </article>
+                    <article class="role-card">
+                        <i class="fa-solid fa-bell-concierge" aria-hidden="true"></i>
+                        <h3>Restoran vas očekuje spreman</h3>
+                        <p>Kod rezervacije pomaže osoblju da brzo potvrdi dolazak i pronađe prave stolove.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="landing-section rules-section" aria-labelledby="rules-title">
+            <div class="container-fluid container-xl rules-grid">
+                <div>
+                    <p class="section-kicker">Pouzdano zakazivanje</p>
+                    <h2 id="rules-title">Rezervacija ima jasna pravila</h2>
+                    <p>Pre potvrde se proverava zauzetost izabranih stolova, a vi dobijate pregled trajanja, termina i koda koji važi pri dolasku.</p>
+                    <a href="pages/reserve-table/" class="text-link">
+                        Otvori formu za rezervaciju
+                        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="rules-panel">
+                    <div>
+                        <strong>1-6h</strong>
+                        <span>Fleksibilno trajanje za kratak ručak ili dužu večeru</span>
+                    </div>
+                    <div>
+                        <strong>4h</strong>
+                        <span>Rok za otkazivanje ako vam se planovi promene</span>
+                    </div>
+                    <div>
+                        <strong>Kod</strong>
+                        <span>Potvrda koju pokazujete osoblju pri dolasku</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-band" aria-labelledby="reservation-title">
+            <div class="container-fluid container-xl">
+                <div>
+                    <p class="section-kicker">Spremni za izlazak</p>
+                    <h2 id="reservation-title">Izaberite sto pre nego što krenete</h2>
+                </div>
+                <a href="pages/reserve-table/" class="btn btn-cta btn-lg">
+                    <i class="fa-solid fa-calendar-plus" aria-hidden="true"></i>
+                    Započni rezervaciju
+                </a>
             </div>
         </section>
 

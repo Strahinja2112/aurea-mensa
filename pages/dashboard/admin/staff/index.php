@@ -113,9 +113,6 @@ $relativePath = Helpers::getRelativePath('pages/dashboard/admin/');
                     <p class="admin-subtitle">Upravljanje nalozima osoblja restorana</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="add/" class="btn btn-cta btn-lg">
-                        <i class="fa-solid fa-plus me-2"></i> Dodaj novog radnika
-                    </a>
                     <a href="<?= $relativePath . '/dashboard/admin' ?>" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-arrow-left me-2"></i> Nazad
                     </a>

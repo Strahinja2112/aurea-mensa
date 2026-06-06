@@ -3,15 +3,6 @@
 	align-items: stretch;
 	justify-content: flex-start;
 	overflow: hidden;
-	--page-bg: #050505;
-	--panel-bg: rgba(12, 16, 15, 0.72);
-	--panel-strong: rgba(21, 28, 27, 0.9);
-	--border: rgba(255, 255, 255, 0.12);
-	--text: #f4f1ea;
-	--muted: #b5afa6;
-	--faint: #756f68;
-	--accent: #c4ab9f;
-	--accent-strong: #4a6a6a;
 }
 
 .landing-page h1,
@@ -57,15 +48,12 @@
 }
 
 .landing-hero {
-	padding-block: 150px !important;
+	padding-top: 150px !important;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 100vh;
+	min-height: 80vh;
 	flex-direction: column;
-	background:
-		linear-gradient(to bottom, transparent 70%, rgb(5 5 5 / 40%) 100%),
-		url("../../public/images/AI_Background2.png") center / cover no-repeat;
 }
 
 .hero-copy {
@@ -73,7 +61,6 @@
 	border: 1px solid var(--border);
 	border-radius: 8px;
 	background: rgba(5, 5, 5, 0.58);
-	backdrop-filter: blur(10px);
 	padding: clamp(24px, 4vw, 42px);
 	box-shadow: 0 26px 90px rgba(0, 0, 0, 0.28);
 }
@@ -132,7 +119,6 @@
 	border: 1px solid var(--border);
 	color: var(--text);
 	background: rgba(255, 255, 255, 0.055);
-	backdrop-filter: blur(12px);
 }
 
 .landing-page .btn-ghost:hover {
@@ -160,7 +146,6 @@
 	border: 1px solid var(--border);
 	border-radius: 8px;
 	background: var(--panel-bg);
-	backdrop-filter: blur(16px);
 	padding: 24px;
 	box-shadow: 0 26px 90px rgba(0, 0, 0, 0.38);
 }
@@ -243,8 +228,6 @@
 
 .landing-section {
 	padding: clamp(68px, 9vw, 112px) 0;
-	background: rgba(5, 5, 5, 0.05);
-	backdrop-filter: blur(5px);
 }
 
 .section-heading {
@@ -321,19 +304,10 @@
 	margin-top: 13px;
 }
 
-.roles-section {
-	background: url("../../public/images/AI_Background2.png") center / cover fixed
-		no-repeat;
-}
-
 .roles-grid {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 16px;
-}
-
-.rules-section {
-	background: rgba(8, 9, 8, 0.98);
 }
 
 .rules-grid {
@@ -359,7 +333,7 @@
 .rules-panel {
 	display: grid;
 	gap: 16px;
-	background: var(--panel-strong);
+	/* background: var(--panel-strong); */
 }
 
 .rules-panel div {
@@ -488,6 +462,7 @@
 
 	#hero-title {
 		font-size: clamp(3.1rem, 18vw, 5rem);
+		text-align: center;
 	}
 
 	.hero-actions,

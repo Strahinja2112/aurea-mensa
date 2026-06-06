@@ -63,6 +63,30 @@ Helpers::renderHead("Home") ?>
             </div>
         </section>
 
+        <section class="landing-section rules-section" aria-labelledby="rules-title">
+            <div class="container-fluid container-xl rules-grid">
+                <div>
+                    <p class="section-kicker">Pouzdano zakazivanje</p>
+                    <h2 id="rules-title">Rezervacija ima jasna pravila</h2>
+                    <p>Pre potvrde se proverava zauzetost izabranih stolova, a vi dobijate pregled trajanja, termina i koda koji važi pri dolasku.</p>
+                </div>
+                <div class="rules-panel">
+                    <div>
+                        <strong>1-6h</strong>
+                        <span>Fleksibilno trajanje za kratak ručak ili dužu večeru</span>
+                    </div>
+                    <div>
+                        <strong>4h</strong>
+                        <span>Rok za otkazivanje ako vam se planovi promene</span>
+                    </div>
+                    <div>
+                        <strong>Kod</strong>
+                        <span>Potvrda koju pokazujete osoblju pri dolasku</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="landing-section roles-section" aria-labelledby="roles-title">
             <div class="container-fluid container-xl">
                 <div class="section-heading">
@@ -90,30 +114,6 @@ Helpers::renderHead("Home") ?>
                         <h3>Restoran vas očekuje spreman</h3>
                         <p>Kod rezervacije pomaže osoblju da brzo potvrdi dolazak i pronađe prave stolove.</p>
                     </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="landing-section rules-section" aria-labelledby="rules-title">
-            <div class="container-fluid container-xl rules-grid">
-                <div>
-                    <p class="section-kicker">Pouzdano zakazivanje</p>
-                    <h2 id="rules-title">Rezervacija ima jasna pravila</h2>
-                    <p>Pre potvrde se proverava zauzetost izabranih stolova, a vi dobijate pregled trajanja, termina i koda koji važi pri dolasku.</p>
-                </div>
-                <div class="rules-panel">
-                    <div>
-                        <strong>1-6h</strong>
-                        <span>Fleksibilno trajanje za kratak ručak ili dužu večeru</span>
-                    </div>
-                    <div>
-                        <strong>4h</strong>
-                        <span>Rok za otkazivanje ako vam se planovi promene</span>
-                    </div>
-                    <div>
-                        <strong>Kod</strong>
-                        <span>Potvrda koju pokazujete osoblju pri dolasku</span>
-                    </div>
                 </div>
             </div>
         </section>

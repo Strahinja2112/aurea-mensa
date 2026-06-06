@@ -1,3 +1,15 @@
+:root {
+	--page-bg: #050505;
+	--panel-bg: rgba(12, 16, 15, 0.72);
+	--panel-strong: rgba(21, 28, 27, 0.9);
+	--border: rgba(255, 255, 255, 0.12);
+	--text: #f4f1ea;
+	--muted: #b5afa6;
+	--faint: #756f68;
+	--accent: #c4ab9f;
+	--accent-strong: #4a6a6a;
+}
+
 html,
 body {
 	box-sizing: border-box;
@@ -5,9 +17,8 @@ body {
 	padding: 0;
 	background-color: rgb(5, 5, 5);
 	background-image:
-		linear-gradient(to bottom, transparent, rgb(5, 5, 5)),
+		linear-gradient(to bottom, transparent, rgb(5, 5, 5, 0.5)),
 		url("../../public/images/AI_Background2.png");
-	/*background-image: linear-gradient(to bottom, transparent, rgb(5, 5, 5)), url("../../public/images/landing-blur.png");*/
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-attachment: fixed;

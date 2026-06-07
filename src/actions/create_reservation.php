@@ -64,6 +64,28 @@ try {
     $endDateTime = clone $startDateTime;
     $endDateTime->modify("+{$durationHours} hours");
 
+    $workingHoursText = (int)$startDateTime->format('N') >= 6
+        ? Helpers::WEBSITE_WORKING_WEEKEND
+        : Helpers::WEBSITE_WORKING_DAYS;
+    [$workingStartText, $workingEndText] = array_map('trim', explode('-', $workingHoursText));
+    $toMinutes = static function (string $time): int {
+        [$hours, $minutes] = array_map('intval', explode(':', $time));
+        return ($hours * 60) + $minutes;
+    };
+    $workingStartMinutes = $toMinutes($workingStartText);
+    $workingEndMinutes = $toMinutes($workingEndText);
+
+    if ($workingEndMinutes <= $workingStartMinutes) {
+        $workingEndMinutes += 1440;
+    }
+
+    $reservationStartMinutes = ((int)$startDateTime->format('H') * 60) + (int)$startDateTime->format('i');
+    $reservationEndMinutes = $reservationStartMinutes + ($durationHours * 60);
+
+    if ($reservationStartMinutes < $workingStartMinutes || $reservationEndMinutes > $workingEndMinutes) {
+        throw new Exception('Rezervacija mora biti u okviru radnog vremena restorana.');
+    }
+
     $startTimeFormatted = $startDateTime->format('H:i:s');
     $endTimeFormatted = $endDateTime->format('H:i:s');
     $reservationDateFormatted = $startDateTime->format('Y-m-d');

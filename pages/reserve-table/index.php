@@ -28,6 +28,10 @@ $tableLayoutData = array_map(static function (array $table, int $index): array {
     ];
 }, $tables, array_keys($tables));
 $tableLayoutJson = json_encode($tableLayoutData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+$workingHoursJson = json_encode([
+    'weekdays' => Helpers::WEBSITE_WORKING_DAYS,
+    'weekend' => Helpers::WEBSITE_WORKING_WEEKEND,
+], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 $today = date('Y-m-d');
 ?>
 
@@ -45,7 +49,7 @@ $today = date('Y-m-d');
 
             <form id="reservationForm">
                 <div class="row">
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-5 form-group">
                         <label class="form-label">Datum rezervacije</label>
                         <input
                             type="date"
@@ -55,30 +59,10 @@ $today = date('Y-m-d');
                             required
                         >
                     </div>
-
-                    <div class="col-md-4 form-group">
-                        <label class="form-label">Vreme početka</label>
-                        <input
-                            type="time"
-                            name="start_time"
-                            class="form-control custom-input"
-                            required
-                        >
-                    </div>
-
-                    <div class="col-md-4 form-group">
-                        <label class="form-label">Trajanje rezervacije</label>
-                        <select name="duration_hours" class="form-control custom-input" required>
-                            <option value="">Izaberite trajanje</option>
-                            <option value="1">1 sat</option>
-                            <option value="2">2 sata</option>
-                            <option value="3">3 sata</option>
-                            <option value="4">4 sata</option>
-                            <option value="5">5 sati</option>
-                            <option value="6">6 sati</option>
-                        </select>
-                    </div>
                 </div>
+
+                <input type="hidden" name="start_time" id="reservationStartTime">
+                <input type="hidden" name="duration_hours" id="reservationDurationHours">
 
                 <div class="form-group">
                     <div class="d-flex justify-content-between align-items-center gap-3 mb-3 flex-wrap">
@@ -97,11 +81,32 @@ $today = date('Y-m-d');
                         data-form-id="reservationForm"
                         data-selected-inputs="selectedTableInputs"
                         data-availability-url="<?= Helpers::getRelativePath('src/actions/table_availability.php') ?>"
+                        data-timeframes-url="<?= Helpers::getRelativePath('src/actions/table_timeframes.php') ?>"
+                        data-working-hours-source="restaurantWorkingHours"
                     >
                         <div class="table-layout-map" aria-label="Mapa stolova za rezervaciju"></div>
                     </div>
 
                     <div id="selectedTableInputs"></div>
+                </div>
+
+                <div class="reservation-timeline-panel">
+                    <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
+                        <div>
+                            <label class="form-label mb-1">Dostupni termini</label>
+                            <p class="reservation-timeline-summary" id="reservationTimelineSummary">
+                                Izaberite datum i sto da biste videli termine.
+                            </p>
+                        </div>
+                        <div class="layout-legend">
+                            <span><i></i> Slobodno</span>
+                            <span><i class="disabled-dot"></i> Zauzeto</span>
+                            <span><i class="selected-dot"></i> Izabrano</span>
+                        </div>
+                    </div>
+
+                    <div id="reservationTimeline" class="reservation-timeline"></div>
+                    <div id="reservationTimeframes" class="reservation-timeframes"></div>
                 </div>
 
                 <div id="reservationMessage" class="mt-4"></div>
@@ -125,6 +130,7 @@ $today = date('Y-m-d');
 <?php require_once Helpers::getFullPath('src/components/footer.php'); ?>
 
 <script type="application/json" id="reserveTableLayoutData"><?= $tableLayoutJson ?></script>
+<script type="application/json" id="restaurantWorkingHours"><?= $workingHoursJson ?></script>
 <script src="<?= Helpers::getRelativePath('src/scripts/table-layout.js') ?>"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -157,6 +163,15 @@ $today = date('Y-m-d');
                 start_time: formData.get("start_time"),
                 duration_hours: Number(formData.get("duration_hours"))
             };
+
+            if (!payload.start_time || !payload.duration_hours) {
+                messageBox.innerHTML = `
+                    <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3">
+                        Morate izabrati termin rezervacije.
+                    </div>
+                `;
+                return;
+            }
 
             submitBtn.disabled = true;
             btnText.classList.add("d-none");

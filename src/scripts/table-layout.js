@@ -362,8 +362,17 @@ function initReserve(root) {
 	const dataElement = document.getElementById(root.dataset.tablesSource);
 	const form = document.getElementById(root.dataset.formId);
 	const selectedInputs = document.getElementById(root.dataset.selectedInputs);
-	const availabilityUrl = root.dataset.availabilityUrl;
+	const timeframesUrl = root.dataset.timeframesUrl;
+	const workingHoursElement = document.getElementById(root.dataset.workingHoursSource);
+	const timeline = document.getElementById("reservationTimeline");
+	const timeframeList = document.getElementById("reservationTimeframes");
+	const timelineSummary = document.getElementById("reservationTimelineSummary");
+	const startInput = document.getElementById("reservationStartTime");
+	const durationInput = document.getElementById("reservationDurationHours");
+	const workingHours = parseWorkingHours(workingHoursElement);
 	const tables = parseTables(dataElement);
+	let busyIntervals = [];
+	let selection = null;
 
 	function selectedIds() {
 		return tables.filter((table) => table.selected).map((table) => table.id);
@@ -401,60 +410,299 @@ function initReserve(root) {
 				table.selected = !table.selected;
 				updateInputs();
 				render();
+				refreshTimeframes();
 			});
 			map.appendChild(node);
 		});
 	}
 
-	async function refreshAvailability() {
-		const formData = new FormData(form);
-		const reservationDate = formData.get("reservation_date");
-		const startTime = formData.get("start_time");
-		const durationHours = Number(formData.get("duration_hours"));
+	function parseWorkingHours(element) {
+		try {
+			return JSON.parse(element?.textContent || "{}");
+		} catch (error) {
+			console.error(error);
+			return {};
+		}
+	}
 
-		if (!reservationDate || !startTime || !durationHours) {
-			tables.forEach((table) => {
-				table.unavailable = false;
-			});
-			render();
+	function parseTimeToMinutes(value) {
+		const [hours, minutes] = String(value).split(":").map(Number);
+		return (hours * 60) + (minutes || 0);
+	}
+
+	function formatMinutes(minutes) {
+		const normalized = minutes >= 1440 ? minutes - 1440 : minutes;
+		const hours = Math.floor(normalized / 60);
+		const mins = normalized % 60;
+
+		return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+	}
+
+	function getWorkingWindow(dateValue) {
+		const date = new Date(`${dateValue}T12:00:00`);
+		const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+		const hoursText = isWeekend ? workingHours.weekend : workingHours.weekdays;
+		const [startText, endText] = String(hoursText || "08:00 - 23:00")
+			.split("-")
+			.map((part) => part.trim());
+		const start = parseTimeToMinutes(startText);
+		let end = parseTimeToMinutes(endText);
+
+		if (end <= start) {
+			end += 1440;
+		}
+
+		return { start, end };
+	}
+
+	function rangesOverlap(startA, endA, startB, endB) {
+		return startA < endB && endA > startB;
+	}
+
+	function rangeIsAvailable(start, end) {
+		if (!selectionWindow || start < selectionWindow.start || end > selectionWindow.end) {
+			return false;
+		}
+
+		if (end - start < 60 || end - start > 360) {
+			return false;
+		}
+
+		return !busyIntervals.some((interval) =>
+			rangesOverlap(start, end, interval.start, interval.end),
+		);
+	}
+
+	function findFirstAvailableRange() {
+		if (!selectionWindow) {
+			return null;
+		}
+
+		for (let start = selectionWindow.start; start + 60 <= selectionWindow.end; start += 60) {
+			if (rangeIsAvailable(start, start + 60)) {
+				return { start, end: start + 60 };
+			}
+		}
+
+		return null;
+	}
+
+	let selectionWindow = null;
+
+	function syncTimeInputs() {
+		if (!selection) {
+			startInput.value = "";
+			durationInput.value = "";
 			return;
 		}
 
+		startInput.value = formatMinutes(selection.start);
+		durationInput.value = String((selection.end - selection.start) / 60);
+	}
+
+	function availableSegments() {
+		if (!selectionWindow) {
+			return [];
+		}
+
+		const sortedBusy = busyIntervals
+			.map((interval) => ({
+				start: Math.max(interval.start, selectionWindow.start),
+				end: Math.min(interval.end, selectionWindow.end),
+			}))
+			.filter((interval) => interval.start < interval.end)
+			.sort((a, b) => a.start - b.start);
+		const segments = [];
+		let cursor = selectionWindow.start;
+
+		sortedBusy.forEach((interval) => {
+			if (cursor < interval.start) {
+				segments.push({ start: cursor, end: interval.start });
+			}
+			cursor = Math.max(cursor, interval.end);
+		});
+
+		if (cursor < selectionWindow.end) {
+			segments.push({ start: cursor, end: selectionWindow.end });
+		}
+
+		return segments.filter((segment) => segment.end - segment.start >= 60);
+	}
+
+	function renderTimeframesList() {
+		const segments = availableSegments();
+
+		if (!timeframeList) {
+			return;
+		}
+
+		if (segments.length === 0) {
+			timeframeList.innerHTML = '<span class="timeframe-empty">Nema slobodnih termina za izabrane stolove.</span>';
+			return;
+		}
+
+		timeframeList.innerHTML = segments
+			.map((segment) => `
+				<button type="button" class="timeframe-chip" data-start="${segment.start}" data-end="${segment.end}">
+					${formatMinutes(segment.start)} - ${formatMinutes(segment.end)}
+				</button>
+			`)
+			.join("");
+
+		timeframeList.querySelectorAll(".timeframe-chip").forEach((chip) => {
+			chip.addEventListener("click", () => {
+				const start = Number(chip.dataset.start);
+				const end = Math.min(Number(chip.dataset.end), start + 60);
+				setSelection(start, end);
+			});
+		});
+	}
+
+	function renderTimeline() {
+		if (!timeline || !timelineSummary) {
+			return;
+		}
+
+		if (!selectionWindow || selectedIds().length === 0) {
+			timeline.innerHTML = '<div class="timeline-empty">Izaberite datum i sto.</div>';
+			timeframeList.innerHTML = "";
+			timelineSummary.textContent = "Izaberite datum i sto da biste videli termine.";
+			syncTimeInputs();
+			return;
+		}
+
+		const totalHours = (selectionWindow.end - selectionWindow.start) / 60;
+		timeline.innerHTML = "";
+		timeline.style.setProperty("--timeline-hours", String(totalHours));
+
+		for (let index = 0; index < totalHours; index += 1) {
+			const slotStart = selectionWindow.start + (index * 60);
+			const slotEnd = slotStart + 60;
+			const slot = document.createElement("button");
+			slot.type = "button";
+			slot.className = "timeline-slot";
+			slot.textContent = formatMinutes(slotStart);
+
+			if (!rangeIsAvailable(slotStart, slotEnd)) {
+				slot.classList.add("busy");
+				slot.disabled = true;
+			} else {
+				slot.addEventListener("click", () => setSelection(slotStart, slotEnd));
+			}
+
+			timeline.appendChild(slot);
+		}
+
+		if (selection) {
+			const range = document.createElement("div");
+			range.className = "timeline-selection";
+			range.style.left = `${((selection.start - selectionWindow.start) / (selectionWindow.end - selectionWindow.start)) * 100}%`;
+			range.style.width = `${((selection.end - selection.start) / (selectionWindow.end - selectionWindow.start)) * 100}%`;
+			range.innerHTML = `
+				<button type="button" class="timeline-handle left" aria-label="Podesi početak"></button>
+				<span>${formatMinutes(selection.start)} - ${formatMinutes(selection.end)}</span>
+				<button type="button" class="timeline-handle right" aria-label="Podesi kraj"></button>
+			`;
+			timeline.appendChild(range);
+
+			range.querySelector(".left").addEventListener("pointerdown", (event) => startResize("left", event));
+			range.querySelector(".right").addEventListener("pointerdown", (event) => startResize("right", event));
+			timelineSummary.textContent = `Izabrano: ${formatMinutes(selection.start)} - ${formatMinutes(selection.end)} (${(selection.end - selection.start) / 60}h)`;
+		} else {
+			timelineSummary.textContent = "Nema slobodnog termina od minimum 1 sat.";
+		}
+
+		renderTimeframesList();
+		syncTimeInputs();
+	}
+
+	function setSelection(start, end) {
+		if (!rangeIsAvailable(start, end)) {
+			return;
+		}
+
+		selection = { start, end };
+		renderTimeline();
+	}
+
+	function startResize(edge, event) {
+		event.preventDefault();
+
+		const onMove = (moveEvent) => {
+			const rect = timeline.getBoundingClientRect();
+			const ratio = Math.max(0, Math.min(1, (moveEvent.clientX - rect.left) / rect.width));
+			const snapped = selectionWindow.start + Math.round((ratio * (selectionWindow.end - selectionWindow.start)) / 60) * 60;
+
+			if (edge === "left") {
+				const nextStart = clamp(snapped, Math.max(selectionWindow.start, selection.end - 360), selection.end - 60);
+				if (rangeIsAvailable(nextStart, selection.end)) {
+					selection.start = nextStart;
+					renderTimeline();
+				}
+			} else {
+				const nextEnd = clamp(snapped, selection.start + 60, Math.min(selectionWindow.end, selection.start + 360));
+				if (rangeIsAvailable(selection.start, nextEnd)) {
+					selection.end = nextEnd;
+					renderTimeline();
+				}
+			}
+		};
+
+		const onUp = () => {
+			document.removeEventListener("pointermove", onMove);
+			document.removeEventListener("pointerup", onUp);
+		};
+
+		document.addEventListener("pointermove", onMove);
+		document.addEventListener("pointerup", onUp);
+	}
+
+	async function refreshTimeframes() {
+		const formData = new FormData(form);
+		const reservationDate = formData.get("reservation_date");
+		const ids = selectedIds();
+
+		if (!reservationDate || ids.length === 0) {
+			selectionWindow = null;
+			busyIntervals = [];
+			selection = null;
+			renderTimeline();
+			return;
+		}
+
+		selectionWindow = getWorkingWindow(reservationDate);
+
 		try {
-			const response = await fetch(availabilityUrl, {
+			const response = await fetch(timeframesUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					reservation_date: reservationDate,
-					start_time: startTime,
-					duration_hours: durationHours,
+					table_ids: ids,
 				}),
 			});
 			const result = await response.json();
-			const unavailableIds = new Set(
-				(result.unavailable_table_ids || []).map(Number),
-			);
+			busyIntervals = (result.busy_intervals || []).map((interval) => ({
+				start: parseTimeToMinutes(interval.start),
+				end: parseTimeToMinutes(interval.end) || 1440,
+			}));
 
-			tables.forEach((table) => {
-				table.unavailable = unavailableIds.has(table.id);
-				if (table.unavailable) {
-					table.selected = false;
-				}
-			});
+			if (!selection || !rangeIsAvailable(selection.start, selection.end)) {
+				selection = findFirstAvailableRange();
+			}
 
-			updateInputs();
-			render();
+			renderTimeline();
 		} catch (error) {
 			console.error(error);
+			selection = null;
+			renderTimeline();
 		}
 	}
 
 	form
-		.querySelectorAll(
-			'[name="reservation_date"], [name="start_time"], [name="duration_hours"]',
-		)
+		.querySelectorAll('[name="reservation_date"]')
 		.forEach((input) => {
-			input.addEventListener("change", refreshAvailability);
+			input.addEventListener("change", refreshTimeframes);
 		});
 
 	window.AureaTableLayouts = window.AureaTableLayouts || {};
@@ -465,12 +713,16 @@ function initReserve(root) {
 			});
 			updateInputs();
 			render();
+			selection = null;
+			renderTimeline();
 		},
-		refreshAvailability,
+		refreshAvailability: refreshTimeframes,
+		refreshTimeframes,
 	};
 
 	updateInputs();
 	render();
+	renderTimeline();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

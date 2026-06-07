@@ -22,25 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'add') {
             db()->restaurantTables->create([
                 'data' => [
-                    'name' => $_POST['name'],
-                    'seats' => (int)$_POST['seats'],
-                    'location_description' => $_POST['location'] ?: null,
+                    'name' => trim((string)$_POST['name']),
+                    'seats' => max(1, min(20, (int)$_POST['seats'])),
+                    'location_description' => trim((string)($_POST['location'] ?? '')) ?: null,
                     'is_smoking' => isset($_POST['is_smoking']) ? 1 : 0,
+                    'layout_x' => 50,
+                    'layout_y' => 50,
+                    'table_shape' => in_array($_POST['table_shape'] ?? 'round', ['round', 'square'], true)
+                        ? $_POST['table_shape']
+                        : 'round',
                 ]
             ]);
-            $message = 'Sto je uspešno dodat.';
-            $messageType = 'success';
-        } elseif ($action === 'edit') {
-            db()->restaurantTables->update([
-                'where' => ['id' => (int)$_POST['id']],
-                'data' => [
-                    'name' => $_POST['name'],
-                    'seats' => (int)$_POST['seats'],
-                    'location_description' => $_POST['location'] ?: null,
-                    'is_smoking' => isset($_POST['is_smoking']) ? 1 : 0,
-                ]
-            ]);
-            $message = 'Sto je uspešno izmenjen.';
+            $message = 'Sto je uspešno dodat. Prevucite ga na željeno mesto i sačuvajte raspored.';
             $messageType = 'success';
         } elseif ($action === 'delete') {
             db()->restaurantTables->delete([
@@ -49,29 +42,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = 'Sto je obrisan.';
             $messageType = 'success';
         }
-    } catch (Exception $e) {
-        $message = $e->getMessage();
+    } catch (Exception $exception) {
+        $message = $exception->getMessage();
         $messageType = 'danger';
     }
 }
 
 $tables = db()->restaurantTables->findMany(['orderBy' => ['id' => 'ASC']]);
+$tableLayoutData = array_map(static function (array $table, int $index): array {
+    $defaultX = [18, 42, 66, 82][$index % 4];
+    $defaultY = min(88, 24 + (floor($index / 4) * 24));
+
+    return [
+        'id' => (int)$table['id'],
+        'name' => (string)$table['name'],
+        'seats' => (int)$table['seats'],
+        'location_description' => $table['location_description'] ?? '',
+        'is_smoking' => (int)($table['is_smoking'] ?? 0),
+        'layout_x' => isset($table['layout_x']) ? (float)$table['layout_x'] : $defaultX,
+        'layout_y' => isset($table['layout_y']) ? (float)$table['layout_y'] : $defaultY,
+        'table_shape' => in_array($table['table_shape'] ?? 'round', ['round', 'square'], true)
+            ? $table['table_shape']
+            : 'round',
+    ];
+}, $tables, array_keys($tables));
+$tableLayoutJson = json_encode($tableLayoutData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
 
 ?>
 <!doctype html>
 <html lang="en">
-<?php Helpers::renderHead("Stolovi", ['dashboard.css']) ?>
+<?php Helpers::renderHead("Stolovi", ['dashboard.css', 'table-layout.css']) ?>
 
 <body>
     <?php include Helpers::getRelativePath('src/components/header.php') ?>
 
     <main>
         <div class="dashboard-container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                 <div>
                     <h1 class="admin-title">Stolovi</h1>
-                    <p class="admin-subtitle">Upravljanje stolovima u restoranu</p>
+                    <p class="admin-subtitle">Vizuelno upravljanje rasporedom restorana</p>
                 </div>
                 <a href="<?= $relativePath . '/dashboard/admin' ?>" class="btn btn-outline-light btn-lg">
                     <i class="fa-solid fa-arrow-left me-2"></i> Nazad
@@ -84,132 +95,121 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 </div>
             <?php endif; ?>
 
-            <div class="glass-card p-4 mb-5 border-0" style="max-width: 600px;">
-                <h5 class="text-white mb-3 font-serif">Dodaj novi sto</h5>
-                <form method="POST">
-                    <input type="hidden" name="action" value="add">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label small opacity-50">Naziv stola</label>
-                            <input type="text" name="name" class="form-control custom-input" required>
+            <div
+                class="table-layout-shell"
+                data-table-layout
+                data-mode="admin"
+                data-tables-source="adminTableLayoutData"
+                data-save-url="<?= Helpers::getRelativePath('src/actions/save_tables_layout.php') ?>"
+            >
+                <section class="glass-card p-4 border-0 table-layout-map-wrap">
+                    <div class="d-flex justify-content-between align-items-center gap-3 mb-3 flex-wrap">
+                        <h5 class="text-white mb-0 font-serif">Mapa restorana</h5>
+                        <div class="layout-legend">
+                            <span><i></i> Slobodan sto</span>
+                            <span><i class="selected-dot"></i> Izabran sto</span>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label small opacity-50">Broj mesta</label>
-                            <input type="number" name="seats" class="form-control custom-input" min="1" required>
-                        </div>
-                        <div class="col-md-8">
-                            <label class="form-label small opacity-50">Lokacija</label>
-                            <input type="text" name="location" class="form-control custom-input">
-                        </div>
-                        <div class="col-md-4 d-flex align-items-end pb-2">
-                            <div class="form-check">
+                    </div>
+                    <div class="table-layout-map" aria-label="Mapa stolova za uređivanje"></div>
+                </section>
+
+                <aside class="table-layout-panel">
+                    <div class="glass-card p-4 border-0 mb-4">
+                        <h5 class="text-white mb-3 font-serif">Dodaj novi sto</h5>
+                        <form method="POST">
+                            <input type="hidden" name="action" value="add">
+                            <div class="mb-3">
+                                <label class="form-label small opacity-50">Naziv stola</label>
+                                <input type="text" name="name" class="form-control custom-input" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small opacity-50">Broj mesta</label>
+                                <input type="number" name="seats" class="form-control custom-input" min="1" max="20" value="4" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small opacity-50">Lokacija</label>
+                                <input type="text" name="location" class="form-control custom-input">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small opacity-50">Oblik</label>
+                                <select name="table_shape" class="form-control custom-input">
+                                    <option value="round">Okrugli</option>
+                                    <option value="square">Kvadratni</option>
+                                </select>
+                            </div>
+                            <div class="form-check mb-3">
                                 <input type="checkbox" name="is_smoking" id="is_smoking" class="form-check-input">
                                 <label for="is_smoking" class="form-check-label text-white small">Pušački deo</label>
                             </div>
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-light w-100 py-2 fw-bold">Dodaj sto</button>
-                        </div>
+                            <button type="submit" class="btn btn-light w-100 py-2 fw-bold">
+                                <i class="fa-solid fa-plus me-2"></i> Dodaj sto
+                            </button>
+                        </form>
                     </div>
-                </form>
-            </div>
 
-            <div class="glass-card p-4 border-0" style="max-width: 100%;">
-                <h5 class="text-white mb-3 font-serif">Postojeći stolovi</h5>
+                    <div class="glass-card p-4 border-0">
+                        <h5 class="text-white mb-3 font-serif">Izabrani sto</h5>
+                        <?php if (empty($tables)): ?>
+                            <p class="text-white opacity-50 small mb-0">Dodajte prvi sto da biste uredili detalje.</p>
+                        <?php else: ?>
+                            <div class="mb-3">
+                                <label class="form-label small opacity-50">Naziv stola</label>
+                                <input type="text" id="layoutTableName" class="form-control custom-input">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small opacity-50">Broj mesta</label>
+                                <div class="seat-stepper">
+                                    <button type="button" id="layoutDecreaseSeats" class="btn btn-outline-light" title="Smanji broj mesta">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <output id="layoutSeatCount">1</output>
+                                    <button type="button" id="layoutIncreaseSeats" class="btn btn-outline-light" title="Povećaj broj mesta">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small opacity-50">Lokacija</label>
+                                <input type="text" id="layoutTableLocation" class="form-control custom-input">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small opacity-50">Oblik</label>
+                                <div class="shape-toggle">
+                                    <button type="button" id="layoutShapeRound" class="btn btn-outline-light">
+                                        <i class="fa-regular fa-circle me-2"></i> Okrugli
+                                    </button>
+                                    <button type="button" id="layoutShapeSquare" class="btn btn-outline-light">
+                                        <i class="fa-regular fa-square me-2"></i> Kvadratni
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" id="layoutTableSmoking" class="form-check-input">
+                                <label for="layoutTableSmoking" class="form-check-label text-white small">Pušački deo</label>
+                            </div>
 
-                <?php if (empty($tables)): ?>
-                    <div class="text-center py-4">
-                        <i class="fa-solid fa-chair fa-2x mb-2 opacity-10"></i>
-                        <p class="text-white opacity-25 fw-light mb-0">Nema stolova.</p>
+                            <div id="tableLayoutStatus" class="layout-status mb-3"></div>
+
+                            <button type="button" id="saveLayoutButton" class="btn btn-light w-100 py-2 fw-bold mb-3">
+                                <i class="fa-solid fa-floppy-disk me-2"></i> Sačuvaj raspored
+                            </button>
+
+                            <form method="POST" onsubmit="return confirm('Obrisati izabrani sto?')">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" id="deleteTableId" value="">
+                                <button type="submit" class="btn btn-outline-danger w-100 py-2">
+                                    <i class="fa-solid fa-trash me-2"></i> Obriši izabrani sto
+                                </button>
+                            </form>
+                        <?php endif; ?>
                     </div>
-                <?php else: ?>
-                    <div class="table-responsive">
-                        <table class="table table-dark table-borderless align-middle mb-0" style="background: transparent;">
-                            <thead>
-                                <tr class="opacity-50 small text-uppercase" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                    <th class="py-2 ps-0">Naziv</th>
-                                    <th class="py-2">Mesta</th>
-                                    <th class="py-2">Lokacija</th>
-                                    <th class="py-2">Deo</th>
-                                    <th class="py-2 text-end pe-0">Akcije</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($tables as $t): ?>
-                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                        <td class="py-3 ps-0 text-white fw-medium"><?= htmlspecialchars($t['name']) ?></td>
-                                        <td class="py-3 text-white"><?= $t['seats'] ?></td>
-                                        <td class="py-3 text-white opacity-75"><?= htmlspecialchars($t['location_description'] ?? '—') ?></td>
-                                        <td class="py-3">
-                                            <?php if ($t['is_smoking']): ?>
-                                                <span class="text-warning opacity-75 small">Pušački</span>
-                                            <?php else: ?>
-                                                <span class="text-success opacity-75 small">Nepušački</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="py-3 text-end pe-0">
-                                            <button class="btn btn-sm btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#editModal<?= $t['id'] ?>">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </button>
-                                            <form method="POST" class="d-inline" onsubmit="return confirm('Obrisati sto?')">
-                                                <input type="hidden" name="action" value="delete">
-                                                <input type="hidden" name="id" value="<?= $t['id'] ?>">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php endif; ?>
+                </aside>
             </div>
         </div>
     </main>
 
-    <?php foreach ($tables as $t): ?>
-        <div class="modal fade" id="editModal<?= $t['id'] ?>" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content glass-card p-4 border-0">
-                    <div class="modal-header border-0 pb-0">
-                        <h5 class="text-white font-serif">Izmeni sto</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body px-0">
-                        <form method="POST">
-                            <input type="hidden" name="action" value="edit">
-                            <input type="hidden" name="id" value="<?= $t['id'] ?>">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label small opacity-50">Naziv stola</label>
-                                    <input type="text" name="name" class="form-control custom-input" value="<?= htmlspecialchars($t['name']) ?>" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label small opacity-50">Broj mesta</label>
-                                    <input type="number" name="seats" class="form-control custom-input" min="1" value="<?= $t['seats'] ?>" required>
-                                </div>
-                                <div class="col-md-8">
-                                    <label class="form-label small opacity-50">Lokacija</label>
-                                    <input type="text" name="location" class="form-control custom-input" value="<?= htmlspecialchars($t['location_description'] ?? '') ?>">
-                                </div>
-                                <div class="col-md-4 d-flex align-items-end pb-2">
-                                    <div class="form-check">
-                                        <input type="checkbox" name="is_smoking" id="edit_smoking_<?= $t['id'] ?>" class="form-check-input" <?= $t['is_smoking'] ? 'checked' : '' ?>>
-                                        <label for="edit_smoking_<?= $t['id'] ?>" class="form-check-label text-white small">Pušački</label>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-light w-100 py-2 fw-bold">Sačuvaj izmene</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <?php endforeach; ?>
+    <script type="application/json" id="adminTableLayoutData"><?= $tableLayoutJson ?></script>
+    <script src="<?= Helpers::getRelativePath('src/scripts/table-layout.js') ?>"></script>
 
     <?php include Helpers::getRelativePath('src/components/footer.php') ?>
 </body>

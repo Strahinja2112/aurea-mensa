@@ -51,6 +51,9 @@ final class Database
             'seats',
             'location_description',
             'is_smoking',
+            'layout_x',
+            'layout_y',
+            'table_shape',
         ],
         'reservations' => [
             'id',

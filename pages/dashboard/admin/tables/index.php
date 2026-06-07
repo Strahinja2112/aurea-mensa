@@ -77,56 +77,93 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
 
                 <aside class="table-layout-panel">
                     <div class="glass-card p-4 border-0">
-                        <fieldset id="layoutEditFields" disabled>
-                            <div class="mb-3">
-                                <label class="form-label small opacity-50">Naziv stola</label>
-                                <input type="text" id="layoutTableName" class="form-control custom-input">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label small opacity-50">Broj mesta</label>
-                                <div class="seat-stepper">
-                                    <button type="button" id="layoutDecreaseSeats" class="btn btn-outline-light" title="Smanji broj mesta">
-                                        <i class="fa-solid fa-minus"></i>
-                                    </button>
-                                    <output id="layoutSeatCount">1</output>
-                                    <button type="button" id="layoutIncreaseSeats" class="btn btn-outline-light" title="Povećaj broj mesta">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
+                        <div id="layoutNoSelectionHint" class="layout-panel-empty">
+                            <i class="fa-solid fa-arrow-pointer"></i>
+                            <h5>Izaberite sto</h5>
+                            <p>Kliknite sto na mapi da izmenite naziv, broj mesta, oblik i zonu.</p>
+                        </div>
+
+                        <div id="layoutInspector" class="layout-inspector d-none">
+                            <div class="layout-inspector-header">
+                                <div>
+                                    <span class="layout-kicker">Izabrani sto</span>
+                                    <strong id="layoutSelectedName">Sto</strong>
                                 </div>
+                                <span id="layoutSelectedMeta">0 mesta</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label small opacity-50">Lokacija</label>
-                                <input type="text" id="layoutTableLocation" class="form-control custom-input">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label small opacity-50">Oblik</label>
-                                <div class="shape-toggle">
-                                    <button type="button" id="layoutShapeRound" class="btn btn-outline-light">
-                                        <i class="fa-regular fa-circle me-2"></i> Okrugli
-                                    </button>
-                                    <button type="button" id="layoutShapeSquare" class="btn btn-outline-light">
-                                        <i class="fa-regular fa-square me-2"></i> Kvadratni
-                                    </button>
+
+                            <fieldset id="layoutEditFields">
+                                <div class="layout-control-group">
+                                    <div class="layout-group-title">
+                                        <i class="fa-solid fa-tag"></i>
+                                        <span>Identitet</span>
+                                    </div>
+
+                                    <label class="layout-field-label" for="layoutTableName">Naziv stola</label>
+                                    <input type="text" id="layoutTableName" class="form-control custom-input">
+
+                                    <label class="layout-field-label mt-3" for="layoutTableLocation">Lokacija</label>
+                                    <input
+                                        type="text"
+                                        id="layoutTableLocation"
+                                        class="form-control custom-input"
+                                        placeholder="npr. Pored prozora"
+                                    >
                                 </div>
+
+                                <div class="layout-control-group">
+                                    <div class="layout-group-title">
+                                        <i class="fa-solid fa-chair"></i>
+                                        <span>Kapacitet</span>
+                                    </div>
+
+                                    <div class="seat-stepper">
+                                        <button type="button" id="layoutDecreaseSeats" class="btn btn-outline-light" title="Smanji broj mesta">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                        <output id="layoutSeatCount">1</output>
+                                        <button type="button" id="layoutIncreaseSeats" class="btn btn-outline-light" title="Povećaj broj mesta">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="layout-control-group">
+                                    <div class="layout-group-title">
+                                        <i class="fa-solid fa-shapes"></i>
+                                        <span>Izgled i zona</span>
+                                    </div>
+
+                                    <label class="layout-field-label">Oblik stola</label>
+                                    <div class="shape-toggle mb-3">
+                                        <button type="button" id="layoutShapeRound" class="btn btn-outline-light">
+                                            <i class="fa-regular fa-circle me-2"></i> Okrugli
+                                        </button>
+                                        <button type="button" id="layoutShapeSquare" class="btn btn-outline-light">
+                                            <i class="fa-regular fa-square me-2"></i> Kvadratni
+                                        </button>
+                                    </div>
+
+                                    <label class="layout-switch" for="layoutTableSmoking">
+                                        <input type="checkbox" id="layoutTableSmoking">
+                                        <span></span>
+                                        <strong>Pušački deo</strong>
+                                    </label>
+                                </div>
+                            </fieldset>
+
+                            <div id="tableLayoutStatus" class="layout-status mb-3"></div>
+
+                            <div class="layout-action-row">
+                                <button type="button" id="saveLayoutButton" class="btn btn-light py-2 fw-bold">
+                                    <i class="fa-solid fa-floppy-disk me-2"></i> Sačuvaj
+                                </button>
+
+                                <button type="button" id="removeLayoutTableButton" class="btn btn-outline-danger py-2">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </div>
-                            <div class="form-check mb-3">
-                                <input type="checkbox" id="layoutTableSmoking" class="form-check-input">
-                                <label for="layoutTableSmoking" class="form-check-label text-white small">Pušački deo</label>
-                            </div>
-                        </fieldset>
-
-                        <p id="layoutNoSelectionHint" class="text-white opacity-50 small mb-3">
-                        </p>
-
-                        <div id="tableLayoutStatus" class="layout-status mb-3"></div>
-
-                        <button type="button" id="saveLayoutButton" class="btn btn-light w-100 py-2 fw-bold mb-3">
-                            <i class="fa-solid fa-floppy-disk me-2"></i> Sačuvaj raspored
-                        </button>
-
-                        <button type="button" id="removeLayoutTableButton" class="btn btn-outline-danger w-100 py-2" disabled>
-                            <i class="fa-solid fa-trash me-2"></i> Ukloni izabrani sto
-                        </button>
+                        </div>
                     </div>
                 </aside>
             </div>

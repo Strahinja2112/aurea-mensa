@@ -95,64 +95,69 @@ function initAdmin(root) {
 	let nextTemporaryId = -1;
 	let drag = null;
 
-	const controls = {
-		add: document.getElementById("addLayoutTableButton"),
-		fieldset: document.getElementById("layoutEditFields"),
-		hint: document.getElementById("layoutNoSelectionHint"),
-		name: document.getElementById("layoutTableName"),
-		location: document.getElementById("layoutTableLocation"),
-		smoking: document.getElementById("layoutTableSmoking"),
-		seats: document.getElementById("layoutSeatCount"),
-		round: document.getElementById("layoutShapeRound"),
-		square: document.getElementById("layoutShapeSquare"),
-		decrease: document.getElementById("layoutDecreaseSeats"),
-		increase: document.getElementById("layoutIncreaseSeats"),
-		save: document.getElementById("saveLayoutButton"),
-		remove: document.getElementById("removeLayoutTableButton"),
-	};
+		const controls = {
+			add: document.getElementById("addLayoutTableButton"),
+			fieldset: document.getElementById("layoutEditFields"),
+			inspector: document.getElementById("layoutInspector"),
+			hint: document.getElementById("layoutNoSelectionHint"),
+			selectedName: document.getElementById("layoutSelectedName"),
+			selectedMeta: document.getElementById("layoutSelectedMeta"),
+			name: document.getElementById("layoutTableName"),
+			location: document.getElementById("layoutTableLocation"),
+			smoking: document.getElementById("layoutTableSmoking"),
+			seats: document.getElementById("layoutSeatCount"),
+			round: document.getElementById("layoutShapeRound"),
+			square: document.getElementById("layoutShapeSquare"),
+			decrease: document.getElementById("layoutDecreaseSeats"),
+			increase: document.getElementById("layoutIncreaseSeats"),
+			save: document.getElementById("saveLayoutButton"),
+			remove: document.getElementById("removeLayoutTableButton"),
+		};
 
-	const getSelected = () =>
-		tables.find((table) => table.id === selectedId) || null;
+		const getSelected = () =>
+			tables.find((table) => table.id === selectedId) || null;
 
-	function setStatus(message, type) {
-		if (!status) {
-			return;
+		function setStatus(message, type) {
+			if (!status) {
+				return;
+			}
+
+			status.innerHTML = message
+				? `<div class="alert alert-${type} bg-${type} bg-opacity-20 border-0 text-white small rounded-3 mb-0">${message}</div>`
+				: "";
 		}
 
-		status.innerHTML = message
-			? `<div class="alert alert-${type} bg-${type} bg-opacity-20 border-0 text-white small rounded-3 mb-0">${message}</div>`
-			: "";
-	}
+		function syncControls() {
+			const table = getSelected();
 
-	function syncControls() {
-		const table = getSelected();
+			if (!controls.name) {
+				return;
+			}
 
-		if (!controls.name) {
-			return;
+			const hasSelection = Boolean(table);
+			controls.inspector.classList.toggle("d-none", !hasSelection);
+			controls.hint.classList.toggle("d-none", hasSelection);
+			controls.remove.disabled = !hasSelection;
+
+			if (!table) {
+				controls.name.value = "";
+				controls.location.value = "";
+				controls.smoking.checked = false;
+				controls.seats.textContent = "0";
+				controls.round.classList.remove("active");
+				controls.square.classList.remove("active");
+				return;
+			}
+
+			controls.name.value = table.name;
+			controls.location.value = table.location_description || "";
+			controls.smoking.checked = Boolean(table.is_smoking);
+			controls.seats.textContent = String(table.seats);
+			controls.selectedName.textContent = table.name;
+			controls.selectedMeta.textContent = `${table.seats} mesta`;
+			controls.round.classList.toggle("active", table.table_shape === "round");
+			controls.square.classList.toggle("active", table.table_shape === "square");
 		}
-
-		const hasSelection = Boolean(table);
-		controls.fieldset.disabled = !hasSelection;
-		controls.remove.disabled = !hasSelection;
-		controls.hint.classList.toggle("d-none", hasSelection);
-
-		if (!table) {
-			controls.name.value = "";
-			controls.location.value = "";
-			controls.smoking.checked = false;
-			controls.seats.textContent = "0";
-			controls.round.classList.remove("active");
-			controls.square.classList.remove("active");
-			return;
-		}
-
-		controls.name.value = table.name;
-		controls.location.value = table.location_description || "";
-		controls.smoking.checked = Boolean(table.is_smoking);
-		controls.seats.textContent = String(table.seats);
-		controls.round.classList.toggle("active", table.table_shape === "round");
-		controls.square.classList.toggle("active", table.table_shape === "square");
-	}
 
 	function render() {
 		map.innerHTML = "";

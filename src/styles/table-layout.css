@@ -453,9 +453,92 @@
 	background: rgba(255, 255, 255, 0.3);
 }
 
+.reserve-layout-card {
+	width: min(1180px, calc(100vw - 32px));
+	max-width: none !important;
+	padding: 28px !important;
+}
+
+.reserve-layout-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 18px;
+}
+
+.reserve-layout-header h2 {
+	margin: 0;
+	color: #fff;
+	font-size: 32px;
+	line-height: 1.1;
+}
+
+.reserve-booking-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr);
+	gap: 22px;
+	align-items: start;
+}
+
+.reserve-map-section,
+.reserve-side-panel {
+	min-width: 0;
+}
+
+.reserve-section-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 12px;
+}
+
+.reserve-section-head.compact {
+	align-items: flex-start;
+}
+
+.reserve-map {
+	min-height: 430px;
+}
+
+.reserve-side-panel {
+	padding: 16px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.03);
+}
+
+.reserve-date-row {
+	margin-bottom: 16px;
+}
+
+.reserve-date-row .custom-input {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.reserve-time-legend {
+	justify-content: flex-end;
+	gap: 8px;
+	font-size: 11px;
+}
+
+.reserve-submit-wrap {
+	margin-top: 16px;
+}
+
+.reserve-submit-wrap .button {
+	width: 100%;
+}
+
+.reserve-submit-wrap .button button {
+	width: 100%;
+}
+
 .reservation-timeline-panel {
-	margin-top: 22px;
-	padding-top: 22px;
+	margin-top: 0;
+	padding-top: 16px;
 	border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -470,7 +553,7 @@
 	position: relative;
 	display: grid;
 	grid-template-columns: repeat(var(--timeline-hours, 1), minmax(58px, 1fr));
-	min-height: 74px;
+	min-height: 62px;
 	overflow-x: auto;
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 8px;
@@ -479,8 +562,8 @@
 
 .timeline-slot {
 	min-width: 58px;
-	min-height: 72px;
-	padding: 34px 6px 8px;
+	min-height: 60px;
+	padding: 28px 6px 7px;
 	border: 0;
 	border-right: 1px solid rgba(255, 255, 255, 0.08);
 	background: transparent;
@@ -514,8 +597,8 @@
 
 .timeline-selection {
 	position: absolute;
-	top: 10px;
-	bottom: 24px;
+	top: 8px;
+	bottom: 20px;
 	z-index: 3;
 	display: flex;
 	align-items: center;
@@ -540,8 +623,8 @@
 .timeline-handle {
 	position: absolute;
 	top: 50%;
-	width: 18px;
-	height: 38px;
+	width: 16px;
+	height: 32px;
 	border: 1px solid rgba(255, 255, 255, 0.35);
 	border-radius: 999px;
 	background: #4a6a6a;
@@ -552,8 +635,8 @@
 
 .timeline-handle::after {
 	position: absolute;
-	top: 9px;
-	left: 7px;
+	top: 7px;
+	left: 6px;
 	width: 2px;
 	height: 18px;
 	border-radius: 999px;
@@ -571,7 +654,7 @@
 
 .timeline-empty {
 	display: flex;
-	min-height: 72px;
+	min-height: 60px;
 	align-items: center;
 	padding: 0 18px;
 	color: rgba(255, 255, 255, 0.45);
@@ -581,8 +664,8 @@
 .reservation-timeframes {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
-	margin-top: 12px;
+	gap: 6px;
+	margin-top: 10px;
 }
 
 .timeframe-chip {
@@ -590,8 +673,8 @@
 	border-radius: 999px;
 	background: rgba(255, 255, 255, 0.04);
 	color: rgba(255, 255, 255, 0.72);
-	padding: 6px 11px;
-	font-size: 12px;
+	padding: 5px 9px;
+	font-size: 11px;
 	cursor: pointer;
 }
 
@@ -607,6 +690,20 @@
 }
 
 @media (max-width: 992px) {
+	.reserve-booking-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.reserve-side-panel {
+		padding: 0;
+		border: 0;
+		background: transparent;
+	}
+
+	.reserve-map {
+		min-height: 420px;
+	}
+
 	.table-layout-shell {
 		grid-template-columns: 1fr;
 	}
@@ -617,9 +714,27 @@
 }
 
 @media (max-width: 576px) {
+	.reserve-layout-card {
+		width: calc(100vw - 20px);
+		padding: 18px !important;
+	}
+
+	.reserve-layout-header h2 {
+		font-size: 26px;
+	}
+
+	.reserve-section-head {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
 	.table-layout-map {
 		aspect-ratio: 4 / 5;
 		min-height: 500px;
+	}
+
+	.reserve-map {
+		min-height: 420px;
 	}
 
 	.layout-table {

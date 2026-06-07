@@ -91,10 +91,15 @@
 		const dataElement = document.getElementById(root.dataset.tablesSource);
 		const saveUrl = root.dataset.saveUrl;
 		const tables = parseTables(dataElement);
-		let selectedId = tables[0] ? tables[0].id : null;
+		const deletedIds = [];
+		let selectedId = null;
+		let nextTemporaryId = -1;
 		let drag = null;
 
 		const controls = {
+			add: document.getElementById("addLayoutTableButton"),
+			fieldset: document.getElementById("layoutEditFields"),
+			hint: document.getElementById("layoutNoSelectionHint"),
 			name: document.getElementById("layoutTableName"),
 			location: document.getElementById("layoutTableLocation"),
 			smoking: document.getElementById("layoutTableSmoking"),
@@ -104,7 +109,7 @@
 			decrease: document.getElementById("layoutDecreaseSeats"),
 			increase: document.getElementById("layoutIncreaseSeats"),
 			save: document.getElementById("saveLayoutButton"),
-			deleteId: document.getElementById("deleteTableId"),
+			remove: document.getElementById("removeLayoutTableButton"),
 		};
 
 		const getSelected = () =>
@@ -123,7 +128,22 @@
 		function syncControls() {
 			const table = getSelected();
 
-			if (!table || !controls.name) {
+			if (!controls.name) {
+				return;
+			}
+
+			const hasSelection = Boolean(table);
+			controls.fieldset.disabled = !hasSelection;
+			controls.remove.disabled = !hasSelection;
+			controls.hint.classList.toggle("d-none", hasSelection);
+
+			if (!table) {
+				controls.name.value = "";
+				controls.location.value = "";
+				controls.smoking.checked = false;
+				controls.seats.textContent = "0";
+				controls.round.classList.remove("active");
+				controls.square.classList.remove("active");
 				return;
 			}
 
@@ -136,7 +156,6 @@
 				"active",
 				table.table_shape === "square",
 			);
-			controls.deleteId.value = String(table.id);
 		}
 
 		function render() {
@@ -145,7 +164,7 @@
 
 			if (tables.length === 0) {
 				map.innerHTML =
-					'<div class="layout-empty-state">Nema stolova. Dodajte prvi sto pomoću forme desno.</div>';
+					'<div class="layout-empty-state">Nema stolova. Dodajte prvi sto pomoću dugmeta iznad mape.</div>';
 				return;
 			}
 
@@ -221,6 +240,29 @@
 			return;
 		}
 
+		controls.add.addEventListener("click", () => {
+			const nextNumber = tables.length + deletedIds.length + 1;
+			const table = {
+				id: nextTemporaryId,
+				name: `Sto ${nextNumber}`,
+				seats: 4,
+				location_description: "",
+				is_smoking: 0,
+				layout_x: 50,
+				layout_y: 50,
+				table_shape: "round",
+				selected: true,
+				unavailable: false,
+			};
+
+			nextTemporaryId -= 1;
+			tables.push(table);
+			selectedId = table.id;
+			syncControls();
+			render();
+			setStatus("Novi sto je dodat na mapu. Sačuvajte raspored da bi bio upisan u bazu.", "info");
+		});
+
 		controls.name.addEventListener("input", () =>
 			updateSelected((table) => {
 				table.name = controls.name.value;
@@ -256,6 +298,27 @@
 				table.table_shape = "square";
 			}),
 		);
+		controls.remove.addEventListener("click", () => {
+			const table = getSelected();
+
+			if (!table || !confirm("Ukloniti izabrani sto iz rasporeda?")) {
+				return;
+			}
+
+			if (table.id > 0) {
+				deletedIds.push(table.id);
+			}
+
+			const index = tables.findIndex((item) => item.id === table.id);
+			if (index !== -1) {
+				tables.splice(index, 1);
+			}
+
+			selectedId = null;
+			syncControls();
+			render();
+			setStatus("Sto je uklonjen iz prikaza. Sačuvajte raspored da bi promena bila upisana.", "info");
+		});
 
 		controls.save.addEventListener("click", async () => {
 			setStatus("Čuvanje rasporeda...", "info");
@@ -265,7 +328,7 @@
 				const response = await fetch(saveUrl, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ tables }),
+					body: JSON.stringify({ tables, deleted_ids: deletedIds }),
 				});
 				const result = await response.json();
 
@@ -273,6 +336,12 @@
 					result.message || "Raspored je sačuvan.",
 					result.success ? "success" : "danger",
 				);
+
+				if (result.success) {
+					window.setTimeout(() => {
+						window.location.reload();
+					}, 500);
+				}
 			} catch (error) {
 				console.error(error);
 				setStatus("Greška pri komunikaciji sa serverom.", "danger");

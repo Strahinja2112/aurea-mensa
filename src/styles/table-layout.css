@@ -161,6 +161,11 @@
 	top: 120px;
 }
 
+.table-layout-panel fieldset:disabled {
+	opacity: 0.48;
+	pointer-events: none;
+}
+
 .layout-empty-state {
 	display: flex;
 	min-height: 260px;

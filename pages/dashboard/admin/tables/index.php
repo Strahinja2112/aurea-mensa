@@ -12,42 +12,6 @@ if (!$user || !$user->isAdmin()) {
     exit;
 }
 
-$message = null;
-$messageType = null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-
-    try {
-        if ($action === 'add') {
-            db()->restaurantTables->create([
-                'data' => [
-                    'name' => trim((string)$_POST['name']),
-                    'seats' => max(1, min(20, (int)$_POST['seats'])),
-                    'location_description' => trim((string)($_POST['location'] ?? '')) ?: null,
-                    'is_smoking' => isset($_POST['is_smoking']) ? 1 : 0,
-                    'layout_x' => 50,
-                    'layout_y' => 50,
-                    'table_shape' => in_array($_POST['table_shape'] ?? 'round', ['round', 'square'], true)
-                        ? $_POST['table_shape']
-                        : 'round',
-                ]
-            ]);
-            $message = 'Sto je uspešno dodat. Prevucite ga na željeno mesto i sačuvajte raspored.';
-            $messageType = 'success';
-        } elseif ($action === 'delete') {
-            db()->restaurantTables->delete([
-                'where' => ['id' => (int)$_POST['id']]
-            ]);
-            $message = 'Sto je obrisan.';
-            $messageType = 'success';
-        }
-    } catch (Exception $exception) {
-        $message = $exception->getMessage();
-        $messageType = 'danger';
-    }
-}
-
 $tables = db()->restaurantTables->findMany(['orderBy' => ['id' => 'ASC']]);
 $tableLayoutData = array_map(static function (array $table, int $index): array {
     $defaultX = [18, 42, 66, 82][$index % 4];
@@ -84,16 +48,15 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                     <h1 class="admin-title">Stolovi</h1>
                     <p class="admin-subtitle">Vizuelno upravljanje rasporedom restorana</p>
                 </div>
-                <a href="<?= $relativePath . '/dashboard/admin' ?>" class="btn btn-outline-light btn-lg">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Nazad
-                </a>
-            </div>
-
-            <?php if ($message): ?>
-                <div class="alert alert-<?= $messageType ?> bg-<?= $messageType ?> bg-opacity-20 border-0 text-white small rounded-3 mb-4">
-                    <?= htmlspecialchars($message) ?>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="button" id="addLayoutTableButton" class="btn btn-light btn-lg">
+                        <i class="fa-solid fa-plus me-2"></i> Dodaj sto
+                    </button>
+                    <a href="<?= $relativePath . '/dashboard/admin' ?>" class="btn btn-outline-light btn-lg">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Nazad
+                    </a>
                 </div>
-            <?php endif; ?>
+            </div>
 
             <div
                 class="table-layout-shell"
@@ -114,44 +77,9 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 </section>
 
                 <aside class="table-layout-panel">
-                    <div class="glass-card p-4 border-0 mb-4">
-                        <h5 class="text-white mb-3 font-serif">Dodaj novi sto</h5>
-                        <form method="POST">
-                            <input type="hidden" name="action" value="add">
-                            <div class="mb-3">
-                                <label class="form-label small opacity-50">Naziv stola</label>
-                                <input type="text" name="name" class="form-control custom-input" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label small opacity-50">Broj mesta</label>
-                                <input type="number" name="seats" class="form-control custom-input" min="1" max="20" value="4" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label small opacity-50">Lokacija</label>
-                                <input type="text" name="location" class="form-control custom-input">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label small opacity-50">Oblik</label>
-                                <select name="table_shape" class="form-control custom-input">
-                                    <option value="round">Okrugli</option>
-                                    <option value="square">Kvadratni</option>
-                                </select>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input type="checkbox" name="is_smoking" id="is_smoking" class="form-check-input">
-                                <label for="is_smoking" class="form-check-label text-white small">Pušački deo</label>
-                            </div>
-                            <button type="submit" class="btn btn-light w-100 py-2 fw-bold">
-                                <i class="fa-solid fa-plus me-2"></i> Dodaj sto
-                            </button>
-                        </form>
-                    </div>
-
                     <div class="glass-card p-4 border-0">
                         <h5 class="text-white mb-3 font-serif">Izabrani sto</h5>
-                        <?php if (empty($tables)): ?>
-                            <p class="text-white opacity-50 small mb-0">Dodajte prvi sto da biste uredili detalje.</p>
-                        <?php else: ?>
+                        <fieldset id="layoutEditFields" disabled>
                             <div class="mb-3">
                                 <label class="form-label small opacity-50">Naziv stola</label>
                                 <input type="text" id="layoutTableName" class="form-control custom-input">
@@ -187,21 +115,21 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                                 <input type="checkbox" id="layoutTableSmoking" class="form-check-input">
                                 <label for="layoutTableSmoking" class="form-check-label text-white small">Pušački deo</label>
                             </div>
+                        </fieldset>
 
-                            <div id="tableLayoutStatus" class="layout-status mb-3"></div>
+                        <p id="layoutNoSelectionHint" class="text-white opacity-50 small mb-3">
+                            Izaberite sto na mapi ili dodajte novi sto.
+                        </p>
 
-                            <button type="button" id="saveLayoutButton" class="btn btn-light w-100 py-2 fw-bold mb-3">
-                                <i class="fa-solid fa-floppy-disk me-2"></i> Sačuvaj raspored
-                            </button>
+                        <div id="tableLayoutStatus" class="layout-status mb-3"></div>
 
-                            <form method="POST" onsubmit="return confirm('Obrisati izabrani sto?')">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" id="deleteTableId" value="">
-                                <button type="submit" class="btn btn-outline-danger w-100 py-2">
-                                    <i class="fa-solid fa-trash me-2"></i> Obriši izabrani sto
-                                </button>
-                            </form>
-                        <?php endif; ?>
+                        <button type="button" id="saveLayoutButton" class="btn btn-light w-100 py-2 fw-bold mb-3">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> Sačuvaj raspored
+                        </button>
+
+                        <button type="button" id="removeLayoutTableButton" class="btn btn-outline-danger w-100 py-2" disabled>
+                            <i class="fa-solid fa-trash me-2"></i> Ukloni izabrani sto
+                        </button>
                     </div>
                 </aside>
             </div>

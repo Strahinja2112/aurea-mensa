@@ -15,6 +15,8 @@ if (!$user || !$user->isStaff()) {
 $today = date('Y-m-d');
 $statusFilter = $_GET['status'] ?? 'pending';
 $searchQuery = $_GET['search'] ?? '';
+$page = max(1, (int)($_GET['page'] ?? 1));
+$perPage = 6;
 
 $reservations = db()->reservations->findMany([
     'where' => [
@@ -80,6 +82,11 @@ foreach ($reservations as $res) {
     ];
 }
 
+$totalStaffReservations = count($todayReservations);
+$totalStaffPages = max(1, (int)ceil($totalStaffReservations / $perPage));
+$page = min($page, $totalStaffPages);
+$paginatedTodayReservations = array_slice($todayReservations, ($page - 1) * $perPage, $perPage);
+
 $message = null;
 $error = null;
 
@@ -93,10 +100,10 @@ $pageTitle = 'Staff Dashboard';
     <?php include Helpers::getRelativePath('src/components/header.php') ?>
 
     <main>
-        <div class="glass-card dashboard-container">
+        <div class="glass-card dashboard-container py-4">
             <div class="page-header text-center mb-4">
-                <h2 class="mb-0 pb-2 pt-5">Današnje Rezervacije</h2>
-                <p class="page-subtitle"><?= date('l, d. M') ?></p>
+                <h2 class="mb-0 pb-2">Današnje Rezervacije</h2>
+                <p class=" page-subtitle"><?= date('l, d. M') ?></p>
             </div>
 
             <div class="filter-buttons mb-4">
@@ -133,7 +140,7 @@ $pageTitle = 'Staff Dashboard';
                 </div>
             </form>
 
-            <?php if (empty($todayReservations)): ?>
+            <?php if (empty($paginatedTodayReservations)): ?>
                 <div class="text-center py-5">
                     <i class="fa-solid fa-calendar-xmark fa-3x mb-3 opacity-10"></i>
                     <h3 class="text-white opacity-25 fw-light">Nema rezervacija.</h3>
@@ -152,7 +159,7 @@ $pageTitle = 'Staff Dashboard';
                         </div>
                     </div>
                     <div class="rt-body">
-                        <?php foreach ($todayReservations as $item):
+                        <?php foreach ($paginatedTodayReservations as $item):
                             $res = $item['reservation'];
                             $resUser = $item['user'];
                             $arrived = $item['arrived'];
@@ -188,19 +195,19 @@ $pageTitle = 'Staff Dashboard';
                                     <?php if (!$arrived): ?>
                                         <button type="button" class="btn btn-cta btn-sm"
                                             onclick="quickCheckIn(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>')">
-                                            <i class="fa-solid fa-check me-1"></i>Prijavi
+                                            <i class="fa-solid fa-check me-2"></i>Prijavi
                                         </button>
                                     <?php endif; ?>
                                     <?php if ($arrived && !$hasComment): ?>
                                         <button type="button" class="btn btn-outline-light btn-sm"
                                             onclick="openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>', '<?= htmlspecialchars($userName) ?>', '<?= htmlspecialchars($resUser['email'] ?? '') ?>', '<?= htmlspecialchars($resUser['phone'] ?? '') ?>', '<?= htmlspecialchars(implode(', ', $tables)) ?>', '<?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>', '')">
-                                            <i class="fa-solid fa-plus me-1"></i>Komentar
+                                            <i class="fa-solid fa-plus me-2"></i>Komentar
                                         </button>
                                     <?php endif; ?>
                                     <?php if ($arrived && $hasComment): ?>
                                         <button type="button" class="btn btn-outline-light btn-sm"
                                             onclick="openCommentModal(<?= $res['id'] ?>, '<?= htmlspecialchars($res['reservation_code']) ?>', '<?= htmlspecialchars($userName) ?>', '<?= htmlspecialchars($resUser['email'] ?? '') ?>', '<?= htmlspecialchars($resUser['phone'] ?? '') ?>', '<?= htmlspecialchars(implode(', ', $tables)) ?>', '<?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>', '<?= htmlspecialchars($res['comment']) ?>')">
-                                            <i class="fa-regular fa-note-sticky me-1"></i>Komentar
+                                            <i class="fa-regular fa-note-sticky me-2"></i>Komentar
                                         </button>
                                     <?php endif; ?>
                                 </div>
@@ -208,6 +215,27 @@ $pageTitle = 'Staff Dashboard';
                         <?php endforeach; ?>
                     </div>
                 </div>
+
+                <?php if ($totalStaffPages > 1): ?>
+                    <div class="pagination-wrap">
+                        <?php if ($page > 1): ?>
+                            <a href="?status=<?= urlencode($statusFilter) ?>&search=<?= urlencode($searchQuery) ?>&page=<?= $page - 1 ?>" class="page-btn">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </a>
+                        <?php endif; ?>
+                        <?php for ($i = 1; $i <= $totalStaffPages; $i++): ?>
+                            <a href="?status=<?= urlencode($statusFilter) ?>&search=<?= urlencode($searchQuery) ?>&page=<?= $i ?>"
+                                class="page-btn <?= $i === $page ? 'active' : '' ?>">
+                                <?= $i ?>
+                            </a>
+                        <?php endfor; ?>
+                        <?php if ($page < $totalStaffPages): ?>
+                            <a href="?status=<?= urlencode($statusFilter) ?>&search=<?= urlencode($searchQuery) ?>&page=<?= $page + 1 ?>" class="page-btn">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </main>
@@ -307,6 +335,7 @@ $pageTitle = 'Staff Dashboard';
             const search = document.getElementById('searchInput').value;
             let url = '?status=' + status;
             if (search) url += '&search=' + encodeURIComponent(search);
+            url += '&page=1';
             window.location.href = url;
         }
 

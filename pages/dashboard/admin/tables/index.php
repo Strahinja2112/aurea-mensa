@@ -63,11 +63,10 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 data-table-layout
                 data-mode="admin"
                 data-tables-source="adminTableLayoutData"
-                data-save-url="<?= Helpers::getRelativePath('src/actions/save_tables_layout.php') ?>"
-            >
+                data-save-url="<?= Helpers::getRelativePath('src/actions/save_tables_layout.php') ?>">
                 <section class="glass-card p-4 border-0 table-layout-map-wrap">
                     <div class="d-flex justify-content-between align-items-center gap-3 mb-3 flex-wrap">
-                        <h5 class="text-white mb-0 font-serif">Mapa restorana</h5>
+                        <h5 class="text-white mb-0 ">Mapa restorana</h5>
                         <div class="layout-legend">
                             <span><i></i> Slobodan sto</span>
                             <span><i class="selected-dot"></i> Izabran sto</span>
@@ -78,7 +77,6 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
 
                 <aside class="table-layout-panel">
                     <div class="glass-card p-4 border-0">
-                        <h5 class="text-white mb-3 font-serif">Izabrani sto</h5>
                         <fieldset id="layoutEditFields" disabled>
                             <div class="mb-3">
                                 <label class="form-label small opacity-50">Naziv stola</label>
@@ -118,7 +116,6 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                         </fieldset>
 
                         <p id="layoutNoSelectionHint" class="text-white opacity-50 small mb-3">
-                            Izaberite sto na mapi ili dodajte novi sto.
                         </p>
 
                         <div id="tableLayoutStatus" class="layout-status mb-3"></div>
@@ -136,7 +133,9 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
         </div>
     </main>
 
-    <script type="application/json" id="adminTableLayoutData"><?= $tableLayoutJson ?></script>
+    <script type="application/json" id="adminTableLayoutData">
+        <?= $tableLayoutJson ?>
+    </script>
     <script src="<?= Helpers::getRelativePath('src/scripts/table-layout.js') ?>"></script>
 
     <?php include Helpers::getRelativePath('src/components/footer.php') ?>

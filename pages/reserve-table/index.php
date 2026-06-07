@@ -53,34 +53,34 @@ $today = date('Y-m-d');
                 <input type="hidden" name="start_time" id="reservationStartTime">
                 <input type="hidden" name="duration_hours" id="reservationDurationHours">
 
-                <div class="reserve-booking-grid">
-                    <section class="reserve-map-section">
-                        <div class="reserve-section-head">
-                            <label class="form-label mb-0">Izaberite sto na mapi</label>
-                            <div class="layout-legend">
-                                <span><i></i> Dostupan</span>
-                                <span><i class="selected-dot"></i> Izabran</span>
-                                <span><i class="disabled-dot"></i> Zauzet</span>
-                            </div>
+                <section class="reserve-map-section">
+                    <div class="reserve-section-head">
+                        <label class="form-label mb-0">Izaberite sto na mapi</label>
+                        <div class="layout-legend">
+                            <span><i></i> Dostupan</span>
+                            <span><i class="selected-dot"></i> Izabran</span>
+                            <span><i class="disabled-dot"></i> Zauzet</span>
                         </div>
+                    </div>
 
-                        <div
-                            data-table-layout
-                            data-mode="reserve"
-                            data-tables-source="reserveTableLayoutData"
-                            data-form-id="reservationForm"
-                            data-selected-inputs="selectedTableInputs"
-                            data-availability-url="<?= Helpers::getRelativePath('src/actions/table_availability.php') ?>"
-                            data-timeframes-url="<?= Helpers::getRelativePath('src/actions/table_timeframes.php') ?>"
-                            data-working-hours-source="restaurantWorkingHours"
-                        >
-                            <div class="table-layout-map reserve-map" aria-label="Mapa stolova za rezervaciju"></div>
-                        </div>
+                    <div
+                        data-table-layout
+                        data-mode="reserve"
+                        data-tables-source="reserveTableLayoutData"
+                        data-form-id="reservationForm"
+                        data-selected-inputs="selectedTableInputs"
+                        data-availability-url="<?= Helpers::getRelativePath('src/actions/table_availability.php') ?>"
+                        data-timeframes-url="<?= Helpers::getRelativePath('src/actions/table_timeframes.php') ?>"
+                        data-working-hours-source="restaurantWorkingHours"
+                    >
+                        <div class="table-layout-map reserve-map" aria-label="Mapa stolova za rezervaciju"></div>
+                    </div>
 
-                        <div id="selectedTableInputs"></div>
-                    </section>
+                    <div id="selectedTableInputs"></div>
+                </section>
 
-                    <aside class="reserve-side-panel">
+                <section class="reservation-timeline-panel">
+                    <div class="reserve-time-header">
                         <div class="reserve-date-row">
                             <label class="form-label">Datum rezervacije</label>
                             <input
@@ -92,39 +92,36 @@ $today = date('Y-m-d');
                             >
                         </div>
 
-                        <div class="reservation-timeline-panel">
-                            <div class="reserve-section-head compact">
-                                <div>
-                                    <label class="form-label mb-1">Dostupni termini</label>
-                                    <p class="reservation-timeline-summary" id="reservationTimelineSummary">
-                                        Izaberite datum i sto da biste videli termine.
-                                    </p>
-                                </div>
-                                <div class="layout-legend reserve-time-legend">
-                                    <span><i></i> Slobodno</span>
-                                    <span><i class="disabled-dot"></i> Zauzeto</span>
-                                    <span><i class="selected-dot"></i> Izabrano</span>
-                                </div>
-                            </div>
-
-                            <div id="reservationTimeline" class="reservation-timeline"></div>
-                            <div id="reservationTimeframes" class="reservation-timeframes"></div>
+                        <div class="reserve-time-copy">
+                            <label class="form-label mb-1">Dostupni termini</label>
+                            <p class="reservation-timeline-summary" id="reservationTimelineSummary">
+                                Izaberite datum i sto da biste videli termine.
+                            </p>
                         </div>
 
-                        <div id="reservationMessage" class="mt-3"></div>
-
-                        <div class="register-btn-wrapper reserve-submit-wrap">
-                            <div class="button">
-                                <button type="submit" id="submitBtn">
-                                    <span id="btnText">REZERVIŠI</span>
-                                    <span id="btnSpinner" class="d-none">
-                                        <span class="spinner-border spinner-border-sm me-2"></span>
-                                        SLANJE...
-                                    </span>
-                                </button>
-                            </div>
+                        <div class="layout-legend reserve-time-legend">
+                            <span><i></i> Slobodno</span>
+                            <span><i class="disabled-dot"></i> Zauzeto</span>
+                            <span><i class="selected-dot"></i> Izabrano</span>
                         </div>
-                    </aside>
+                    </div>
+
+                    <div id="reservationTimeline" class="reservation-timeline"></div>
+                    <div id="reservationTimeframes" class="reservation-timeframes"></div>
+                </section>
+
+                <div id="reservationMessage" class="mt-3"></div>
+
+                <div class="register-btn-wrapper reserve-submit-wrap">
+                    <div class="button">
+                        <button type="submit" id="submitBtn">
+                            <span id="btnText">REZERVIŠI</span>
+                            <span id="btnSpinner" class="d-none">
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                SLANJE...
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

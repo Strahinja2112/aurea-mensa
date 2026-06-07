@@ -372,10 +372,15 @@ function initReserve(root) {
 	const workingHours = parseWorkingHours(workingHoursElement);
 	const tables = parseTables(dataElement);
 	let busyIntervals = [];
+	let busyByTable = {};
 	let selection = null;
 
 	function selectedIds() {
 		return tables.filter((table) => table.selected).map((table) => table.id);
+	}
+
+	function selectedTables() {
+		return tables.filter((table) => table.selected);
 	}
 
 	function updateInputs() {
@@ -473,6 +478,12 @@ function initReserve(root) {
 		);
 	}
 
+	function tableRangeIsBusy(tableId, start, end) {
+		return (busyByTable[String(tableId)] || []).some((interval) =>
+			rangesOverlap(start, end, interval.start, interval.end),
+		);
+	}
+
 	function findFirstAvailableRange() {
 		if (!selectionWindow) {
 			return null;
@@ -563,7 +574,9 @@ function initReserve(root) {
 			return;
 		}
 
-		if (!selectionWindow || selectedIds().length === 0) {
+		const activeTables = selectedTables();
+
+		if (!selectionWindow || activeTables.length === 0) {
 			timeline.innerHTML = '<div class="timeline-empty">Izaberite datum i sto.</div>';
 			timeframeList.innerHTML = "";
 			timelineSummary.textContent = "Izaberite datum i sto da biste videli termine.";
@@ -575,23 +588,64 @@ function initReserve(root) {
 		timeline.innerHTML = "";
 		timeline.style.setProperty("--timeline-hours", String(totalHours));
 
+		const board = document.createElement("div");
+		board.className = "timeline-board";
+
+		const corner = document.createElement("div");
+		corner.className = "timeline-corner";
+		corner.textContent = "Sto";
+		board.appendChild(corner);
+
+		const hoursRow = document.createElement("div");
+		hoursRow.className = "timeline-hours-row";
+		hoursRow.style.setProperty("--timeline-hours", String(totalHours));
+
 		for (let index = 0; index < totalHours; index += 1) {
 			const slotStart = selectionWindow.start + (index * 60);
-			const slotEnd = slotStart + 60;
-			const slot = document.createElement("button");
-			slot.type = "button";
-			slot.className = "timeline-slot";
-			slot.textContent = formatMinutes(slotStart);
+			const hour = document.createElement("span");
+			hour.className = "timeline-hour";
+			hour.textContent = formatMinutes(slotStart);
+			hoursRow.appendChild(hour);
+		}
 
-			if (!rangeIsAvailable(slotStart, slotEnd)) {
-				slot.classList.add("busy");
-				slot.disabled = true;
-			} else {
-				slot.addEventListener("click", () => setSelection(slotStart, slotEnd));
+		board.appendChild(hoursRow);
+
+		const labels = document.createElement("div");
+		labels.className = "timeline-labels";
+		const lanes = document.createElement("div");
+		lanes.className = "timeline-lanes";
+		lanes.style.setProperty("--timeline-hours", String(totalHours));
+
+		activeTables.forEach((table) => {
+			const label = document.createElement("div");
+			label.className = "timeline-table-label";
+			label.textContent = table.name;
+			labels.appendChild(label);
+
+			const lane = document.createElement("div");
+			lane.className = "timeline-lane";
+			lane.style.setProperty("--timeline-hours", String(totalHours));
+
+			for (let index = 0; index < totalHours; index += 1) {
+				const slotStart = selectionWindow.start + (index * 60);
+				const slotEnd = slotStart + 60;
+				const slot = document.createElement("button");
+				slot.type = "button";
+				slot.className = "timeline-slot";
+				slot.setAttribute("aria-label", `${table.name}: ${formatMinutes(slotStart)} - ${formatMinutes(slotEnd)}`);
+
+				if (tableRangeIsBusy(table.id, slotStart, slotEnd)) {
+					slot.classList.add("busy");
+					slot.disabled = true;
+				} else {
+					slot.addEventListener("click", () => setSelection(slotStart, slotEnd));
+				}
+
+				lane.appendChild(slot);
 			}
 
-			timeline.appendChild(slot);
-		}
+			lanes.appendChild(lane);
+		});
 
 		if (selection) {
 			const range = document.createElement("div");
@@ -603,7 +657,7 @@ function initReserve(root) {
 				<span>${formatMinutes(selection.start)} - ${formatMinutes(selection.end)}</span>
 				<button type="button" class="timeline-handle right" aria-label="Podesi kraj"></button>
 			`;
-			timeline.appendChild(range);
+			lanes.appendChild(range);
 
 			range.querySelector(".left").addEventListener("pointerdown", (event) => startResize("left", event));
 			range.querySelector(".right").addEventListener("pointerdown", (event) => startResize("right", event));
@@ -612,6 +666,9 @@ function initReserve(root) {
 			timelineSummary.textContent = "Nema slobodnog termina od minimum 1 sat.";
 		}
 
+		board.appendChild(labels);
+		board.appendChild(lanes);
+		timeline.appendChild(board);
 		renderTimeframesList();
 		syncTimeInputs();
 	}
@@ -629,7 +686,13 @@ function initReserve(root) {
 		event.preventDefault();
 
 		const onMove = (moveEvent) => {
-			const rect = timeline.getBoundingClientRect();
+			const lanes = timeline.querySelector(".timeline-lanes");
+
+			if (!lanes) {
+				return;
+			}
+
+			const rect = lanes.getBoundingClientRect();
 			const ratio = Math.max(0, Math.min(1, (moveEvent.clientX - rect.left) / rect.width));
 			const snapped = selectionWindow.start + Math.round((ratio * (selectionWindow.end - selectionWindow.start)) / 60) * 60;
 
@@ -665,6 +728,7 @@ function initReserve(root) {
 		if (!reservationDate || ids.length === 0) {
 			selectionWindow = null;
 			busyIntervals = [];
+			busyByTable = {};
 			selection = null;
 			renderTimeline();
 			return;
@@ -686,6 +750,14 @@ function initReserve(root) {
 				start: parseTimeToMinutes(interval.start),
 				end: parseTimeToMinutes(interval.end) || 1440,
 			}));
+			busyByTable = {};
+
+			Object.entries(result.busy_by_table || {}).forEach(([tableId, intervals]) => {
+				busyByTable[tableId] = intervals.map((interval) => ({
+					start: parseTimeToMinutes(interval.start),
+					end: parseTimeToMinutes(interval.end) || 1440,
+				}));
+			});
 
 			if (!selection || !rangeIsAvailable(selection.start, selection.end)) {
 				selection = findFirstAvailableRange();

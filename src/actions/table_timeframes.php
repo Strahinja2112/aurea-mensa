@@ -60,12 +60,25 @@ try {
         ]
     ]);
 
+    $tablesByReservation = [];
+
+    foreach ($reservationTables as $reservationTable) {
+        $reservationId = (int)$reservationTable['reservation_id'];
+        $tableId = (int)$reservationTable['table_id'];
+        $tablesByReservation[$reservationId][] = $tableId;
+    }
+
     $reservationIds = array_values(array_unique(array_map(
         static fn(array $reservationTable): int => (int)$reservationTable['reservation_id'],
         $reservationTables
     )));
 
     $busyIntervals = [];
+    $busyByTable = [];
+
+    foreach ($tableIds as $tableId) {
+        $busyByTable[(string)$tableId] = [];
+    }
 
     if (!empty($reservationIds)) {
         $reservations = db()->reservations->findMany([
@@ -74,15 +87,23 @@ try {
                 'reservation_date' => $reservationDate,
                 'status' => 'ACTIVE'
             ],
-            'select' => ['start_time', 'end_time'],
+            'select' => ['id', 'start_time', 'end_time'],
             'orderBy' => ['start_time' => 'ASC']
         ]);
 
         foreach ($reservations as $reservation) {
-            $busyIntervals[] = [
+            $interval = [
                 'start' => substr((string)$reservation['start_time'], 0, 5),
                 'end' => substr((string)$reservation['end_time'], 0, 5),
             ];
+
+            $busyIntervals[] = $interval;
+
+            foreach ($tablesByReservation[(int)$reservation['id']] ?? [] as $tableId) {
+                if (isset($busyByTable[(string)$tableId])) {
+                    $busyByTable[(string)$tableId][] = $interval;
+                }
+            }
         }
     }
 
@@ -90,7 +111,8 @@ try {
 
     echo json_encode([
         'success' => true,
-        'busy_intervals' => $busyIntervals
+        'busy_intervals' => $busyIntervals,
+        'busy_by_table' => $busyByTable
     ]);
 } catch (Exception $exception) {
     if (ob_get_length()) {
@@ -100,7 +122,8 @@ try {
     echo json_encode([
         'success' => false,
         'message' => $exception->getMessage(),
-        'busy_intervals' => []
+        'busy_intervals' => [],
+        'busy_by_table' => []
     ]);
 }
 

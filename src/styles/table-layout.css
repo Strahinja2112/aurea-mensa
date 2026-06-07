@@ -46,18 +46,6 @@
 	pointer-events: none;
 }
 
-.table-layout-map::before {
-	content: "Ulaz";
-	left: 20px;
-	bottom: 18px;
-}
-
-.table-layout-map::after {
-	content: "Prozori";
-	right: 20px;
-	top: 18px;
-}
-
 .layout-table {
 	--table-size: 72px;
 	position: absolute;
@@ -474,15 +462,7 @@
 	line-height: 1.1;
 }
 
-.reserve-booking-grid {
-	display: grid;
-	grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr);
-	gap: 22px;
-	align-items: start;
-}
-
-.reserve-map-section,
-.reserve-side-panel {
+.reserve-map-section {
 	min-width: 0;
 }
 
@@ -499,18 +479,13 @@
 }
 
 .reserve-map {
-	min-height: 430px;
-}
-
-.reserve-side-panel {
-	padding: 16px;
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	border-radius: 8px;
-	background: rgba(255, 255, 255, 0.03);
+	min-height: 410px;
 }
 
 .reserve-date-row {
-	margin-bottom: 16px;
+	width: min(260px, 100%);
+	flex: 0 0 auto;
+	margin-bottom: 0;
 }
 
 .reserve-date-row .custom-input {
@@ -525,7 +500,7 @@
 }
 
 .reserve-submit-wrap {
-	margin-top: 16px;
+	margin-top: 18px;
 }
 
 .reserve-submit-wrap .button {
@@ -537,9 +512,21 @@
 }
 
 .reservation-timeline-panel {
-	margin-top: 0;
-	padding-top: 16px;
+	margin-top: 22px;
+	padding-top: 20px;
 	border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reserve-time-header {
+	display: grid;
+	grid-template-columns: minmax(180px, 260px) minmax(0, 1fr) auto;
+	gap: 16px;
+	align-items: end;
+	margin-bottom: 14px;
+}
+
+.reserve-time-copy {
+	min-width: 0;
 }
 
 .reservation-timeline-summary {
@@ -551,19 +538,87 @@
 
 .reservation-timeline {
 	position: relative;
-	display: grid;
-	grid-template-columns: repeat(var(--timeline-hours, 1), minmax(58px, 1fr));
-	min-height: 62px;
 	overflow-x: auto;
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 8px;
 	background: rgba(255, 255, 255, 0.035);
 }
 
+.timeline-board {
+	display: grid;
+	grid-template-columns: 112px minmax(640px, 1fr);
+}
+
+.timeline-corner,
+.timeline-hour,
+.timeline-table-label {
+	display: flex;
+	align-items: center;
+	min-height: 34px;
+	padding: 0 10px;
+	color: rgba(255, 255, 255, 0.45);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.timeline-corner {
+	position: sticky;
+	left: 0;
+	z-index: 4;
+	border-right: 1px solid rgba(255, 255, 255, 0.08);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(10, 10, 10, 0.92);
+}
+
+.timeline-hours-row {
+	display: grid;
+	grid-template-columns: repeat(var(--timeline-hours, 1), minmax(58px, 1fr));
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.timeline-hour {
+	border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.timeline-labels {
+	position: sticky;
+	left: 0;
+	z-index: 4;
+	background: rgba(10, 10, 10, 0.92);
+}
+
+.timeline-table-label {
+	min-height: 46px;
+	overflow: hidden;
+	border-right: 1px solid rgba(255, 255, 255, 0.08);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	color: rgba(255, 255, 255, 0.72);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.timeline-lanes {
+	position: relative;
+}
+
+.timeline-lane {
+	display: grid;
+	grid-template-columns: repeat(var(--timeline-hours, 1), minmax(58px, 1fr));
+	min-height: 46px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.timeline-lane:last-child,
+.timeline-table-label:last-child {
+	border-bottom: 0;
+}
+
 .timeline-slot {
 	min-width: 58px;
-	min-height: 60px;
-	padding: 28px 6px 7px;
+	min-height: 46px;
+	padding: 0;
 	border: 0;
 	border-right: 1px solid rgba(255, 255, 255, 0.08);
 	background: transparent;
@@ -583,22 +638,21 @@
 }
 
 .timeline-slot.busy {
-	background:
-		repeating-linear-gradient(
-			-45deg,
-			rgba(255, 255, 255, 0.04),
-			rgba(255, 255, 255, 0.04) 6px,
-			rgba(255, 255, 255, 0.01) 6px,
-			rgba(255, 255, 255, 0.01) 12px
-		);
+	background: repeating-linear-gradient(
+		-45deg,
+		rgba(255, 255, 255, 0.04),
+		rgba(255, 255, 255, 0.04) 6px,
+		rgba(255, 255, 255, 0.01) 6px,
+		rgba(255, 255, 255, 0.01) 12px
+	);
 	color: rgba(255, 255, 255, 0.25);
 	cursor: not-allowed;
 }
 
 .timeline-selection {
 	position: absolute;
-	top: 8px;
-	bottom: 20px;
+	top: 5px;
+	bottom: 5px;
 	z-index: 3;
 	display: flex;
 	align-items: center;
@@ -624,7 +678,7 @@
 	position: absolute;
 	top: 50%;
 	width: 16px;
-	height: 32px;
+	height: calc(100% + 8px);
 	border: 1px solid rgba(255, 255, 255, 0.35);
 	border-radius: 999px;
 	background: #4a6a6a;
@@ -635,7 +689,7 @@
 
 .timeline-handle::after {
 	position: absolute;
-	top: 7px;
+	top: calc(50% - 9px);
 	left: 6px;
 	width: 2px;
 	height: 18px;
@@ -690,18 +744,17 @@
 }
 
 @media (max-width: 992px) {
-	.reserve-booking-grid {
-		grid-template-columns: 1fr;
-	}
-
-	.reserve-side-panel {
-		padding: 0;
-		border: 0;
-		background: transparent;
-	}
-
 	.reserve-map {
 		min-height: 420px;
+	}
+
+	.reserve-time-header {
+		grid-template-columns: 1fr;
+		align-items: start;
+	}
+
+	.reserve-date-row {
+		width: 100%;
 	}
 
 	.table-layout-shell {

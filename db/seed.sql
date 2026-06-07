@@ -73,15 +73,15 @@ CREATE TABLE restaurant_tables
     is_smoking           BOOLEAN DEFAULT FALSE,
     layout_x             DECIMAL(5, 2) DEFAULT 50.00,
     layout_y             DECIMAL(5, 2) DEFAULT 50.00,
-    table_shape          ENUM ('round', 'square') DEFAULT 'round'
+    table_shape          ENUM ('round', 'square', 'rectangle', 'oval', 'booth') DEFAULT 'round'
 );
 
 INSERT
 INTO restaurant_tables (name, seats, location_description, is_smoking, layout_x, layout_y, table_shape)
 VALUES ('Sto 1', 2, 'Pored prozora', FALSE, 18.00, 24.00, 'round'),
        ('Sto 2', 4, 'Sredina restorana', FALSE, 48.00, 28.00, 'square'),
-       ('Sto 3', 6, 'Pušački deo', TRUE, 76.00, 58.00, 'round'),
-       ('Sto 4', 8, 'VIP kutak', FALSE, 30.00, 70.00, 'square');
+       ('Sto 3', 6, 'Pušački deo', TRUE, 76.00, 58.00, 'oval'),
+       ('Sto 4', 8, 'VIP kutak', FALSE, 30.00, 70.00, 'rectangle');
 
 CREATE TABLE reservations
 (

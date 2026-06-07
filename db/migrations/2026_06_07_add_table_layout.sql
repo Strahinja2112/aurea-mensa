@@ -1,7 +1,7 @@
 ALTER TABLE restaurant_tables
     ADD COLUMN layout_x DECIMAL(5, 2) DEFAULT 50.00 AFTER is_smoking,
     ADD COLUMN layout_y DECIMAL(5, 2) DEFAULT 50.00 AFTER layout_x,
-    ADD COLUMN table_shape ENUM ('round', 'square') DEFAULT 'round' AFTER layout_y;
+    ADD COLUMN table_shape ENUM ('round', 'square', 'rectangle', 'oval', 'booth') DEFAULT 'round' AFTER layout_y;
 
 UPDATE restaurant_tables
 SET layout_x = CASE

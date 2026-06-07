@@ -12,8 +12,9 @@ if (!$user || !$user->isAdmin()) {
     exit;
 }
 
+$allowedTableShapes = ['round', 'square', 'rectangle', 'oval', 'booth'];
 $tables = db()->restaurantTables->findMany(['orderBy' => ['id' => 'ASC']]);
-$tableLayoutData = array_map(static function (array $table, int $index): array {
+$tableLayoutData = array_map(static function (array $table, int $index) use ($allowedTableShapes): array {
     $defaultX = [18, 42, 66, 82][$index % 4];
     $defaultY = min(88, 24 + (floor($index / 4) * 24));
 
@@ -25,7 +26,7 @@ $tableLayoutData = array_map(static function (array $table, int $index): array {
         'is_smoking' => (int)($table['is_smoking'] ?? 0),
         'layout_x' => isset($table['layout_x']) ? (float)$table['layout_x'] : $defaultX,
         'layout_y' => isset($table['layout_y']) ? (float)$table['layout_y'] : $defaultY,
-        'table_shape' => in_array($table['table_shape'] ?? 'round', ['round', 'square'], true)
+        'table_shape' => in_array($table['table_shape'] ?? 'round', $allowedTableShapes, true)
             ? $table['table_shape']
             : 'round',
     ];
@@ -122,11 +123,20 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
 
                                     <label class="layout-field-label">Oblik stola</label>
                                     <div class="shape-toggle mb-3">
-                                        <button type="button" id="layoutShapeRound" class="btn btn-outline-light">
+                                        <button type="button" class="btn btn-outline-light" data-layout-shape="round">
                                             Okrugli
                                         </button>
-                                        <button type="button" id="layoutShapeSquare" class="btn btn-outline-light">
+                                        <button type="button" class="btn btn-outline-light" data-layout-shape="square">
                                             Kvadratni
+                                        </button>
+                                        <button type="button" class="btn btn-outline-light" data-layout-shape="rectangle">
+                                            Pravougaoni
+                                        </button>
+                                        <button type="button" class="btn btn-outline-light" data-layout-shape="oval">
+                                            Ovalni
+                                        </button>
+                                        <button type="button" class="btn btn-outline-light" data-layout-shape="booth">
+                                            Separe
                                         </button>
                                     </div>
 

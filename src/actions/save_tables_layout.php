@@ -15,6 +15,7 @@ try {
         throw new Exception('Samo administrator može menjati raspored stolova.');
     }
 
+    $allowedTableShapes = ['round', 'square', 'rectangle', 'oval', 'booth'];
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
     $tables = $data['tables'] ?? null;
@@ -57,7 +58,7 @@ try {
                 throw new Exception('Broj mesta mora biti između 1 i 20.');
             }
 
-            if (!in_array($shape, ['round', 'square'], true)) {
+            if (!in_array($shape, $allowedTableShapes, true)) {
                 throw new Exception('Oblik stola nije ispravan.');
             }
 

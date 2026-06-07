@@ -1,6 +1,7 @@
 "use strict";
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const TABLE_SHAPES = ["round", "square", "rectangle", "oval", "booth"];
 
 function parseTables(dataElement) {
 	if (!dataElement) {
@@ -18,7 +19,7 @@ function parseTables(dataElement) {
 			is_smoking: Number(row.is_smoking || 0),
 			layout_x: Number(row.layout_x || defaultX(index)),
 			layout_y: Number(row.layout_y || defaultY(index)),
-			table_shape: ["round", "square"].includes(row.table_shape)
+			table_shape: TABLE_SHAPES.includes(row.table_shape)
 				? row.table_shape
 				: "round",
 			selected: false,
@@ -106,8 +107,7 @@ function initAdmin(root) {
 		location: document.getElementById("layoutTableLocation"),
 		smoking: document.getElementById("layoutTableSmoking"),
 		seats: document.getElementById("layoutSeatCount"),
-		round: document.getElementById("layoutShapeRound"),
-		square: document.getElementById("layoutShapeSquare"),
+		shapeButtons: document.querySelectorAll("[data-layout-shape]"),
 		decrease: document.getElementById("layoutDecreaseSeats"),
 		increase: document.getElementById("layoutIncreaseSeats"),
 		save: document.getElementById("saveLayoutButton"),
@@ -144,8 +144,7 @@ function initAdmin(root) {
 			controls.location.value = "";
 			controls.smoking.checked = false;
 			controls.seats.textContent = "0";
-			controls.round.classList.remove("active");
-			controls.square.classList.remove("active");
+			controls.shapeButtons.forEach((button) => button.classList.remove("active"));
 			return;
 		}
 
@@ -153,8 +152,9 @@ function initAdmin(root) {
 		controls.location.value = table.location_description || "";
 		controls.smoking.checked = Boolean(table.is_smoking);
 		controls.seats.textContent = String(table.seats);
-		controls.round.classList.toggle("active", table.table_shape === "round");
-		controls.square.classList.toggle("active", table.table_shape === "square");
+		controls.shapeButtons.forEach((button) => {
+			button.classList.toggle("active", button.dataset.layoutShape === table.table_shape);
+		});
 	}
 
 	function render() {
@@ -288,16 +288,15 @@ function initAdmin(root) {
 			table.seats = Math.min(20, table.seats + 1);
 		}),
 	);
-	controls.round.addEventListener("click", () =>
-		updateSelected((table) => {
-			table.table_shape = "round";
-		}),
-	);
-	controls.square.addEventListener("click", () =>
-		updateSelected((table) => {
-			table.table_shape = "square";
-		}),
-	);
+	controls.shapeButtons.forEach((button) => {
+		button.addEventListener("click", () =>
+			updateSelected((table) => {
+				if (TABLE_SHAPES.includes(button.dataset.layoutShape)) {
+					table.table_shape = button.dataset.layoutShape;
+				}
+			}),
+		);
+	});
 	controls.remove.addEventListener("click", () => {
 		const table = getSelected();
 

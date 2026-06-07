@@ -156,7 +156,10 @@
 				node.addEventListener("pointerdown", (event) => {
 					selectedId = table.id;
 					syncControls();
-					render();
+					map.querySelectorAll(".layout-table.selected").forEach((selectedNode) => {
+						selectedNode.classList.remove("selected");
+					});
+					node.classList.add("selected");
 
 					if (
 						!window.matchMedia("(pointer: fine)").matches &&

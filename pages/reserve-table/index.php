@@ -7,97 +7,101 @@ require_once '../../autoload.php';
 Auth::requireAuth();
 
 $tables = db()->restaurantTables->findMany([
-        'orderBy' => ['id' => 'ASC']
+    'orderBy' => ['id' => 'ASC']
 ]);
 
+$tableLayoutData = array_map(static function (array $table, int $index): array {
+    $defaultX = [18, 42, 66, 82][$index % 4];
+    $defaultY = min(88, 24 + (floor($index / 4) * 24));
+
+    return [
+        'id' => (int)$table['id'],
+        'name' => (string)$table['name'],
+        'seats' => (int)$table['seats'],
+        'location_description' => $table['location_description'] ?? '',
+        'is_smoking' => (int)($table['is_smoking'] ?? 0),
+        'layout_x' => isset($table['layout_x']) ? (float)$table['layout_x'] : $defaultX,
+        'layout_y' => isset($table['layout_y']) ? (float)$table['layout_y'] : $defaultY,
+        'table_shape' => in_array($table['table_shape'] ?? 'round', ['round', 'square'], true)
+            ? $table['table_shape']
+            : 'round',
+    ];
+}, $tables, array_keys($tables));
+$tableLayoutJson = json_encode($tableLayoutData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 $today = date('Y-m-d');
 ?>
 
 <!doctype html>
 <html lang="sr">
-<?php
-Helpers::renderHead("Rezervacija", ['auth.css']); ?>
+<?php Helpers::renderHead("Rezervacija", ['auth.css', 'table-layout.css']); ?>
 <body>
 
-<?php
-require_once Helpers::getFullPath('src/components/header.php'); ?>
+<?php require_once Helpers::getFullPath('src/components/header.php'); ?>
 
 <main>
     <div class="container d-flex justify-content-center">
-        <div class="glass-card" style="max-width: 850px;">
+        <div class="glass-card" style="max-width: 1100px;">
             <h2 class="text-center mb-4">Rezervacija stola</h2>
 
             <form id="reservationForm">
                 <div class="row">
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-4 form-group">
                         <label class="form-label">Datum rezervacije</label>
                         <input
-                                type="date"
-                                name="reservation_date"
-                                class="form-control custom-input"
-                                min="<?= $today ?>"
-                                required
+                            type="date"
+                            name="reservation_date"
+                            class="form-control custom-input"
+                            min="<?= $today ?>"
+                            required
                         >
                     </div>
 
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-4 form-group">
                         <label class="form-label">Vreme početka</label>
                         <input
-                                type="time"
-                                name="start_time"
-                                class="form-control custom-input"
-                                required
+                            type="time"
+                            name="start_time"
+                            class="form-control custom-input"
+                            required
                         >
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label">Trajanje rezervacije</label>
-                    <select name="duration_hours" class="form-control custom-input" required>
-                        <option value="">Izaberite trajanje</option>
-                        <option value="1">1 sat</option>
-                        <option value="2">2 sata</option>
-                        <option value="3">3 sata</option>
-                        <option value="4">4 sata</option>
-                        <option value="5">5 sati</option>
-                        <option value="6">6 sati</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Izaberite sto</label>
-
-                    <div class="row g-3">
-                        <?php
-                        foreach ($tables as $table): ?>
-                            <div class="col-md-6">
-                                <label class="table-card d-block p-3 rounded-3">
-                                    <input
-                                            type="checkbox"
-                                            name="table_ids[]"
-                                            value="<?= htmlspecialchars((string)$table['id']) ?>"
-                                    >
-
-                                    <span class="ms-2 text-white fw-bold">
-                                        <?= htmlspecialchars($table['name']) ?>
-                                    </span>
-
-                                    <div class="small opacity-75 mt-2">
-                                        Broj mesta: <?= htmlspecialchars((string)$table['seats']) ?>
-                                    </div>
-
-                                    <div class="small opacity-50">
-                                        <?= htmlspecialchars($table['location_description']) ?>
-                                    </div>
-
-                                    <div class="small mt-1">
-                                        <?= $table['is_smoking'] ? 'Pušački deo' : 'Nepušački deo' ?>
-                                    </div>
-                                </label>
-                            </div>
-                        <?php
-                        endforeach; ?>
+                    <div class="col-md-4 form-group">
+                        <label class="form-label">Trajanje rezervacije</label>
+                        <select name="duration_hours" class="form-control custom-input" required>
+                            <option value="">Izaberite trajanje</option>
+                            <option value="1">1 sat</option>
+                            <option value="2">2 sata</option>
+                            <option value="3">3 sata</option>
+                            <option value="4">4 sata</option>
+                            <option value="5">5 sati</option>
+                            <option value="6">6 sati</option>
+                        </select>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-flex justify-content-between align-items-center gap-3 mb-3 flex-wrap">
+                        <label class="form-label mb-0">Izaberite sto na mapi</label>
+                        <div class="layout-legend">
+                            <span><i></i> Dostupan</span>
+                            <span><i class="selected-dot"></i> Izabran</span>
+                            <span><i class="disabled-dot"></i> Zauzet</span>
+                        </div>
+                    </div>
+
+                    <div
+                        data-table-layout
+                        data-mode="reserve"
+                        data-tables-source="reserveTableLayoutData"
+                        data-form-id="reservationForm"
+                        data-selected-inputs="selectedTableInputs"
+                        data-availability-url="<?= Helpers::getRelativePath('src/actions/table_availability.php') ?>"
+                    >
+                        <div class="table-layout-map" aria-label="Mapa stolova za rezervaciju"></div>
+                    </div>
+
+                    <div id="selectedTableInputs"></div>
                 </div>
 
                 <div id="reservationMessage" class="mt-4"></div>
@@ -118,10 +122,10 @@ require_once Helpers::getFullPath('src/components/header.php'); ?>
     </div>
 </main>
 
-<?php
-require_once Helpers::getFullPath('src/components/footer.php'); ?>
+<?php require_once Helpers::getFullPath('src/components/footer.php'); ?>
 
-
+<script type="application/json" id="reserveTableLayoutData"><?= $tableLayoutJson ?></script>
+<script src="<?= Helpers::getRelativePath('src/scripts/table-layout.js') ?>"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("reservationForm");
@@ -130,27 +134,12 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
         const btnText = document.getElementById("btnText");
         const btnSpinner = document.getElementById("btnSpinner");
 
-        const tableCards = document.querySelectorAll(".table-card");
-
-        tableCards.forEach(card => {
-            const checkbox = card.querySelector("input[type='checkbox']");
-
-            checkbox.addEventListener("change", () => {
-                if (checkbox.checked) {
-                    card.classList.add("selected");
-                } else {
-                    card.classList.remove("selected");
-                }
-            });
-        });
-
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
 
             messageBox.innerHTML = "";
 
             const formData = new FormData(form);
-
             const selectedTables = formData.getAll("table_ids[]").map(id => Number(id));
 
             if (selectedTables.length === 0) {
@@ -169,8 +158,6 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
                 duration_hours: Number(formData.get("duration_hours"))
             };
 
-            console.log(payload);
-
             submitBtn.disabled = true;
             btnText.classList.add("d-none");
             btnSpinner.classList.remove("d-none");
@@ -183,7 +170,6 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
                     },
                     body: JSON.stringify(payload)
                 });
-
 
                 const result = await response.json();
 
@@ -199,9 +185,10 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
 
                     form.reset();
 
-                    tableCards.forEach(card => {
-                        card.classList.remove("selected");
-                    });
+                    if (window.AureaTableLayouts?.reserve) {
+                        window.AureaTableLayouts.reserve.clearSelection();
+                        window.AureaTableLayouts.reserve.refreshAvailability();
+                    }
                 } else {
                     messageBox.innerHTML = `
                         <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3">
@@ -225,47 +212,6 @@ require_once Helpers::getFullPath('src/components/footer.php'); ?>
         });
     });
 </script>
-
-<style>
-    .table-card {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        cursor: pointer;
-        transition: 0.3s;
-        height: 100%;
-    }
-
-    .table-card:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .table-card.selected {
-        border-color: #ffa07f;
-        background: rgba(255, 160, 127, 0.15);
-    }
-
-    .table-card input {
-        transform: scale(1.2);
-        accent-color: #ffa07f;
-    }
-
-    #reservationMessage strong {
-        letter-spacing: 2px;
-    }
-
-    select.custom-input {
-        background-color: rgba(255, 255, 255, 0.06);
-        color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    select.custom-input option {
-        background-color: #1e1e1e;
-        color: #fff;
-    }
-
-</style>
 
 </body>
 </html>

@@ -6,7 +6,7 @@ require_once '../../autoload.php';
 
 Auth::requireAuth();
 
-$allowedTableShapes = ['round', 'square', 'rectangle', 'oval', 'booth'];
+$allowedTableShapes = ['round', 'square', 'rectangle', 'oval', 'corner'];
 $tables = db()->restaurantTables->findMany([
     'orderBy' => ['id' => 'ASC']
 ]);

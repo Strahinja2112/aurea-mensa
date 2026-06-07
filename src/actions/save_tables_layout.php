@@ -15,7 +15,7 @@ try {
         throw new Exception('Samo administrator može menjati raspored stolova.');
     }
 
-    $allowedTableShapes = ['round', 'square', 'rectangle', 'oval', 'booth'];
+    $allowedTableShapes = ['round', 'square', 'rectangle', 'oval', 'corner'];
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
     $tables = $data['tables'] ?? null;

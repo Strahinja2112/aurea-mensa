@@ -12,7 +12,7 @@ if (!$user || !$user->isAdmin()) {
     exit;
 }
 
-$allowedTableShapes = ['round', 'square', 'rectangle', 'oval', 'booth'];
+$allowedTableShapes = ['round', 'square', 'rectangle', 'oval', 'corner'];
 $tables = db()->restaurantTables->findMany(['orderBy' => ['id' => 'ASC']]);
 $tableLayoutData = array_map(static function (array $table, int $index) use ($allowedTableShapes): array {
     $defaultX = [18, 42, 66, 82][$index % 4];
@@ -136,8 +136,8 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                                         <button type="button" class="btn btn-outline-light" data-layout-shape="oval">
                                             Ovalni
                                         </button>
-                                        <button type="button" class="btn btn-outline-light" data-layout-shape="booth">
-                                            Separe
+                                        <button type="button" class="btn btn-outline-light" data-layout-shape="corner">
+                                            Ugaoni
                                         </button>
                                     </div>
 

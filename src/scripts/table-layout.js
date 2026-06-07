@@ -1,7 +1,7 @@
 "use strict";
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-const TABLE_SHAPES = ["round", "square", "rectangle", "oval", "booth"];
+const TABLE_SHAPES = ["round", "square", "rectangle", "oval", "corner"];
 
 function normalizeRotation(value) {
 	const rotation = Number(value || 0) % 360;
@@ -143,8 +143,8 @@ function getChairPositions(table) {
 		return getEdgeChairPositions(seats, ["top", "right", "bottom", "left"]);
 	}
 
-	if (table.table_shape === "booth") {
-		return getEdgeChairPositions(seats, ["bottom", "left", "right"]);
+	if (table.table_shape === "corner") {
+		return getEdgeChairPositions(seats, ["bottom", "right"]);
 	}
 
 	return Array.from({ length: seats }, (_, index) => {

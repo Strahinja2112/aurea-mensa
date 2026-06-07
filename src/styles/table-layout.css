@@ -138,18 +138,22 @@
 	border-radius: 999px;
 }
 
-.layout-table[data-shape="booth"] .table-surface {
-	width: 88px;
-	height: 58px;
-	border-radius: 20px 20px 8px 8px;
+.layout-table[data-shape="corner"] .table-surface {
+	width: 84px;
+	height: 84px;
+	align-items: flex-start;
+	justify-content: flex-start;
+	padding: 14px 0 0 14px;
+	border-radius: 8px;
+	clip-path: polygon(0 0, 100% 0, 100% 42%, 42% 42%, 42% 100%, 0 100%);
 	box-shadow:
-		inset 0 10px 0 rgba(255, 255, 255, 0.12),
+		inset 0 0 0 12px rgba(255, 255, 255, 0.08),
 		0 12px 28px rgba(0, 0, 0, 0.32);
 }
 
-.layout-table.selected[data-shape="booth"] .table-surface {
+.layout-table.selected[data-shape="corner"] .table-surface {
 	box-shadow:
-		inset 0 10px 0 rgba(255, 255, 255, 0.12),
+		inset 0 0 0 12px rgba(255, 255, 255, 0.08),
 		0 0 0 3px rgba(74, 106, 106, 0.24),
 		0 16px 36px rgba(0, 0, 0, 0.35);
 }
@@ -471,11 +475,11 @@
 	border-radius: 999px;
 }
 
-.shape-toggle button[data-layout-shape="booth"]::before {
+.shape-toggle button[data-layout-shape="corner"]::before {
 	width: 24px;
-	height: 15px;
-	border-radius: 9px 9px 4px 4px;
-	box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.16);
+	height: 24px;
+	border-radius: 4px;
+	clip-path: polygon(0 0, 100% 0, 100% 42%, 42% 42%, 42% 100%, 0 100%);
 }
 
 .shape-toggle button.active {
@@ -888,9 +892,9 @@
 
 	.layout-table[data-shape="rectangle"] .table-surface,
 	.layout-table[data-shape="oval"] .table-surface,
-	.layout-table[data-shape="booth"] .table-surface {
+	.layout-table[data-shape="corner"] .table-surface {
 		width: 74px;
-		height: 50px;
+		height: 74px;
 	}
 
 	.layout-chair {

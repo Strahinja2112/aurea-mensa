@@ -74,7 +74,7 @@ CREATE TABLE restaurant_tables
     layout_x             DECIMAL(5, 2) DEFAULT 50.00,
     layout_y             DECIMAL(5, 2) DEFAULT 50.00,
     layout_rotation      SMALLINT UNSIGNED DEFAULT 0,
-    table_shape          ENUM ('round', 'square', 'rectangle', 'oval', 'booth') DEFAULT 'round'
+    table_shape          ENUM ('round', 'square', 'rectangle', 'oval', 'corner') DEFAULT 'round'
 );
 
 INSERT

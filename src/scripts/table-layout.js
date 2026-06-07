@@ -153,7 +153,6 @@ function initAdmin(root) {
 		controls.location.value = table.location_description || "";
 		controls.smoking.checked = Boolean(table.is_smoking);
 		controls.seats.textContent = String(table.seats);
-		controls.selectedName.textContent = table.name;
 		controls.round.classList.toggle("active", table.table_shape === "round");
 		controls.square.classList.toggle("active", table.table_shape === "square");
 	}
@@ -262,10 +261,6 @@ function initAdmin(root) {
 		selectedId = table.id;
 		syncControls();
 		render();
-		setStatus(
-			"Novi sto je dodat na mapu. Sačuvajte raspored da bi bio upisan u bazu.",
-			"info",
-		);
 	});
 
 	controls.name.addEventListener("input", () =>

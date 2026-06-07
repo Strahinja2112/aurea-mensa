@@ -30,6 +30,7 @@ $tableLayoutData = array_map(static function (array $table, int $index): array {
             : 'round',
     ];
 }, $tables, array_keys($tables));
+
 $tableLayoutJson = json_encode($tableLayoutData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
 
@@ -83,13 +84,6 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                         </div>
 
                         <div id="layoutInspector" class="layout-inspector d-none">
-                            <div class="layout-inspector-header">
-                                <div>
-                                    <span class="layout-kicker">Izabrani sto</span>
-                                    <strong id="layoutSelectedName">Sto</strong>
-                                </div>
-                            </div>
-
                             <fieldset id="layoutEditFields">
                                 <div class="layout-control-group">
                                     <label class="layout-field-label" for="layoutTableName">Naziv stola</label>

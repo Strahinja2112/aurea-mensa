@@ -47,7 +47,7 @@
 }
 
 .layout-table {
-	--table-size: 72px;
+	--table-size: 96px;
 	position: absolute;
 	left: var(--x);
 	top: var(--y);
@@ -101,8 +101,8 @@
 	top: 50%;
 	z-index: 2;
 	display: flex;
-	width: 54px;
-	height: 54px;
+	width: 72px;
+	height: 72px;
 	align-items: center;
 	justify-content: center;
 	border: 1px solid rgba(255, 255, 255, 0.25);
@@ -120,9 +120,9 @@
 }
 
 .table-label {
-	max-width: 48px;
+	max-width: 62px;
 	overflow: hidden;
-	font-size: 12px;
+	font-size: 13px;
 	font-weight: 700;
 	line-height: 1.05;
 	text-overflow: ellipsis;
@@ -134,19 +134,19 @@
 	left: 50%;
 	top: 50%;
 	z-index: 1;
-	width: 14px;
-	height: 14px;
+	width: 18px;
+	height: 18px;
 	border: 1px solid rgba(255, 255, 255, 0.32);
 	border-radius: 4px;
 	background: rgba(255, 255, 255, 0.18);
-	transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-42px);
+	transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-56px);
 	transform-origin: center;
 }
 
 .table-meta-pill {
 	position: absolute;
 	left: 50%;
-	top: calc(50% + 42px);
+	top: calc(50% + 56px);
 	z-index: 3;
 	padding: 3px 8px;
 	border-radius: 999px;
@@ -791,15 +791,17 @@
 	}
 
 	.layout-table {
-		--table-size: 66px;
+		--table-size: 82px;
 	}
 
 	.table-surface {
-		width: 48px;
-		height: 48px;
+		width: 62px;
+		height: 62px;
 	}
 
 	.layout-chair {
-		transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-38px);
+		width: 16px;
+		height: 16px;
+		transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-48px);
 	}
 }

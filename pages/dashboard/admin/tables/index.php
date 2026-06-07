@@ -78,7 +78,6 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 <aside class="table-layout-panel">
                     <div class="glass-card p-4 border-0">
                         <div id="layoutNoSelectionHint" class="layout-panel-empty">
-                            <i class="fa-solid fa-arrow-pointer"></i>
                             <h5>Izaberite sto</h5>
                             <p>Kliknite sto na mapi da izmenite naziv, broj mesta, oblik i zonu.</p>
                         </div>
@@ -89,16 +88,10 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                                     <span class="layout-kicker">Izabrani sto</span>
                                     <strong id="layoutSelectedName">Sto</strong>
                                 </div>
-                                <span id="layoutSelectedMeta">0 mesta</span>
                             </div>
 
                             <fieldset id="layoutEditFields">
                                 <div class="layout-control-group">
-                                    <div class="layout-group-title">
-                                        <i class="fa-solid fa-tag"></i>
-                                        <span>Identitet</span>
-                                    </div>
-
                                     <label class="layout-field-label" for="layoutTableName">Naziv stola</label>
                                     <input type="text" id="layoutTableName" class="form-control custom-input">
 
@@ -107,8 +100,7 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                                         type="text"
                                         id="layoutTableLocation"
                                         class="form-control custom-input"
-                                        placeholder="npr. Pored prozora"
-                                    >
+                                        placeholder="npr. Pored prozora">
                                 </div>
 
                                 <div class="layout-control-group">
@@ -137,10 +129,10 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                                     <label class="layout-field-label">Oblik stola</label>
                                     <div class="shape-toggle mb-3">
                                         <button type="button" id="layoutShapeRound" class="btn btn-outline-light">
-                                            <i class="fa-regular fa-circle me-2"></i> Okrugli
+                                            Okrugli
                                         </button>
                                         <button type="button" id="layoutShapeSquare" class="btn btn-outline-light">
-                                            <i class="fa-regular fa-square me-2"></i> Kvadratni
+                                            Kvadratni
                                         </button>
                                     </div>
 

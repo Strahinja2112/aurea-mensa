@@ -590,6 +590,7 @@ function initReserve(root) {
 
 		const board = document.createElement("div");
 		board.className = "timeline-board";
+		board.style.setProperty("--timeline-track-width", `${Math.max(640, totalHours * 58)}px`);
 
 		const corner = document.createElement("div");
 		corner.className = "timeline-corner";
@@ -685,16 +686,19 @@ function initReserve(root) {
 	function startResize(edge, event) {
 		event.preventDefault();
 
+		const lane = timeline.querySelector(".timeline-lane");
+		const laneRect = lane?.getBoundingClientRect();
+		const totalHours = (selectionWindow.end - selectionWindow.start) / 60;
+		const hourWidth = laneRect && totalHours > 0 ? laneRect.width / totalHours : 58;
+
+		if (!laneRect || !selection || hourWidth <= 0) {
+			return;
+		}
+
 		const onMove = (moveEvent) => {
-			const lanes = timeline.querySelector(".timeline-lanes");
-
-			if (!lanes) {
-				return;
-			}
-
-			const rect = lanes.getBoundingClientRect();
-			const ratio = Math.max(0, Math.min(1, (moveEvent.clientX - rect.left) / rect.width));
-			const snapped = selectionWindow.start + Math.round((ratio * (selectionWindow.end - selectionWindow.start)) / 60) * 60;
+			const contentX = clamp(moveEvent.clientX - laneRect.left, 0, laneRect.width);
+			const snappedHours = Math.round(contentX / hourWidth);
+			const snapped = selectionWindow.start + (snappedHours * 60);
 
 			if (edge === "left") {
 				const nextStart = clamp(snapped, Math.max(selectionWindow.start, selection.end - 360), selection.end - 60);
@@ -714,10 +718,12 @@ function initReserve(root) {
 		const onUp = () => {
 			document.removeEventListener("pointermove", onMove);
 			document.removeEventListener("pointerup", onUp);
+			document.removeEventListener("pointercancel", onUp);
 		};
 
 		document.addEventListener("pointermove", onMove);
 		document.addEventListener("pointerup", onUp);
+		document.addEventListener("pointercancel", onUp);
 	}
 
 	async function refreshTimeframes() {

@@ -38,159 +38,162 @@ $today = date('Y-m-d');
 <!doctype html>
 <html lang="sr">
 <?php Helpers::renderHead("Rezervacija", ['auth.css', 'table-layout.css']); ?>
+
 <body>
 
-<?php require_once Helpers::getFullPath('src/components/header.php'); ?>
+    <?php require_once Helpers::getFullPath('src/components/header.php'); ?>
 
-<main>
-    <div class="container d-flex justify-content-center">
-        <div class="glass-card reserve-layout-card">
-            <div class="reserve-layout-header">
-                <h2>Rezervacija stola</h2>
-            </div>
-
-            <form id="reservationForm">
-                <input type="hidden" name="start_time" id="reservationStartTime">
-                <input type="hidden" name="duration_hours" id="reservationDurationHours">
-
-                <section class="reserve-map-section">
-                    <div class="reserve-section-head">
-                        <label class="form-label mb-0">Izaberite sto na mapi</label>
-                        <div class="layout-legend">
-                            <span><i></i> Dostupan</span>
-                            <span><i class="selected-dot"></i> Izabran</span>
-                            <span><i class="disabled-dot"></i> Zauzet</span>
-                        </div>
-                    </div>
-
-                    <div
-                        data-table-layout
-                        data-mode="reserve"
-                        data-tables-source="reserveTableLayoutData"
-                        data-form-id="reservationForm"
-                        data-selected-inputs="selectedTableInputs"
-                        data-availability-url="<?= Helpers::getRelativePath('src/actions/table_availability.php') ?>"
-                        data-timeframes-url="<?= Helpers::getRelativePath('src/actions/table_timeframes.php') ?>"
-                        data-working-hours-source="restaurantWorkingHours"
-                    >
-                        <div class="table-layout-map reserve-map" aria-label="Mapa stolova za rezervaciju"></div>
-                    </div>
-
-                    <div id="selectedTableInputs"></div>
-                </section>
-
-                <section class="reservation-timeline-panel">
-                    <div class="reserve-time-header">
-                        <div class="reserve-date-row">
-                            <label class="form-label">Datum rezervacije</label>
-                            <input
-                                type="date"
-                                name="reservation_date"
-                                class="form-control custom-input"
-                                min="<?= $today ?>"
-                                required
-                            >
-                        </div>
-
-                        <div class="reserve-time-copy">
-                            <label class="form-label mb-1">Dostupni termini</label>
-                            <p class="reservation-timeline-summary" id="reservationTimelineSummary">
-                                Izaberite datum i sto da biste videli termine.
-                            </p>
-                        </div>
-
-                        <div class="layout-legend reserve-time-legend">
-                            <span><i></i> Slobodno</span>
-                            <span><i class="disabled-dot"></i> Zauzeto</span>
-                            <span><i class="selected-dot"></i> Izabrano</span>
-                        </div>
-                    </div>
-
-                    <div id="reservationTimeline" class="reservation-timeline"></div>
-                    <div id="reservationTimeframes" class="reservation-timeframes"></div>
-                </section>
-
-                <div id="reservationMessage" class="mt-3"></div>
-
-                <div class="register-btn-wrapper reserve-submit-wrap">
-                    <div class="button">
-                        <button type="submit" id="submitBtn">
-                            <span id="btnText">REZERVIŠI</span>
-                            <span id="btnSpinner" class="d-none">
-                                <span class="spinner-border spinner-border-sm me-2"></span>
-                                SLANJE...
-                            </span>
-                        </button>
-                    </div>
+    <main>
+        <div class="container d-flex justify-content-center">
+            <div class="glass-card reserve-layout-card">
+                <div class="reserve-layout-header">
+                    <h2>Rezervacija stola</h2>
                 </div>
-            </form>
+
+                <form id="reservationForm">
+                    <input type="hidden" name="start_time" id="reservationStartTime">
+                    <input type="hidden" name="duration_hours" id="reservationDurationHours">
+
+                    <section class="reserve-map-section">
+                        <div class="reserve-section-head">
+                            <label class="form-label mb-0">Izaberite sto na mapi</label>
+                            <div class="layout-legend">
+                                <span><i></i> Dostupan</span>
+                                <span><i class="selected-dot"></i> Izabran</span>
+                                <span><i class="disabled-dot"></i> Zauzet</span>
+                            </div>
+                        </div>
+
+                        <div
+                            data-table-layout
+                            data-mode="reserve"
+                            data-tables-source="reserveTableLayoutData"
+                            data-form-id="reservationForm"
+                            data-selected-inputs="selectedTableInputs"
+                            data-availability-url="<?= Helpers::getRelativePath('src/actions/table_availability.php') ?>"
+                            data-timeframes-url="<?= Helpers::getRelativePath('src/actions/table_timeframes.php') ?>"
+                            data-working-hours-source="restaurantWorkingHours">
+                            <div class="table-layout-map reserve-map" aria-label="Mapa stolova za rezervaciju"></div>
+                        </div>
+
+                        <div id="selectedTableInputs"></div>
+                    </section>
+
+                    <section class="reservation-timeline-panel">
+                        <div class="reserve-time-header">
+                            <div class="reserve-date-row">
+                                <label class="form-label">Datum rezervacije</label>
+                                <input
+                                    type="date"
+                                    name="reservation_date"
+                                    class="form-control custom-input"
+                                    min="<?= $today ?>"
+                                    required>
+                            </div>
+
+                            <div class="reserve-time-copy">
+                                <label class="form-label mb-1">Dostupni termini</label>
+                                <p class="reservation-timeline-summary" id="reservationTimelineSummary">
+                                    Izaberite datum i sto da biste videli termine.
+                                </p>
+                            </div>
+
+                            <div class="layout-legend reserve-time-legend">
+                                <span><i></i> Slobodno</span>
+                                <span><i class="disabled-dot"></i> Zauzeto</span>
+                                <span><i class="selected-dot"></i> Izabrano</span>
+                            </div>
+                        </div>
+
+                        <div id="reservationTimeline" class="reservation-timeline"></div>
+                        <div id="reservationTimeframes" class="reservation-timeframes"></div>
+                    </section>
+
+                    <div id="reservationMessage" class="mt-3"></div>
+
+                    <div class="register-btn-wrapper reserve-submit-wrap">
+                        <div class="button">
+                            <button type="submit" id="submitBtn">
+                                <span id="btnText">REZERVIŠI</span>
+                                <span id="btnSpinner" class="d-none">
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    SLANJE...
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<?php require_once Helpers::getFullPath('src/components/footer.php'); ?>
+    <?php require_once Helpers::getFullPath('src/components/footer.php'); ?>
 
-<script type="application/json" id="reserveTableLayoutData"><?= $tableLayoutJson ?></script>
-<script type="application/json" id="restaurantWorkingHours"><?= $workingHoursJson ?></script>
-<script src="<?= Helpers::getRelativePath('src/scripts/table-layout.js') ?>"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("reservationForm");
-        const messageBox = document.getElementById("reservationMessage");
-        const submitBtn = document.getElementById("submitBtn");
-        const btnText = document.getElementById("btnText");
-        const btnSpinner = document.getElementById("btnSpinner");
+    <script type="application/json" id="reserveTableLayoutData">
+        <?= $tableLayoutJson ?>
+    </script>
+    <script type="application/json" id="restaurantWorkingHours">
+        <?= $workingHoursJson ?>
+    </script>
+    <script src="<?= Helpers::getRelativePath('src/scripts/table-layout.js') ?>"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("reservationForm");
+            const messageBox = document.getElementById("reservationMessage");
+            const submitBtn = document.getElementById("submitBtn");
+            const btnText = document.getElementById("btnText");
+            const btnSpinner = document.getElementById("btnSpinner");
 
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
 
-            messageBox.innerHTML = "";
+                messageBox.innerHTML = "";
 
-            const formData = new FormData(form);
-            const selectedTables = formData.getAll("table_ids[]").map(id => Number(id));
+                const formData = new FormData(form);
+                const selectedTables = formData.getAll("table_ids[]").map(id => Number(id));
 
-            if (selectedTables.length === 0) {
-                messageBox.innerHTML = `
+                if (selectedTables.length === 0) {
+                    messageBox.innerHTML = `
                     <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3">
                         Morate izabrati bar jedan sto.
                     </div>
                 `;
-                return;
-            }
+                    return;
+                }
 
-            const payload = {
-                table_ids: selectedTables,
-                reservation_date: formData.get("reservation_date"),
-                start_time: formData.get("start_time"),
-                duration_hours: Number(formData.get("duration_hours"))
-            };
+                const payload = {
+                    table_ids: selectedTables,
+                    reservation_date: formData.get("reservation_date"),
+                    start_time: formData.get("start_time"),
+                    duration_hours: Number(formData.get("duration_hours"))
+                };
 
-            if (!payload.start_time || !payload.duration_hours) {
-                messageBox.innerHTML = `
+                if (!payload.start_time || !payload.duration_hours) {
+                    messageBox.innerHTML = `
                     <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3">
                         Morate izabrati termin rezervacije.
                     </div>
                 `;
-                return;
-            }
+                    return;
+                }
 
-            submitBtn.disabled = true;
-            btnText.classList.add("d-none");
-            btnSpinner.classList.remove("d-none");
+                submitBtn.disabled = true;
+                btnText.classList.add("d-none");
+                btnSpinner.classList.remove("d-none");
 
-            try {
-                const response = await fetch("<?= Helpers::getRelativePath('src/actions/create_reservation.php') ?>", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
-                });
+                try {
+                    const response = await fetch("<?= Helpers::getRelativePath('src/actions/create_reservation.php') ?>", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(payload)
+                    });
 
-                const result = await response.json();
+                    const result = await response.json();
 
-                if (result.success) {
-                    messageBox.innerHTML = `
+                    if (result.success) {
+                        messageBox.innerHTML = `
                         <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 text-center">
                             <i class="fa-solid fa-check-circle me-2"></i>
                             ${result.message}<br>
@@ -199,35 +202,36 @@ $today = date('Y-m-d');
                         </div>
                     `;
 
-                    form.reset();
+                        form.reset();
 
-                    if (window.AureaTableLayouts?.reserve) {
-                        window.AureaTableLayouts.reserve.clearSelection();
-                        window.AureaTableLayouts.reserve.refreshAvailability();
-                    }
-                } else {
-                    messageBox.innerHTML = `
+                        if (window.AureaTableLayouts?.reserve) {
+                            window.AureaTableLayouts.reserve.clearSelection();
+                            window.AureaTableLayouts.reserve.refreshAvailability();
+                        }
+                    } else {
+                        messageBox.innerHTML = `
                         <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3">
                             <i class="fa-solid fa-triangle-exclamation me-2"></i>
                             ${result.message}
                         </div>
                     `;
-                }
-            } catch (error) {
-                console.log(error);
-                messageBox.innerHTML = `
+                    }
+                } catch (error) {
+                    console.log(error);
+                    messageBox.innerHTML = `
                     <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3">
                         Greška pri komunikaciji sa serverom.
                     </div>
                 `;
-            } finally {
-                submitBtn.disabled = false;
-                btnText.classList.remove("d-none");
-                btnSpinner.classList.add("d-none");
-            }
+                } finally {
+                    submitBtn.disabled = false;
+                    btnText.classList.remove("d-none");
+                    btnSpinner.classList.add("d-none");
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
+
 </html>

@@ -546,7 +546,7 @@
 
 .timeline-board {
 	display: grid;
-	grid-template-columns: 112px minmax(640px, 1fr);
+	grid-template-columns: 112px minmax(var(--timeline-track-width, 640px), 1fr);
 }
 
 .timeline-corner,

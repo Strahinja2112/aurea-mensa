@@ -3,6 +3,12 @@
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const TABLE_SHAPES = ["round", "square", "rectangle", "oval", "booth"];
 
+function normalizeRotation(value) {
+	const rotation = Number(value || 0) % 360;
+
+	return rotation < 0 ? rotation + 360 : rotation;
+}
+
 function parseTables(dataElement) {
 	if (!dataElement) {
 		return [];
@@ -19,6 +25,7 @@ function parseTables(dataElement) {
 			is_smoking: Number(row.is_smoking || 0),
 			layout_x: Number(row.layout_x || defaultX(index)),
 			layout_y: Number(row.layout_y || defaultY(index)),
+			layout_rotation: normalizeRotation(row.layout_rotation),
 			table_shape: TABLE_SHAPES.includes(row.table_shape)
 				? row.table_shape
 				: "round",
@@ -39,6 +46,119 @@ function defaultY(index) {
 	return clamp(24 + Math.floor(index / 4) * 24, 12, 88);
 }
 
+function linearSeats(count, start, end) {
+	if (count <= 1) {
+		return [(start + end) / 2];
+	}
+
+	return Array.from(
+		{ length: count },
+		(_, index) => start + ((end - start) * index) / (count - 1),
+	);
+}
+
+function getEdgeChairPositions(seats, edges) {
+	const positions = [];
+	const base = Math.floor(seats / edges.length);
+	let extra = seats % edges.length;
+
+	edges.forEach((edge) => {
+		const count = base + (extra > 0 ? 1 : 0);
+		extra -= extra > 0 ? 1 : 0;
+
+		if (count <= 0) {
+			return;
+		}
+
+		const steps = linearSeats(count, 26, 74);
+
+		steps.forEach((step) => {
+			if (edge === "top") {
+				positions.push({ x: step, y: 8, rotation: 180 });
+			} else if (edge === "right") {
+				positions.push({ x: 92, y: step, rotation: 270 });
+			} else if (edge === "bottom") {
+				positions.push({ x: step, y: 92, rotation: 0 });
+			} else {
+				positions.push({ x: 8, y: step, rotation: 90 });
+			}
+		});
+	});
+
+	return positions;
+}
+
+function getRectangleChairPositions(seats) {
+	const positions = [];
+	const sideCount = Math.max(0, seats - 8);
+	const longSideSeats = seats - sideCount;
+	const topCount = Math.ceil(longSideSeats / 2);
+	const bottomCount = Math.floor(longSideSeats / 2);
+
+	linearSeats(topCount, 24, 76).forEach((x) => {
+		positions.push({ x, y: 9, rotation: 180 });
+	});
+
+	linearSeats(bottomCount, 24, 76).forEach((x) => {
+		positions.push({ x, y: 91, rotation: 0 });
+	});
+
+	if (sideCount > 0) {
+		const leftCount = Math.ceil(sideCount / 2);
+		const rightCount = Math.floor(sideCount / 2);
+
+		linearSeats(leftCount, 34, 66).forEach((y) => {
+			positions.push({ x: 7, y, rotation: 90 });
+		});
+
+		linearSeats(rightCount, 34, 66).forEach((y) => {
+			positions.push({ x: 93, y, rotation: 270 });
+		});
+	}
+
+	return positions;
+}
+
+function getChairPositions(table) {
+	const seats = Math.max(1, Number(table.seats || 1));
+
+	if (table.table_shape === "rectangle" || table.table_shape === "oval") {
+		if (table.table_shape === "oval") {
+			return Array.from({ length: seats }, (_, index) => {
+				const angle = (360 / seats) * index;
+				const radians = ((angle - 90) * Math.PI) / 180;
+
+				return {
+					x: 50 + Math.cos(radians) * 45,
+					y: 50 + Math.sin(radians) * 36,
+					rotation: angle,
+				};
+			});
+		}
+
+		return getRectangleChairPositions(seats);
+	}
+
+	if (table.table_shape === "square") {
+		return getEdgeChairPositions(seats, ["top", "right", "bottom", "left"]);
+	}
+
+	if (table.table_shape === "booth") {
+		return getEdgeChairPositions(seats, ["bottom", "left", "right"]);
+	}
+
+	return Array.from({ length: seats }, (_, index) => {
+		const angle = (360 / seats) * index;
+		const radians = ((angle - 90) * Math.PI) / 180;
+
+		return {
+			x: 50 + Math.cos(radians) * 43,
+			y: 50 + Math.sin(radians) * 43,
+			rotation: angle,
+		};
+	});
+}
+
 function renderTable(map, table, mode) {
 	const button = document.createElement("button");
 	button.type = "button";
@@ -47,6 +167,14 @@ function renderTable(map, table, mode) {
 	button.dataset.shape = table.table_shape;
 	button.style.setProperty("--x", `${table.layout_x}%`);
 	button.style.setProperty("--y", `${table.layout_y}%`);
+	button.style.setProperty(
+		"--rotation",
+		`${normalizeRotation(table.layout_rotation)}deg`,
+	);
+	button.style.setProperty(
+		"--counter-rotation",
+		`${-normalizeRotation(table.layout_rotation)}deg`,
+	);
 	button.setAttribute("aria-label", `${table.name}, ${table.seats} mesta`);
 
 	if (table.selected) {
@@ -58,6 +186,9 @@ function renderTable(map, table, mode) {
 		button.setAttribute("aria-disabled", "true");
 	}
 
+	const figure = document.createElement("span");
+	figure.className = "table-figure";
+
 	const surface = document.createElement("span");
 	surface.className = "table-surface";
 
@@ -65,14 +196,18 @@ function renderTable(map, table, mode) {
 	label.className = "table-label";
 	label.textContent = table.name;
 	surface.appendChild(label);
-	button.appendChild(surface);
+	figure.appendChild(surface);
 
-	for (let index = 0; index < table.seats; index += 1) {
+	getChairPositions(table).forEach((position) => {
 		const chair = document.createElement("span");
 		chair.className = "layout-chair";
-		chair.style.setProperty("--angle", `${(360 / table.seats) * index}deg`);
-		button.appendChild(chair);
-	}
+		chair.style.setProperty("--chair-x", `${position.x}%`);
+		chair.style.setProperty("--chair-y", `${position.y}%`);
+		chair.style.setProperty("--chair-rotation", `${position.rotation}deg`);
+		figure.appendChild(chair);
+	});
+
+	button.appendChild(figure);
 
 	const meta = document.createElement("span");
 	meta.className = "table-meta-pill";
@@ -107,9 +242,12 @@ function initAdmin(root) {
 		location: document.getElementById("layoutTableLocation"),
 		smoking: document.getElementById("layoutTableSmoking"),
 		seats: document.getElementById("layoutSeatCount"),
+		rotation: document.getElementById("layoutRotationValue"),
 		shapeButtons: document.querySelectorAll("[data-layout-shape]"),
 		decrease: document.getElementById("layoutDecreaseSeats"),
 		increase: document.getElementById("layoutIncreaseSeats"),
+		rotateLeft: document.getElementById("layoutRotateLeft"),
+		rotateRight: document.getElementById("layoutRotateRight"),
 		save: document.getElementById("saveLayoutButton"),
 		remove: document.getElementById("removeLayoutTableButton"),
 	};
@@ -144,7 +282,10 @@ function initAdmin(root) {
 			controls.location.value = "";
 			controls.smoking.checked = false;
 			controls.seats.textContent = "0";
-			controls.shapeButtons.forEach((button) => button.classList.remove("active"));
+			controls.rotation.textContent = "0°";
+			controls.shapeButtons.forEach((button) =>
+				button.classList.remove("active"),
+			);
 			return;
 		}
 
@@ -152,8 +293,12 @@ function initAdmin(root) {
 		controls.location.value = table.location_description || "";
 		controls.smoking.checked = Boolean(table.is_smoking);
 		controls.seats.textContent = String(table.seats);
+		controls.rotation.textContent = `${normalizeRotation(table.layout_rotation)}°`;
 		controls.shapeButtons.forEach((button) => {
-			button.classList.toggle("active", button.dataset.layoutShape === table.table_shape);
+			button.classList.toggle(
+				"active",
+				button.dataset.layoutShape === table.table_shape,
+			);
 		});
 	}
 
@@ -251,6 +396,7 @@ function initAdmin(root) {
 			is_smoking: 0,
 			layout_x: 50,
 			layout_y: 50,
+			layout_rotation: 0,
 			table_shape: "round",
 			selected: true,
 			unavailable: false,
@@ -285,7 +431,7 @@ function initAdmin(root) {
 	);
 	controls.increase.addEventListener("click", () =>
 		updateSelected((table) => {
-			table.seats = Math.min(20, table.seats + 1);
+			table.seats = Math.min(10, table.seats + 1);
 		}),
 	);
 	controls.shapeButtons.forEach((button) => {
@@ -297,6 +443,16 @@ function initAdmin(root) {
 			}),
 		);
 	});
+	controls.rotateLeft.addEventListener("click", () =>
+		updateSelected((table) => {
+			table.layout_rotation = normalizeRotation(table.layout_rotation - 15);
+		}),
+	);
+	controls.rotateRight.addEventListener("click", () =>
+		updateSelected((table) => {
+			table.layout_rotation = normalizeRotation(table.layout_rotation + 15);
+		}),
+	);
 	controls.remove.addEventListener("click", () => {
 		const table = getSelected();
 
@@ -362,7 +518,9 @@ function initReserve(root) {
 	const form = document.getElementById(root.dataset.formId);
 	const selectedInputs = document.getElementById(root.dataset.selectedInputs);
 	const timeframesUrl = root.dataset.timeframesUrl;
-	const workingHoursElement = document.getElementById(root.dataset.workingHoursSource);
+	const workingHoursElement = document.getElementById(
+		root.dataset.workingHoursSource,
+	);
 	const timeline = document.getElementById("reservationTimeline");
 	const timeframeList = document.getElementById("reservationTimeframes");
 	const timelineSummary = document.getElementById("reservationTimelineSummary");
@@ -431,7 +589,7 @@ function initReserve(root) {
 
 	function parseTimeToMinutes(value) {
 		const [hours, minutes] = String(value).split(":").map(Number);
-		return (hours * 60) + (minutes || 0);
+		return hours * 60 + (minutes || 0);
 	}
 
 	function formatMinutes(minutes) {
@@ -464,7 +622,11 @@ function initReserve(root) {
 	}
 
 	function rangeIsAvailable(start, end) {
-		if (!selectionWindow || start < selectionWindow.start || end > selectionWindow.end) {
+		if (
+			!selectionWindow ||
+			start < selectionWindow.start ||
+			end > selectionWindow.end
+		) {
 			return false;
 		}
 
@@ -488,7 +650,11 @@ function initReserve(root) {
 			return null;
 		}
 
-		for (let start = selectionWindow.start; start + 60 <= selectionWindow.end; start += 60) {
+		for (
+			let start = selectionWindow.start;
+			start + 60 <= selectionWindow.end;
+			start += 60
+		) {
 			if (rangeIsAvailable(start, start + 60)) {
 				return { start, end: start + 60 };
 			}
@@ -547,16 +713,19 @@ function initReserve(root) {
 		}
 
 		if (segments.length === 0) {
-			timeframeList.innerHTML = '<span class="timeframe-empty">Nema slobodnih termina za izabrane stolove.</span>';
+			timeframeList.innerHTML =
+				'<span class="timeframe-empty">Nema slobodnih termina za izabrane stolove.</span>';
 			return;
 		}
 
 		timeframeList.innerHTML = segments
-			.map((segment) => `
+			.map(
+				(segment) => `
 				<button type="button" class="timeframe-chip" data-start="${segment.start}" data-end="${segment.end}">
 					${formatMinutes(segment.start)} - ${formatMinutes(segment.end)}
 				</button>
-			`)
+			`,
+			)
 			.join("");
 
 		timeframeList.querySelectorAll(".timeframe-chip").forEach((chip) => {
@@ -576,9 +745,11 @@ function initReserve(root) {
 		const activeTables = selectedTables();
 
 		if (!selectionWindow || activeTables.length === 0) {
-			timeline.innerHTML = '<div class="timeline-empty">Izaberite datum i sto.</div>';
+			timeline.innerHTML =
+				'<div class="timeline-empty">Izaberite datum i sto.</div>';
 			timeframeList.innerHTML = "";
-			timelineSummary.textContent = "Izaberite datum i sto da biste videli termine.";
+			timelineSummary.textContent =
+				"Izaberite datum i sto da biste videli termine.";
 			syncTimeInputs();
 			return;
 		}
@@ -589,7 +760,10 @@ function initReserve(root) {
 
 		const board = document.createElement("div");
 		board.className = "timeline-board";
-		board.style.setProperty("--timeline-track-width", `${Math.max(640, totalHours * 58)}px`);
+		board.style.setProperty(
+			"--timeline-track-width",
+			`${Math.max(640, totalHours * 58)}px`,
+		);
 
 		const corner = document.createElement("div");
 		corner.className = "timeline-corner";
@@ -601,7 +775,7 @@ function initReserve(root) {
 		hoursRow.style.setProperty("--timeline-hours", String(totalHours));
 
 		for (let index = 0; index < totalHours; index += 1) {
-			const slotStart = selectionWindow.start + (index * 60);
+			const slotStart = selectionWindow.start + index * 60;
 			const hour = document.createElement("span");
 			hour.className = "timeline-hour";
 			hour.textContent = formatMinutes(slotStart);
@@ -627,18 +801,23 @@ function initReserve(root) {
 			lane.style.setProperty("--timeline-hours", String(totalHours));
 
 			for (let index = 0; index < totalHours; index += 1) {
-				const slotStart = selectionWindow.start + (index * 60);
+				const slotStart = selectionWindow.start + index * 60;
 				const slotEnd = slotStart + 60;
 				const slot = document.createElement("button");
 				slot.type = "button";
 				slot.className = "timeline-slot";
-				slot.setAttribute("aria-label", `${table.name}: ${formatMinutes(slotStart)} - ${formatMinutes(slotEnd)}`);
+				slot.setAttribute(
+					"aria-label",
+					`${table.name}: ${formatMinutes(slotStart)} - ${formatMinutes(slotEnd)}`,
+				);
 
 				if (tableRangeIsBusy(table.id, slotStart, slotEnd)) {
 					slot.classList.add("busy");
 					slot.disabled = true;
 				} else {
-					slot.addEventListener("click", () => setSelection(slotStart, slotEnd));
+					slot.addEventListener("click", () =>
+						setSelection(slotStart, slotEnd),
+					);
 				}
 
 				lane.appendChild(slot);
@@ -659,8 +838,14 @@ function initReserve(root) {
 			`;
 			lanes.appendChild(range);
 
-			range.querySelector(".left").addEventListener("pointerdown", (event) => startResize("left", event));
-			range.querySelector(".right").addEventListener("pointerdown", (event) => startResize("right", event));
+			range
+				.querySelector(".left")
+				.addEventListener("pointerdown", (event) => startResize("left", event));
+			range
+				.querySelector(".right")
+				.addEventListener("pointerdown", (event) =>
+					startResize("right", event),
+				);
 			timelineSummary.textContent = `Izabrano: ${formatMinutes(selection.start)} - ${formatMinutes(selection.end)} (${(selection.end - selection.start) / 60}h)`;
 		} else {
 			timelineSummary.textContent = "Nema slobodnog termina od minimum 1 sat.";
@@ -688,25 +873,38 @@ function initReserve(root) {
 		const lane = timeline.querySelector(".timeline-lane");
 		const laneRect = lane?.getBoundingClientRect();
 		const totalHours = (selectionWindow.end - selectionWindow.start) / 60;
-		const hourWidth = laneRect && totalHours > 0 ? laneRect.width / totalHours : 58;
+		const hourWidth =
+			laneRect && totalHours > 0 ? laneRect.width / totalHours : 58;
 
 		if (!laneRect || !selection || hourWidth <= 0) {
 			return;
 		}
 
 		const onMove = (moveEvent) => {
-			const contentX = clamp(moveEvent.clientX - laneRect.left, 0, laneRect.width);
+			const contentX = clamp(
+				moveEvent.clientX - laneRect.left,
+				0,
+				laneRect.width,
+			);
 			const snappedHours = Math.round(contentX / hourWidth);
-			const snapped = selectionWindow.start + (snappedHours * 60);
+			const snapped = selectionWindow.start + snappedHours * 60;
 
 			if (edge === "left") {
-				const nextStart = clamp(snapped, Math.max(selectionWindow.start, selection.end - 360), selection.end - 60);
+				const nextStart = clamp(
+					snapped,
+					Math.max(selectionWindow.start, selection.end - 360),
+					selection.end - 60,
+				);
 				if (rangeIsAvailable(nextStart, selection.end)) {
 					selection.start = nextStart;
 					renderTimeline();
 				}
 			} else {
-				const nextEnd = clamp(snapped, selection.start + 60, Math.min(selectionWindow.end, selection.start + 360));
+				const nextEnd = clamp(
+					snapped,
+					selection.start + 60,
+					Math.min(selectionWindow.end, selection.start + 360),
+				);
 				if (rangeIsAvailable(selection.start, nextEnd)) {
 					selection.end = nextEnd;
 					renderTimeline();
@@ -757,12 +955,14 @@ function initReserve(root) {
 			}));
 			busyByTable = {};
 
-			Object.entries(result.busy_by_table || {}).forEach(([tableId, intervals]) => {
-				busyByTable[tableId] = intervals.map((interval) => ({
-					start: parseTimeToMinutes(interval.start),
-					end: parseTimeToMinutes(interval.end) || 1440,
-				}));
-			});
+			Object.entries(result.busy_by_table || {}).forEach(
+				([tableId, intervals]) => {
+					busyByTable[tableId] = intervals.map((interval) => ({
+						start: parseTimeToMinutes(interval.start),
+						end: parseTimeToMinutes(interval.end) || 1440,
+					}));
+				},
+			);
 
 			if (!selection || !rangeIsAvailable(selection.start, selection.end)) {
 				selection = findFirstAvailableRange();
@@ -776,11 +976,9 @@ function initReserve(root) {
 		}
 	}
 
-	form
-		.querySelectorAll('[name="reservation_date"]')
-		.forEach((input) => {
-			input.addEventListener("change", refreshTimeframes);
-		});
+	form.querySelectorAll('[name="reservation_date"]').forEach((input) => {
+		input.addEventListener("change", refreshTimeframes);
+	});
 
 	window.AureaTableLayouts = window.AureaTableLayouts || {};
 	window.AureaTableLayouts.reserve = {

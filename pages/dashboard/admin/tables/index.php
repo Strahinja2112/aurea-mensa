@@ -26,6 +26,7 @@ $tableLayoutData = array_map(static function (array $table, int $index) use ($al
         'is_smoking' => (int)($table['is_smoking'] ?? 0),
         'layout_x' => isset($table['layout_x']) ? (float)$table['layout_x'] : $defaultX,
         'layout_y' => isset($table['layout_y']) ? (float)$table['layout_y'] : $defaultY,
+        'layout_rotation' => isset($table['layout_rotation']) ? (int)$table['layout_rotation'] : 0,
         'table_shape' => in_array($table['table_shape'] ?? 'round', $allowedTableShapes, true)
             ? $table['table_shape']
             : 'round',
@@ -137,6 +138,17 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                                         </button>
                                         <button type="button" class="btn btn-outline-light" data-layout-shape="booth">
                                             Separe
+                                        </button>
+                                    </div>
+
+                                    <label class="layout-field-label">Rotacija</label>
+                                    <div class="rotation-stepper mb-3">
+                                        <button type="button" id="layoutRotateLeft" class="btn btn-outline-light" title="Rotiraj ulevo">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                        </button>
+                                        <output id="layoutRotationValue">0°</output>
+                                        <button type="button" id="layoutRotateRight" class="btn btn-outline-light" title="Rotiraj udesno">
+                                            <i class="fa-solid fa-rotate-right"></i>
                                         </button>
                                     </div>
 

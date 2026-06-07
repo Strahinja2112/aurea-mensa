@@ -23,6 +23,7 @@ $tableLayoutData = array_map(static function (array $table, int $index) use ($al
         'is_smoking' => (int)($table['is_smoking'] ?? 0),
         'layout_x' => isset($table['layout_x']) ? (float)$table['layout_x'] : $defaultX,
         'layout_y' => isset($table['layout_y']) ? (float)$table['layout_y'] : $defaultY,
+        'layout_rotation' => isset($table['layout_rotation']) ? (int)$table['layout_rotation'] : 0,
         'table_shape' => in_array($table['table_shape'] ?? 'round', $allowedTableShapes, true)
             ? $table['table_shape']
             : 'round',
@@ -49,6 +50,7 @@ $today = date('Y-m-d');
             <div class="glass-card reserve-layout-card">
                 <div class="reserve-layout-header">
                     <h2>Rezervacija stola</h2>
+                    <span>Izaberite sto ili stolove jednostavnim klikom, nakon toga izaberite datum rezervacije i vremenski period.</span>
                 </div>
 
                 <form id="reservationForm">
@@ -56,15 +58,6 @@ $today = date('Y-m-d');
                     <input type="hidden" name="duration_hours" id="reservationDurationHours">
 
                     <section class="reserve-map-section">
-                        <div class="reserve-section-head">
-                            <label class="form-label mb-0">Izaberite sto na mapi</label>
-                            <div class="layout-legend">
-                                <span><i></i> Dostupan</span>
-                                <span><i class="selected-dot"></i> Izabran</span>
-                                <span><i class="disabled-dot"></i> Zauzet</span>
-                            </div>
-                        </div>
-
                         <div
                             data-table-layout
                             data-mode="reserve"
@@ -97,12 +90,6 @@ $today = date('Y-m-d');
                                 <p class="reservation-timeline-summary" id="reservationTimelineSummary">
                                     Izaberite datum i sto da biste videli termine.
                                 </p>
-                            </div>
-
-                            <div class="layout-legend reserve-time-legend">
-                                <span><i></i> Slobodno</span>
-                                <span><i class="disabled-dot"></i> Zauzeto</span>
-                                <span><i class="selected-dot"></i> Izabrano</span>
                             </div>
                         </div>
 

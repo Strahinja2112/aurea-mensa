@@ -53,6 +53,7 @@ final class Database
             'is_smoking',
             'layout_x',
             'layout_y',
+            'layout_rotation',
             'table_shape',
         ],
         'reservations' => [

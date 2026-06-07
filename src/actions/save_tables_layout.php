@@ -48,6 +48,7 @@ try {
             $seats = (int)($table['seats'] ?? 0);
             $layoutX = (float)($table['layout_x'] ?? 50);
             $layoutY = (float)($table['layout_y'] ?? 50);
+            $layoutRotation = (int)($table['layout_rotation'] ?? 0);
             $shape = (string)($table['table_shape'] ?? 'round');
 
             if ($name === '') {
@@ -69,6 +70,7 @@ try {
                 'is_smoking' => !empty($table['is_smoking']) ? 1 : 0,
                 'layout_x' => max(4, min(96, $layoutX)),
                 'layout_y' => max(8, min(92, $layoutY)),
+                'layout_rotation' => (($layoutRotation % 360) + 360) % 360,
                 'table_shape' => $shape,
             ];
 

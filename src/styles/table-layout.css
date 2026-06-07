@@ -95,6 +95,13 @@
 	border-color: rgba(74, 106, 106, 0.9);
 }
 
+.table-figure {
+	position: absolute;
+	inset: 0;
+	transform: rotate(var(--rotation, 0deg));
+	transform-origin: center;
+}
+
 .table-surface {
 	position: absolute;
 	left: 50%;
@@ -140,6 +147,13 @@
 		0 12px 28px rgba(0, 0, 0, 0.32);
 }
 
+.layout-table.selected[data-shape="booth"] .table-surface {
+	box-shadow:
+		inset 0 10px 0 rgba(255, 255, 255, 0.12),
+		0 0 0 3px rgba(74, 106, 106, 0.24),
+		0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
 .table-label {
 	max-width: 62px;
 	overflow: hidden;
@@ -147,20 +161,21 @@
 	font-weight: 700;
 	line-height: 1.05;
 	text-overflow: ellipsis;
+	transform: rotate(var(--counter-rotation, 0deg));
 	white-space: nowrap;
 }
 
 .layout-chair {
 	position: absolute;
-	left: 50%;
-	top: 50%;
+	left: var(--chair-x);
+	top: var(--chair-y);
 	z-index: 1;
 	width: 18px;
 	height: 18px;
 	border: 1px solid rgba(255, 255, 255, 0.32);
 	border-radius: 4px;
 	background: rgba(255, 255, 255, 0.18);
-	transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-56px);
+	transform: translate(-50%, -50%) rotate(var(--chair-rotation, 0deg));
 	transform-origin: center;
 }
 
@@ -330,7 +345,8 @@
 	min-height: 0;
 }
 
-.seat-stepper {
+.seat-stepper,
+.rotation-stepper {
 	display: grid;
 	grid-template-columns: 44px minmax(0, 1fr) 44px;
 	gap: 8px;
@@ -338,7 +354,9 @@
 }
 
 .seat-stepper output,
-.seat-stepper button {
+.seat-stepper button,
+.rotation-stepper output,
+.rotation-stepper button {
 	display: flex;
 	height: 40px;
 	align-items: center;
@@ -519,15 +537,15 @@
 .reserve-layout-header {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	gap: 16px;
+	justify-content: center;
+	flex-direction: column;
 	margin-bottom: 18px;
 }
 
 .reserve-layout-header h2 {
 	margin: 0;
 	color: #fff;
-	font-size: 32px;
+	font-size: 52px;
 	line-height: 1.1;
 }
 

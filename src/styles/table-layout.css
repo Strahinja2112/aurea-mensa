@@ -613,7 +613,13 @@
 }
 
 .reserve-table-info {
+	display: flex;
+	flex-direction: column;
 	padding: 20px;
+}
+
+.reserve-table-info .reserve-table-info-footer {
+	margin-top: auto;
 }
 
 .reserve-table-info-head {

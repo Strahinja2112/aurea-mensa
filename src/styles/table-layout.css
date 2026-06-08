@@ -565,15 +565,26 @@
 }
 
 .reserve-table-info-panel {
+	display: flex;
+	flex-direction: column;
 	min-width: 0;
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 8px;
 	background: rgba(255, 255, 255, 0.035);
 }
 
+.reserve-table-info-panel > .reserve-table-info-empty,
+.reserve-table-info-panel > .reserve-table-info {
+	flex: 1 1 auto;
+}
+
+.reserve-table-info-panel > .reserve-table-info-footer {
+	margin-top: auto;
+}
+
 .reserve-table-info-empty {
 	display: flex;
-	min-height: 100%;
+	min-height: 0;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
@@ -714,12 +725,16 @@
 
 .reserve-submit-wrap .button button {
 	width: 100%;
+	color: #fff !important;
+}
+
+.reserve-submit-wrap .button button span {
+	color: inherit;
 }
 
 .reservation-timeline-panel {
 	margin-top: 22px;
 	padding-top: 20px;
-	border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .reserve-time-header {

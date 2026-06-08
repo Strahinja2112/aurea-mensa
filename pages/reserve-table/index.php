@@ -48,9 +48,9 @@ $today = date('Y-m-d');
     <main>
         <div class="container-fluid d-flex justify-content-center">
             <div class="glass-card reserve-layout-card">
-                <div class="reserve-layout-header">
+                <!-- <div class="reserve-layout-header">
                     <h2>Rezervacija termina</h2>
-                </div>
+                </div> -->
 
                 <form id="reservationForm">
                     <input type="hidden" name="start_time" id="reservationStartTime">
@@ -127,25 +127,22 @@ $today = date('Y-m-d');
                                         </div>
                                     </dl>
                                 </div>
+                                <div class="register-btn-wrapper reserve-submit-wrap reserve-table-info-footer p-2">
+                                    <div class="button">
+                                        <button type="submit" id="submitBtn">
+                                            <span id="btnText">REZERVIŠI</span>
+                                            <span id="btnSpinner" class="d-none">
+                                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                                SLANJE...
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
                             </aside>
                         </div>
-
                         <div id="selectedTableInputs"></div>
                     </section>
-
                     <div id="reservationMessage" class="mt-3"></div>
-
-                    <div class="register-btn-wrapper reserve-submit-wrap">
-                        <div class="button">
-                            <button type="submit" id="submitBtn">
-                                <span id="btnText">REZERVIŠI</span>
-                                <span id="btnSpinner" class="d-none">
-                                    <span class="spinner-border spinner-border-sm me-2"></span>
-                                    SLANJE...
-                                </span>
-                            </button>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>

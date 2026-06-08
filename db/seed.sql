@@ -1,19 +1,23 @@
-DROP DATABASE IF EXISTS Restaurant;
-CREATE DATABASE Restaurant CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE Restaurant;
+CREATE DATABASE IF NOT EXISTS sn CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE sn;
 
-CREATE TABLE roles
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS reservation_tables;
+DROP TABLE IF EXISTS reservations;
+DROP TABLE IF EXISTS auth_sessions;
+DROP TABLE IF EXISTS verification_tokens;
+DROP TABLE IF EXISTS restaurant_tables;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE IF NOT EXISTS roles
 (
     id   INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO roles (name)
-VALUES ('USER'),
-       ('STAFF'),
-       ('ADMIN');
-
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     id             INT AUTO_INCREMENT PRIMARY KEY,
     email          VARCHAR(255) NOT NULL UNIQUE,
@@ -28,15 +32,7 @@ CREATE TABLE users
     CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
-INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, email_verified)
-VALUES ('user@test.com', '$2y$10$Jt1UViY2MocolMv8vuoeLehjUE234ZU5OCZQrbC9rIcACCTW1j1B2', 'Test', 'Korisnik',
-        '0600000003', 1, TRUE),
-       ('staff@test.com', '$2y$10$Jt1UViY2MocolMv8vuoeLehjUE234ZU5OCZQrbC9rIcACCTW1j1B2', 'Staff', 'Korisnik',
-        '0600000002', 2, TRUE),
-       ('admin@test.com', '$2y$10$Jt1UViY2MocolMv8vuoeLehjUE234ZU5OCZQrbC9rIcACCTW1j1B2', 'Admin', 'Korisnik',
-        '0600000001', 3, TRUE);
-
-CREATE TABLE auth_sessions
+CREATE TABLE IF NOT EXISTS auth_sessions
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     user_id    INT      NOT NULL,
@@ -47,10 +43,7 @@ CREATE TABLE auth_sessions
     CONSTRAINT fk_auth_session_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_auth_session_user ON auth_sessions (user_id);
-CREATE INDEX idx_auth_session_expires ON auth_sessions (expires_at);
-
-CREATE TABLE verification_tokens
+CREATE TABLE IF NOT EXISTS verification_tokens
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     user_id    INT          NOT NULL,
@@ -60,10 +53,7 @@ CREATE TABLE verification_tokens
     CONSTRAINT fk_verification_token_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_verification_token_user ON verification_tokens (user_id);
-CREATE INDEX idx_verification_token_expires ON verification_tokens (expires_at);
-
-CREATE TABLE restaurant_tables
+CREATE TABLE IF NOT EXISTS restaurant_tables
 (
     id                   INT AUTO_INCREMENT PRIMARY KEY,
     name                 VARCHAR(50) NOT NULL,
@@ -76,7 +66,48 @@ CREATE TABLE restaurant_tables
     table_shape          ENUM ('round', 'square', 'rectangle', 'oval', 'corner') DEFAULT 'round'
 );
 
-CREATE INDEX idx_table_seats ON restaurant_tables (seats);
+CREATE TABLE IF NOT EXISTS reservations
+(
+    id               INT AUTO_INCREMENT PRIMARY KEY,
+    user_id          INT         NOT NULL,
+    reservation_code VARCHAR(50) NOT NULL UNIQUE,
+    reservation_date DATE        NOT NULL,
+    start_time       TIME        NOT NULL,
+    end_time         TIME        NOT NULL,
+    status           ENUM ('ACTIVE', 'CANCELLED', 'COMPLETED') DEFAULT 'ACTIVE',
+    arrived          BOOLEAN                                   DEFAULT FALSE,
+    arrived_at       DATETIME,
+    arrival_staff_id INT,
+    comment          TEXT,
+    created_at       TIMESTAMP                                 DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_reservation_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_reservation_arrival_staff FOREIGN KEY (arrival_staff_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS reservation_tables
+(
+    reservation_id INT NOT NULL,
+    table_id       INT NOT NULL,
+
+    PRIMARY KEY (reservation_id, table_id),
+
+    CONSTRAINT fk_reservation_table_reservation FOREIGN KEY (reservation_id) REFERENCES reservations (id) ON DELETE CASCADE,
+    CONSTRAINT fk_reservation_table_table FOREIGN KEY (table_id) REFERENCES restaurant_tables (id) ON DELETE CASCADE
+);
+
+INSERT INTO roles (name)
+VALUES ('USER'),
+       ('STAFF'),
+       ('ADMIN');
+
+INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, email_verified)
+VALUES ('user@test.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Test', 'Korisnik',
+        '0600000003', 1, TRUE),
+       ('staff@test.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Staff', 'Korisnik',
+        '0600000002', 2, TRUE),
+       ('admin@test.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Admin', 'Korisnik',
+        '0600000001', 3, TRUE);
 
 INSERT INTO restaurant_tables
     (id, name, seats, location_description, is_smoking, layout_x, layout_y, layout_rotation, table_shape)
@@ -96,41 +127,6 @@ VALUES
     (18, 'Sto 13', 4, NULL, FALSE, 49.67, 50.81, 0, 'round');
 
 ALTER TABLE restaurant_tables AUTO_INCREMENT = 19;
-
-CREATE TABLE reservations
-(
-    id               INT AUTO_INCREMENT PRIMARY KEY,
-    user_id          INT         NOT NULL,
-    reservation_code VARCHAR(50) NOT NULL UNIQUE,
-    reservation_date DATE        NOT NULL,
-    start_time       TIME        NOT NULL,
-    end_time         TIME        NOT NULL,
-    status           ENUM ('ACTIVE', 'CANCELLED', 'COMPLETED') DEFAULT 'ACTIVE',
-    arrived          BOOLEAN                                   DEFAULT FALSE,
-    arrived_at       DATETIME,
-    arrival_staff_id INT,
-    comment          TEXT,
-    created_at       TIMESTAMP                                 DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_reservation_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    CONSTRAINT fk_reservation_arrival_staff FOREIGN KEY (arrival_staff_id) REFERENCES users (id)
-);
-
-CREATE INDEX idx_reservation_date ON reservations (reservation_date);
-CREATE INDEX idx_reservation_user ON reservations (user_id);
-CREATE INDEX idx_reservation_code ON reservations (reservation_code);
-CREATE INDEX idx_reservation_status ON reservations (status);
-
-CREATE TABLE reservation_tables
-(
-    reservation_id INT NOT NULL,
-    table_id       INT NOT NULL,
-
-    PRIMARY KEY (reservation_id, table_id),
-
-    CONSTRAINT fk_reservation_table_reservation FOREIGN KEY (reservation_id) REFERENCES reservations (id) ON DELETE CASCADE,
-    CONSTRAINT fk_reservation_table_table FOREIGN KEY (table_id) REFERENCES restaurant_tables (id) ON DELETE CASCADE
-);
 
 INSERT INTO reservations
     (user_id, reservation_code, reservation_date, start_time, end_time, status, arrived, arrived_at, arrival_staff_id, comment)

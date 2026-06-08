@@ -33,6 +33,8 @@ Helpers::renderHead("Home") ?>
             </div>
         </section>
 
+        <?= password_hash("pass", PASSWORD_BCRYPT) ?>
+
         <section id="about" class="landing-section" aria-labelledby="flow-title">
             <div class="container-fluid container-xl">
                 <div class="section-heading">

@@ -18,7 +18,7 @@ body {
 	background-color: rgb(5, 5, 5);
 	background-image:
 		linear-gradient(to bottom, transparent, rgb(5, 5, 5, 0.5)),
-		url("../../public/images/AI_Background2.png");
+		url("../../public/images/background-compressed.png");
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-attachment: fixed;

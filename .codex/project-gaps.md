@@ -58,12 +58,6 @@ The most important remaining work is reservation editing, staff creation, CSRF/s
 
    Since the assignment requires external JavaScript files, this should be cleaned up.
 
-5. **Debug output must be removed**
-
-   Current debug output:
-   - `pages/auth/activate-account/index.php` contains `var_dump($token)`
-   - `src/classes/Mailer.php` contains `var_dump($e)`
-
 ## Bugs / Fragile Parts
 
 1. **Seed reset is broken**

@@ -216,7 +216,11 @@ final class Auth
             ]
         ]);
 
-        Mailer::sendPasswordResetEmail($email, $token);
+        $mailSent = Mailer::sendPasswordResetEmail($email, $token);
+
+        if (!$mailSent) {
+            throw new Exception("Greška prilikom slanja emaila za reset lozinke.");
+        }
     }
 
     public static function resetPassword(string $token, string $newPassword): void

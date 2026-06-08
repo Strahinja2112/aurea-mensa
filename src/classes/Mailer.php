@@ -32,12 +32,14 @@ final class Mailer
     private static function getAppUrl(): string
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-        $host = $_SERVER['HTTP_HOST'];
-        if ($host == 'localhost') {
-            $host .= ':3000';
+        $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? 'localhost';
+
+        $fullPath = "{$protocol}://{$host}";
+        if ($host == "localhost") {
+            $fullPath .= APP_DIR;
         }
 
-        return "{$protocol}://{$host}/" . APP_DIR;
+        return $fullPath;
     }
 
     private static function getEmailTemplate(
@@ -111,6 +113,7 @@ final class Mailer
             $mail->Password = Env::$MAILTRAP_PASSWORD;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->CharSet = 'UTF-8';
+            $mail->Timeout = 10;
 
             $mail->setFrom('no-reply@restoran.rs', 'Restoran Rezervacije');
             $mail->addAddress($to);
@@ -121,7 +124,16 @@ final class Mailer
 
             return $mail->send();
         } catch (Exception $e) {
-            var_dump($e);
+            if (class_exists('Logger')) {
+                Logger::logException($e, [
+                    'mail_to' => $to,
+                    'mail_subject' => $subject,
+                    'mail_host' => Env::$MAILTRAP_DOMAIN,
+                    'mail_port' => Env::$MAILTRAP_PORT,
+                    'mail_error' => $mail->ErrorInfo,
+                ]);
+            }
+
             return false;
         }
     }

@@ -46,37 +46,19 @@ $today = date('Y-m-d');
     <?php require_once Helpers::getFullPath('src/components/header.php'); ?>
 
     <main>
-        <div class="container d-flex justify-content-center">
+        <div class="container-fluid d-flex justify-content-center">
             <div class="glass-card reserve-layout-card">
                 <div class="reserve-layout-header">
-                    <h2>Rezervacija stola</h2>
-                    <span>Izaberite sto ili stolove jednostavnim klikom, nakon toga izaberite datum rezervacije i vremenski period.</span>
+                    <h2>Rezervacija termina</h2>
                 </div>
 
                 <form id="reservationForm">
                     <input type="hidden" name="start_time" id="reservationStartTime">
                     <input type="hidden" name="duration_hours" id="reservationDurationHours">
 
-                    <section class="reserve-map-section">
-                        <div
-                            data-table-layout
-                            data-mode="reserve"
-                            data-tables-source="reserveTableLayoutData"
-                            data-form-id="reservationForm"
-                            data-selected-inputs="selectedTableInputs"
-                            data-availability-url="<?= Helpers::getRelativePath('src/actions/table_availability.php') ?>"
-                            data-timeframes-url="<?= Helpers::getRelativePath('src/actions/table_timeframes.php') ?>"
-                            data-working-hours-source="restaurantWorkingHours">
-                            <div class="table-layout-map reserve-map" aria-label="Mapa stolova za rezervaciju"></div>
-                        </div>
-
-                        <div id="selectedTableInputs"></div>
-                    </section>
-
-                    <section class="reservation-timeline-panel">
+                    <section class="reservation-timeline-panel mb-1">
                         <div class="reserve-time-header">
                             <div class="reserve-date-row">
-                                <label class="form-label">Datum rezervacije</label>
                                 <input
                                     type="date"
                                     name="reservation_date"
@@ -96,6 +78,59 @@ $today = date('Y-m-d');
 
                         <div id="reservationTimeline" class="reservation-timeline"></div>
                         <div id="reservationTimeframes" class="reservation-timeframes"></div>
+                    </section>
+
+                    <section class="reserve-map-section">
+                        <div class="reserve-map-grid">
+                            <div
+                                data-table-layout
+                                data-mode="reserve"
+                                data-tables-source="reserveTableLayoutData"
+                                data-form-id="reservationForm"
+                                data-selected-inputs="selectedTableInputs"
+                                data-availability-url="<?= Helpers::getRelativePath('src/actions/table_availability.php') ?>"
+                                data-timeframes-url="<?= Helpers::getRelativePath('src/actions/table_timeframes.php') ?>"
+                                data-working-hours-source="restaurantWorkingHours">
+                                <div class="table-layout-map reserve-map" aria-label="Mapa stolova za rezervaciju"></div>
+                            </div>
+
+                            <aside class="reserve-table-info-panel" id="reserveTableInfoPanel" aria-live="polite">
+                                <div class="reserve-table-info-empty" id="reserveTableInfoEmpty">
+                                    <i class="fa-solid fa-chair"></i>
+                                    <h5>Izaberite sto</h5>
+                                    <p>Detalji izabranog stola će se prikazati ovde.</p>
+                                </div>
+
+                                <div class="reserve-table-info d-none" id="reserveTableInfo">
+                                    <div class="reserve-table-info-head">
+                                        <span class="layout-kicker">Izabrani sto</span>
+                                        <strong id="reserveInfoName"></strong>
+                                        <span class="reserve-info-status" id="reserveInfoStatus"></span>
+                                    </div>
+
+                                    <dl class="reserve-info-list">
+                                        <div>
+                                            <dt>Kapacitet</dt>
+                                            <dd id="reserveInfoSeats"></dd>
+                                        </div>
+                                        <div>
+                                            <dt>Zona</dt>
+                                            <dd id="reserveInfoLocation"></dd>
+                                        </div>
+                                        <div>
+                                            <dt>Pušenje</dt>
+                                            <dd id="reserveInfoSmoking"></dd>
+                                        </div>
+                                        <div>
+                                            <dt>Oblik</dt>
+                                            <dd id="reserveInfoShape"></dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </aside>
+                        </div>
+
+                        <div id="selectedTableInputs"></div>
                     </section>
 
                     <div id="reservationMessage" class="mt-3"></div>

@@ -527,11 +527,22 @@ function initReserve(root) {
 	const timelineSummary = document.getElementById("reservationTimelineSummary");
 	const startInput = document.getElementById("reservationStartTime");
 	const durationInput = document.getElementById("reservationDurationHours");
+	const tableInfo = {
+		empty: document.getElementById("reserveTableInfoEmpty"),
+		panel: document.getElementById("reserveTableInfo"),
+		name: document.getElementById("reserveInfoName"),
+		status: document.getElementById("reserveInfoStatus"),
+		seats: document.getElementById("reserveInfoSeats"),
+		location: document.getElementById("reserveInfoLocation"),
+		smoking: document.getElementById("reserveInfoSmoking"),
+		shape: document.getElementById("reserveInfoShape"),
+	};
 	const workingHours = parseWorkingHours(workingHoursElement);
 	const tables = parseTables(dataElement);
 	let busyIntervals = [];
 	let busyByTable = {};
 	let selection = null;
+	let focusedTableId = null;
 
 	function selectedIds() {
 		return tables.filter((table) => table.selected).map((table) => table.id);
@@ -539,6 +550,59 @@ function initReserve(root) {
 
 	function selectedTables() {
 		return tables.filter((table) => table.selected);
+	}
+
+	function focusedTable() {
+		const selected = selectedTables();
+
+		if (focusedTableId !== null) {
+			const focused = selected.find((table) => table.id === focusedTableId);
+
+			if (focused) {
+				return focused;
+			}
+		}
+
+		return selected[selected.length - 1] || null;
+	}
+
+	function tableShapeLabel(shape) {
+		return (
+			{
+				round: "Okrugli",
+				square: "Kvadratni",
+				rectangle: "Pravougaoni",
+				oval: "Ovalni",
+				corner: "Ugaoni",
+			}[shape] || "Standardni"
+		);
+	}
+
+	function updateTableInfo() {
+		const table = focusedTable();
+
+		if (!tableInfo.empty || !tableInfo.panel) {
+			return;
+		}
+
+		if (!table) {
+			tableInfo.empty.classList.remove("d-none");
+			tableInfo.panel.classList.add("d-none");
+			return;
+		}
+
+		tableInfo.empty.classList.add("d-none");
+		tableInfo.panel.classList.remove("d-none");
+		tableInfo.name.textContent = table.name;
+		tableInfo.status.textContent = table.unavailable ? "Zauzet" : "Dostupan";
+		tableInfo.status.dataset.state = table.unavailable ? "busy" : "available";
+		tableInfo.seats.textContent = `${table.seats} ${table.seats === 1 ? "mesto" : "mesta"}`;
+		tableInfo.location.textContent =
+			table.location_description || "Nije navedeno";
+		tableInfo.smoking.textContent = table.is_smoking
+			? "Pušačka zona"
+			: "Nepušačka zona";
+		tableInfo.shape.textContent = tableShapeLabel(table.table_shape);
 	}
 
 	function updateInputs() {
@@ -550,21 +614,6 @@ function initReserve(root) {
 			input.name = "table_ids[]";
 			input.value = String(id);
 			selectedInputs.appendChild(input);
-		});
-	}
-
-	function scrollToTimelinePicker() {
-		if (!timelinePanel) {
-			return;
-		}
-
-		const prefersReducedMotion = window.matchMedia(
-			"(prefers-reduced-motion: reduce)",
-		).matches;
-
-		timelinePanel.scrollIntoView({
-			behavior: prefersReducedMotion ? "auto" : "smooth",
-			block: "start",
 		});
 	}
 
@@ -587,12 +636,11 @@ function initReserve(root) {
 
 				const isSelecting = !table.selected;
 				table.selected = !table.selected;
+				focusedTableId = isSelecting ? table.id : focusedTable()?.id || null;
 				updateInputs();
+				updateTableInfo();
 				render();
 				refreshTimeframes();
-				if (isSelecting) {
-					requestAnimationFrame(scrollToTimelinePicker);
-				}
 			});
 			map.appendChild(node);
 		});
@@ -988,7 +1036,9 @@ function initReserve(root) {
 			tables.forEach((table) => {
 				table.selected = false;
 			});
+			focusedTableId = null;
 			updateInputs();
+			updateTableInfo();
 			render();
 			selection = null;
 			renderTimeline();
@@ -998,6 +1048,7 @@ function initReserve(root) {
 	};
 
 	updateInputs();
+	updateTableInfo();
 	render();
 	renderTimeline();
 }

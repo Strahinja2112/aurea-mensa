@@ -112,6 +112,14 @@ if (!class_exists('Helpers')) {
             return strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
         }
 
+        public static function isDev(): bool
+        {
+            $host = strtolower((string)($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? ''));
+            $host = explode(':', $host, 2)[0];
+
+            return in_array($host, ['localhost', '127.0.0.1', '::1', 'sn.stud.vts.su.ac.rs'], true);
+        }
+
         public static function getErrorUrl(ErrorType $type, ?string $message = null, ?string $redirectTo = null): string
         {
             $params = ['type' => $type->value];

@@ -107,6 +107,11 @@ if (!class_exists('Helpers')) {
             return $hasUppercase && $hasNumber && $isLongEnough;
         }
 
+        public static function generateReservationCode(): string
+        {
+            return strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+        }
+
         public static function getErrorUrl(ErrorType $type, ?string $message = null, ?string $redirectTo = null): string
         {
             $params = ['type' => $type->value];

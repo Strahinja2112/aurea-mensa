@@ -101,7 +101,7 @@
 }
 
 .rt-table-actions .rt-row {
-	grid-template-columns: 140px 100px 1fr 1.2fr 120px 100px 140px;
+	grid-template-columns: 140px 1fr 1fr 1.2fr 120px 120px;
 }
 
 .rt-table-actions .rt-cell-arrival {
@@ -115,134 +115,134 @@
 }
 
 .rt-table-profile .rt-row {
-    grid-template-columns: minmax(auto, 1fr) 70px 120px 90px 130px;
+	grid-template-columns: minmax(auto, 1fr) 70px 120px 90px 130px;
 }
 
 .rt-table-profile .rt-cell-code {
-    min-width: auto;
-    overflow: visible;
-    text-overflow: clip;
+	min-width: auto;
+	overflow: visible;
+	text-overflow: clip;
 }
 
 .rt-table-profile .rt-cell-tables {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0;
 }
 
 .rt-cell-date {
-    text-align: center;
-    line-height: 1.2;
+	text-align: center;
+	line-height: 1.2;
 }
 
 .rt-table-profile .rt-cell-arrival {
-    text-align: left;
-    white-space: nowrap;
+	text-align: left;
+	white-space: nowrap;
 }
 
 .rt-table-profile .rt-cell-arrival .btn {
-    font-size: 0.75rem;
-    padding: 4px 10px;
+	font-size: 0.75rem;
+	padding: 4px 10px;
 }
 
 @media (max-width: 900px) {
-    .rt-row,
-    .rt-table-actions .rt-row {
-        grid-template-columns: 1fr 1fr;
-        gap: 4px 12px;
-        padding: 12px 16px;
-    }
+	.rt-row,
+	.rt-table-actions .rt-row {
+		grid-template-columns: 1fr 1fr;
+		gap: 4px 12px;
+		padding: 12px 16px;
+	}
 
-    .rt-table-profile .rt-row {
-        grid-template-columns: 1.5fr 1fr;
-        gap: 4px 12px;
-        padding: 12px 16px;
-    }
+	.rt-table-profile .rt-row {
+		grid-template-columns: 1.5fr 1fr;
+		gap: 4px 12px;
+		padding: 12px 16px;
+	}
 
-    .rt-table-profile .rt-cell-code {
-        order: 0;
-    }
+	.rt-table-profile .rt-cell-code {
+		order: 0;
+	}
 
-    .rt-table-profile .rt-cell-date {
-        order: 1;
-    }
+	.rt-table-profile .rt-cell-date {
+		order: 1;
+	}
 
-    .rt-table-profile .rt-cell-time {
-        order: 2;
-    }
+	.rt-table-profile .rt-cell-time {
+		order: 2;
+	}
 
-    .rt-table-profile .rt-cell-tables {
-        order: 3;
-    }
+	.rt-table-profile .rt-cell-tables {
+		order: 3;
+	}
 
-    .rt-table-profile .rt-cell-arrival {
-        order: 4;
-    }
+	.rt-table-profile .rt-cell-arrival {
+		order: 4;
+	}
 
-    .rt-head {
-        display: none;
-    }
+	.rt-head {
+		display: none;
+	}
 
-    .rt-cell::before {
-        content: attr(data-label);
-        font-size: 0.6rem;
-        font-weight: 600;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.3);
-        display: block;
-        margin-bottom: 2px;
-    }
+	.rt-cell::before {
+		content: attr(data-label);
+		font-size: 0.6rem;
+		font-weight: 600;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.3);
+		display: block;
+		margin-bottom: 2px;
+	}
 
-    .rt-table-profile .rt-cell {
-        text-align: left;
-    }
+	.rt-table-profile .rt-cell {
+		text-align: left;
+	}
 
-    .rt-table-profile .rt-cell-arrival {
-        text-align: left;
-    }
+	.rt-table-profile .rt-cell-arrival {
+		text-align: left;
+	}
 }
 
 @media (max-width: 500px) {
-    .rt-row,
-    .rt-table-actions .rt-row,
-    .rt-table-profile .rt-row {
-        grid-template-columns: 1fr;
-        gap: 6px;
-    }
+	.rt-row,
+	.rt-table-actions .rt-row,
+	.rt-table-profile .rt-row {
+		grid-template-columns: 1fr;
+		gap: 6px;
+	}
 
-    .rt-table-profile .rt-cell-tables {
-        white-space: normal;
-    }
+	.rt-table-profile .rt-cell-tables {
+		white-space: normal;
+	}
 
-    .rt-table-profile .rt-cell-arrival {
-        text-align: right;
-    }
+	.rt-table-profile .rt-cell-arrival {
+		text-align: right;
+	}
 }
 
 .rt-table-staff .rt-row {
-    grid-template-columns: 1fr 1.5fr 1fr 100px;
+	grid-template-columns: 1fr 1.5fr 1fr 100px;
 }
 
 .rt-table-staff .rt-cell:last-child {
-    text-align: right;
+	text-align: right;
 }
 
 @media (max-width: 900px) {
-    .rt-table-staff .rt-row {
-        grid-template-columns: 1fr 1fr;
-    }
+	.rt-table-staff .rt-row {
+		grid-template-columns: 1fr 1fr;
+	}
 }
 
 @media (max-width: 500px) {
-    .rt-table-staff .rt-row {
-        grid-template-columns: 1fr;
-    }
+	.rt-table-staff .rt-row {
+		grid-template-columns: 1fr;
+	}
 
-    .rt-table-staff .rt-cell:last-child {
-        text-align: left;
-    }
+	.rt-table-staff .rt-cell:last-child {
+		text-align: left;
+	}
 }
 
 .pagination-wrap {
@@ -279,5 +279,3 @@
 	color: #e6e6e6;
 	border-color: #4a6a6a;
 }
-
-

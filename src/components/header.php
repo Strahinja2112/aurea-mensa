@@ -46,7 +46,7 @@ $relativePath = Helpers::getRelativePath('pages');
                     if ($user->isAdmin() || $user->isStaff()): ?>
                         <a href="<?= $relativePath . '/dashboard/' . ($user->isAdmin() ? 'admin' : 'staff') ?>" class="btn btn-success btn-lg">
                             <i class="fa-solid fa-dashboard me-2"></i>
-                            Dashboard
+                            Kontrolni Panel
                         </a>
                     <?php
                     endif ?>

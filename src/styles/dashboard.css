@@ -281,3 +281,24 @@ main {
 .btn-close.btn-close-white {
 	filter: invert(1);
 }
+
+.otp-code-inputs {
+	display: grid;
+	grid-template-columns: repeat(8, minmax(34px, 1fr));
+	gap: 8px;
+}
+
+.otp-code-digit {
+	aspect-ratio: 1;
+	padding: 0;
+	text-align: center;
+	font-size: 1.15rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+@media (max-width: 420px) {
+	.otp-code-inputs {
+		grid-template-columns: repeat(4, minmax(42px, 1fr));
+	}
+}

@@ -24,9 +24,14 @@ try {
     $data = json_decode($input, true);
 
     $reservationId = (int)($data['reservation_id'] ?? 0);
+    $reservationCode = trim((string)($data['reservation_code'] ?? ''));
 
     if (!$reservationId) {
         throw new Exception('Neispravan zahtev (nedostaje ID rezervacije).');
+    }
+
+    if ($reservationCode === '') {
+        throw new Exception('Morate uneti kod rezervacije.');
     }
 
     $reservation = db()->reservations->findFirst([
@@ -42,6 +47,13 @@ try {
 
     if (!empty($reservation['arrived'])) {
         throw new Exception('Gost je već prijavljen.');
+    }
+
+    if (!hash_equals(
+        mb_strtoupper((string)$reservation['reservation_code']),
+        mb_strtoupper($reservationCode)
+    )) {
+        throw new Exception('Kod rezervacije nije ispravan.');
     }
 
     db()->reservations->update([

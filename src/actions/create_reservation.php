@@ -136,7 +136,7 @@ try {
     db()->beginTransaction();
 
     try {
-        $reservationCode = strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+        $reservationCode = Helpers::generateReservationCode();
 
         $reservation = db()->reservations->create([
             'data' => [

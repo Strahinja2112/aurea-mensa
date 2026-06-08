@@ -187,7 +187,7 @@ function seedReservations(string $redirectUrl): void
             $endDateTime = clone $startDateTime;
             $endDateTime->modify("+{$duration} hours");
 
-            $reservationCode = 'RES' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+            $reservationCode = Helpers::generateReservationCode();
 
             $reservation = db()->reservations->create([
                 'data' => [
@@ -234,7 +234,7 @@ function seedReservations(string $redirectUrl): void
         $endM = $endH === 23 ? min($m, 59) : $m;
         $endTime = sprintf('%02d:%02d:00', $endH, $endM);
 
-        $reservationCode = 'RES' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+        $reservationCode = Helpers::generateReservationCode();
 
         $reservation = db()->reservations->create([
             'data' => [

@@ -81,6 +81,7 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 <aside class="table-layout-panel">
                     <div class="glass-card p-4 border-0">
                         <div id="layoutNoSelectionHint" class="layout-panel-empty">
+                            <i class="fa-solid fa-chair" style="font-size: 3rem;"></i>
                             <h5>Izaberite sto</h5>
                             <p>Kliknite sto na mapi da izmenite naziv, broj mesta, oblik i zonu.</p>
                         </div>

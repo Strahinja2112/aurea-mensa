@@ -47,7 +47,7 @@
 }
 
 .layout-table {
-	--table-size: 96px;
+	--table-size: 116px;
 	position: absolute;
 	left: var(--x);
 	top: var(--y);
@@ -108,8 +108,8 @@
 	top: 50%;
 	z-index: 2;
 	display: flex;
-	width: 72px;
-	height: 72px;
+	width: 88px;
+	height: 88px;
 	align-items: center;
 	justify-content: center;
 	border: 1px solid rgba(255, 255, 255, 0.25);
@@ -127,20 +127,20 @@
 }
 
 .layout-table[data-shape="rectangle"] .table-surface {
-	width: 88px;
-	height: 58px;
+	width: 108px;
+	height: 70px;
 	border-radius: 8px;
 }
 
 .layout-table[data-shape="oval"] .table-surface {
-	width: 88px;
-	height: 58px;
+	width: 108px;
+	height: 70px;
 	border-radius: 999px;
 }
 
 .layout-table[data-shape="corner"] .table-surface {
-	width: 84px;
-	height: 84px;
+	width: 102px;
+	height: 102px;
 	align-items: flex-start;
 	justify-content: flex-start;
 	padding: 14px 0 0 14px;
@@ -159,9 +159,9 @@
 }
 
 .table-label {
-	max-width: 62px;
+	max-width: 76px;
 	overflow: hidden;
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: 700;
 	line-height: 1.05;
 	text-overflow: ellipsis;
@@ -174,8 +174,8 @@
 	left: var(--chair-x);
 	top: var(--chair-y);
 	z-index: 1;
-	width: 18px;
-	height: 18px;
+	width: 22px;
+	height: 22px;
 	border: 1px solid rgba(255, 255, 255, 0.32);
 	border-radius: 4px;
 	background: rgba(255, 255, 255, 0.18);
@@ -186,7 +186,7 @@
 .table-meta-pill {
 	position: absolute;
 	left: 50%;
-	top: calc(50% + 56px);
+	top: 25px;
 	z-index: 3;
 	padding: 3px 8px;
 	border-radius: 999px;
@@ -226,7 +226,6 @@
 .layout-panel-empty h5 {
 	margin: 0 0 6px;
 	color: #fff;
-	font-family: serif;
 	font-size: 22px;
 	font-weight: 300;
 }
@@ -534,9 +533,9 @@
 
 .reserve-layout-card {
 	--layout-accent: var(--accent-strong, #4a6a6a);
-	width: min(1180px, calc(100vw - 32px));
-	max-width: none !important;
-	padding: 28px !important;
+	max-width: 1300px;
+	padding: 30px !important;
+	border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .reserve-layout-header {
@@ -602,7 +601,6 @@
 .reserve-table-info-empty h5 {
 	margin: 0 0 6px;
 	color: #fff;
-	font-family: serif;
 	font-size: 22px;
 	font-weight: 300;
 }
@@ -730,11 +728,6 @@
 
 .reserve-submit-wrap .button button span {
 	color: inherit;
-}
-
-.reservation-timeline-panel {
-	margin-top: 22px;
-	padding-top: 20px;
 }
 
 .reserve-time-header {
@@ -1019,24 +1012,24 @@
 	}
 
 	.layout-table {
-		--table-size: 82px;
+		--table-size: 98px;
 	}
 
 	.table-surface {
-		width: 62px;
-		height: 62px;
+		width: 76px;
+		height: 76px;
 	}
 
 	.layout-table[data-shape="rectangle"] .table-surface,
 	.layout-table[data-shape="oval"] .table-surface,
 	.layout-table[data-shape="corner"] .table-surface {
-		width: 74px;
-		height: 74px;
+		width: 90px;
+		height: 90px;
 	}
 
 	.layout-chair {
-		width: 16px;
-		height: 16px;
-		transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-48px);
+		width: 19px;
+		height: 19px;
+		transform: translate(-50%, -50%) rotate(var(--chair-rotation, 0deg));
 	}
 }

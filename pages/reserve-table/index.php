@@ -96,12 +96,12 @@ $today = date('Y-m-d');
 
                             <aside class="reserve-table-info-panel" id="reserveTableInfoPanel" aria-live="polite">
                                 <div class="reserve-table-info-empty" id="reserveTableInfoEmpty">
-                                    <i class="fa-solid fa-chair"></i>
+                                    <i class="fa-solid fa-chair" style="font-size: 3rem;"></i>
                                     <h5>Izaberite sto</h5>
                                     <p>Detalji izabranog stola će se prikazati ovde.</p>
                                 </div>
 
-                                <div class="reserve-table-info d-none" id="reserveTableInfo">
+                                <div class="reserve-table-info d-none border" id="reserveTableInfo">
                                     <div class="reserve-table-info-head">
                                         <span class="layout-kicker">Izabrani sto</span>
                                         <strong id="reserveInfoName"></strong>
@@ -126,18 +126,19 @@ $today = date('Y-m-d');
                                             <dd id="reserveInfoShape"></dd>
                                         </div>
                                     </dl>
-                                </div>
-                                <div class="register-btn-wrapper reserve-submit-wrap reserve-table-info-footer p-2">
-                                    <div class="button">
-                                        <button type="submit" id="submitBtn">
-                                            <span id="btnText">REZERVIŠI</span>
-                                            <span id="btnSpinner" class="d-none">
-                                                <span class="spinner-border spinner-border-sm me-2"></span>
-                                                SLANJE...
-                                            </span>
-                                        </button>
+                                    <div class="register-btn-wrapper reserve-submit-wrap reserve-table-info-footer p-2">
+                                        <div class="button">
+                                            <button type="submit" id="submitBtn">
+                                                <span id="btnText">REZERVIŠI</span>
+                                                <span id="btnSpinner" class="d-none">
+                                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                                    SLANJE...
+                                                </span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
+
                             </aside>
                         </div>
                         <div id="selectedTableInputs"></div>
@@ -175,7 +176,7 @@ $today = date('Y-m-d');
 
                 if (selectedTables.length === 0) {
                     messageBox.innerHTML = `
-                    <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3">
+                    <div class="alert alert-danger bg-danger bg-opacity-20 border-0 text-white small rounded-3 mt-3">
                         Morate izabrati bar jedan sto.
                     </div>
                 `;

@@ -119,6 +119,40 @@ function getRectangleChairPositions(seats) {
 	return positions;
 }
 
+function distributeSeats(total, buckets) {
+	const counts = Array.from({ length: buckets }, () => 0);
+
+	for (let index = 0; index < total; index += 1) {
+		counts[index % buckets] += 1;
+	}
+
+	return counts;
+}
+
+function getCornerChairPositions(seats) {
+	const positions = [];
+	const [innerBottomCount, innerRightCount, outerTopCount, outerLeftCount] =
+		distributeSeats(seats, 4);
+
+	linearSeats(innerBottomCount, 58, 88).forEach((x) => {
+		positions.push({ x, y: 48, rotation: 0 });
+	});
+
+	linearSeats(innerRightCount, 58, 88).forEach((y) => {
+		positions.push({ x: 48, y, rotation: 270 });
+	});
+
+	linearSeats(outerTopCount, 22, 78).forEach((x) => {
+		positions.push({ x, y: 7, rotation: 180 });
+	});
+
+	linearSeats(outerLeftCount, 22, 78).forEach((y) => {
+		positions.push({ x: 7, y, rotation: 90 });
+	});
+
+	return positions;
+}
+
 function getChairPositions(table) {
 	const seats = Math.max(1, Number(table.seats || 1));
 
@@ -144,7 +178,7 @@ function getChairPositions(table) {
 	}
 
 	if (table.table_shape === "corner") {
-		return getEdgeChairPositions(seats, ["bottom", "right"]);
+		return getCornerChairPositions(seats);
 	}
 
 	return Array.from({ length: seats }, (_, index) => {
@@ -431,7 +465,7 @@ function initAdmin(root) {
 	);
 	controls.increase.addEventListener("click", () =>
 		updateSelected((table) => {
-			table.seats = Math.min(10, table.seats + 1);
+			table.seats = Math.min(12, table.seats + 1);
 		}),
 	);
 	controls.shapeButtons.forEach((button) => {

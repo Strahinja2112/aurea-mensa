@@ -79,14 +79,23 @@ CREATE TABLE restaurant_tables
 CREATE INDEX idx_table_seats ON restaurant_tables (seats);
 
 INSERT INTO restaurant_tables
-    (name, seats, location_description, is_smoking, layout_x, layout_y, layout_rotation, table_shape)
+    (id, name, seats, location_description, is_smoking, layout_x, layout_y, layout_rotation, table_shape)
 VALUES
-    ('Sto 1', 2, 'Pored prozora', FALSE, 16.00, 22.00, 0, 'round'),
-    ('Sto 2', 4, 'Sredina restorana', FALSE, 42.00, 24.00, 0, 'square'),
-    ('Sto 3', 6, 'Nepusacki deo', FALSE, 70.00, 24.00, 15, 'rectangle'),
-    ('Sto 4', 6, 'VIP kutak', FALSE, 24.00, 58.00, 90, 'oval'),
-    ('Sto 5', 5, 'Ugaoni deo sale', FALSE, 54.00, 58.00, 0, 'corner'),
-    ('Sto 6', 4, 'Pusacka terasa', TRUE, 82.00, 58.00, 0, 'square');
+    (6, 'Sto 3', 4, NULL, TRUE, 89.76, 12.29, 90, 'corner'),
+    (7, 'Sto 4', 4, NULL, TRUE, 91.72, 37.73, 90, 'rectangle'),
+    (8, 'Sto 5', 4, NULL, TRUE, 91.94, 60.04, 90, 'rectangle'),
+    (9, 'Sto 6', 4, NULL, TRUE, 90.20, 86.36, 180, 'corner'),
+    (10, 'Sto 7', 4, NULL, TRUE, 9.59, 12.46, 0, 'corner'),
+    (11, 'Sto 6', 6, NULL, TRUE, 8.06, 37.56, 90, 'rectangle'),
+    (12, 'Sto 7', 4, NULL, TRUE, 8.06, 60.22, 90, 'rectangle'),
+    (13, 'Sto 8', 4, NULL, TRUE, 9.80, 86.36, 270, 'corner'),
+    (14, 'Sto 9', 6, NULL, FALSE, 31.15, 28.85, 0, 'rectangle'),
+    (15, 'Sto 10', 6, NULL, FALSE, 30.07, 72.42, 0, 'rectangle'),
+    (16, 'Sto 11', 6, NULL, FALSE, 66.01, 29.19, 0, 'rectangle'),
+    (17, 'Sto 12', 6, NULL, FALSE, 66.01, 72.07, 0, 'rectangle'),
+    (18, 'Sto 13', 4, NULL, FALSE, 49.67, 50.81, 0, 'round');
+
+ALTER TABLE restaurant_tables AUTO_INCREMENT = 19;
 
 CREATE TABLE reservations
 (
@@ -132,7 +141,7 @@ VALUES
     (1, 'NPQR6789', DATE_ADD(CURDATE(), INTERVAL 2 DAY), '20:00:00', '22:00:00', 'CANCELLED', FALSE, NULL, NULL, NULL);
 
 INSERT INTO reservation_tables (reservation_id, table_id)
-VALUES (1, 2),
-       (2, 5),
-       (3, 1),
-       (4, 4);
+VALUES (1, 14),
+       (2, 18),
+       (3, 7),
+       (4, 16);

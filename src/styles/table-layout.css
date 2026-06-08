@@ -118,6 +118,29 @@
 	transform: translate(-50%, -50%);
 }
 
+.table-smoking-icon {
+	position: absolute;
+	right: 8px;
+	bottom: 8px;
+	z-index: 4;
+	display: inline-flex;
+	width: 22px;
+	height: 22px;
+	align-items: center;
+	justify-content: center;
+	border-radius: 999px;
+	background: rgba(0, 0, 0, 0.42);
+	color: rgba(255, 255, 255, 0.9);
+	font-size: 11px;
+	line-height: 1;
+	transform: rotate(var(--counter-rotation, 0deg));
+}
+
+.layout-table[data-shape="corner"] .table-smoking-icon {
+	right: 52px;
+	bottom: 52px;
+}
+
 .layout-table[data-shape="round"] .table-surface {
 	border-radius: 50%;
 }
@@ -186,7 +209,7 @@
 .table-meta-pill {
 	position: absolute;
 	left: 50%;
-	top: 25px;
+	top: 0;
 	z-index: 3;
 	padding: 3px 8px;
 	border-radius: 999px;

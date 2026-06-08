@@ -96,12 +96,12 @@ $today = date('Y-m-d');
 
                             <aside class="reserve-table-info-panel" id="reserveTableInfoPanel" aria-live="polite">
                                 <div class="reserve-table-info-empty" id="reserveTableInfoEmpty">
-                                    <i class="fa-solid fa-chair" style="font-size: 3rem;"></i>
+                                    <i class="fa-solid fa-utensils" style="font-size: 3rem;"></i>
                                     <h5>Izaberite sto</h5>
                                     <p>Detalji izabranog stola će se prikazati ovde.</p>
                                 </div>
 
-                                <div class="reserve-table-info d-none border" id="reserveTableInfo">
+                                <div class="reserve-table-info d-none" id="reserveTableInfo">
                                     <div class="reserve-table-info-head">
                                         <span class="layout-kicker">Izabrani sto</span>
                                         <strong id="reserveInfoName"></strong>

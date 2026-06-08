@@ -215,6 +215,14 @@ function renderTable(map, table, mode) {
 		button.classList.add("selected");
 	}
 
+	if (table.is_smoking) {
+		button.classList.add("smoking");
+		button.setAttribute(
+			"aria-label",
+			`${table.name}, ${table.seats} mesta, pušačka zona`,
+		);
+	}
+
 	if (table.unavailable) {
 		button.classList.add("unavailable");
 		button.setAttribute("aria-disabled", "true");
@@ -230,6 +238,14 @@ function renderTable(map, table, mode) {
 	label.className = "table-label";
 	label.textContent = table.name;
 	surface.appendChild(label);
+
+	if (table.is_smoking) {
+		const smokingIcon = document.createElement("span");
+		smokingIcon.className = "table-smoking-icon";
+		smokingIcon.innerHTML = '<i class="fa-solid fa-smoking" aria-hidden="true"></i>';
+		surface.appendChild(smokingIcon);
+	}
+
 	figure.appendChild(surface);
 
 	getChairPositions(table).forEach((position) => {

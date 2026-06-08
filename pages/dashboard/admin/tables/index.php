@@ -69,11 +69,7 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 data-save-url="<?= Helpers::getRelativePath('src/actions/save_tables_layout.php') ?>">
                 <section class="glass-card p-4 border-0 table-layout-map-wrap">
                     <div class="d-flex justify-content-between align-items-center gap-3 mb-3 flex-wrap">
-                        <h5 class="text-white mb-0 ">Mapa restorana</h5>
-                        <div class="layout-legend">
-                            <span><i></i> Slobodan sto</span>
-                            <span><i class="selected-dot"></i> Izabran sto</span>
-                        </div>
+                        <h5 class="text-white mb-0">Mapa restorana</h5>
                     </div>
                     <div class="table-layout-map" aria-label="Mapa stolova za uređivanje"></div>
                 </section>
@@ -81,7 +77,7 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                 <aside class="table-layout-panel">
                     <div class="glass-card p-4 border-0">
                         <div id="layoutNoSelectionHint" class="layout-panel-empty">
-                            <i class="fa-solid fa-chair" style="font-size: 3rem;"></i>
+                            <i class="fa-solid fa-utensils" style="font-size: 3rem;"></i>
                             <h5>Izaberite sto</h5>
                             <p>Kliknite sto na mapi da izmenite naziv, broj mesta, oblik i zonu.</p>
                         </div>

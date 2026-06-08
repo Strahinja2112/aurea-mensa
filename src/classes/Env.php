@@ -42,6 +42,10 @@ class Env
             self::$DB_PASSWORD = $env['DB_PASSWORD'] ?? throw new Exception('Database password is missing');
             self::$DB_NAME = $env['DB_NAME'] ?? throw new Exception('Database name is missing');
         } catch (Exception $exception) {
+            if (class_exists('Logger')) {
+                Logger::logException($exception, ['bootstrap' => 'env']);
+            }
+
             echo "Error: " . $exception->getMessage();
             exit;
         }

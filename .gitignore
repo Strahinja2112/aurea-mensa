@@ -17,6 +17,8 @@
 Thumbs.db
 
 # Temporary and log files
+/logs/*
+!/logs/.gitkeep
 *.log
 *.sqlite
 *~

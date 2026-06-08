@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 require 'src/classes/Helpers.php';
+require 'src/classes/Logger.php';
+
+Logger::init();
+
 require 'src/classes/Env.php';
 
 spl_autoload_register(function (string $class): void {

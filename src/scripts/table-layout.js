@@ -522,6 +522,7 @@ function initReserve(root) {
 		root.dataset.workingHoursSource,
 	);
 	const timeline = document.getElementById("reservationTimeline");
+	const timelinePanel = document.querySelector(".reservation-timeline-panel");
 	const timeframeList = document.getElementById("reservationTimeframes");
 	const timelineSummary = document.getElementById("reservationTimelineSummary");
 	const startInput = document.getElementById("reservationStartTime");
@@ -552,6 +553,21 @@ function initReserve(root) {
 		});
 	}
 
+	function scrollToTimelinePicker() {
+		if (!timelinePanel) {
+			return;
+		}
+
+		const prefersReducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
+
+		timelinePanel.scrollIntoView({
+			behavior: prefersReducedMotion ? "auto" : "smooth",
+			block: "start",
+		});
+	}
+
 	function render() {
 		map.innerHTML = "";
 		map.dataset.mode = "reserve";
@@ -569,10 +585,14 @@ function initReserve(root) {
 					return;
 				}
 
+				const isSelecting = !table.selected;
 				table.selected = !table.selected;
 				updateInputs();
 				render();
 				refreshTimeframes();
+				if (isSelecting) {
+					requestAnimationFrame(scrollToTimelinePicker);
+				}
 			});
 			map.appendChild(node);
 		});

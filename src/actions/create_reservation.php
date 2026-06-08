@@ -136,7 +136,19 @@ try {
     db()->beginTransaction();
 
     try {
-        $reservationCode = Helpers::generateReservationCode();
+        $maxAttempts = 5;
+        do {
+            $reservationCode = Helpers::generateReservationCode();
+            $existing = db()->reservations->findFirst([
+                'where' => ['reservation_code' => $reservationCode],
+                'columns' => ['id']
+            ]);
+            if (!$existing) break;
+        } while (--$maxAttempts > 0);
+
+        if ($existing) {
+            throw new Exception('Could not generate unique reservation code. Please try again.');
+        }
 
         $reservation = db()->reservations->create([
             'data' => [

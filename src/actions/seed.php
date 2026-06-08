@@ -187,7 +187,15 @@ function seedReservations(string $redirectUrl): void
             $endDateTime = clone $startDateTime;
             $endDateTime->modify("+{$duration} hours");
 
-            $reservationCode = Helpers::generateReservationCode();
+            $maxAttempts = 5;
+            do {
+                $reservationCode = Helpers::generateReservationCode();
+                $existing = db()->reservations->findFirst([
+                    'where' => ['reservation_code' => $reservationCode],
+                    'columns' => ['id']
+                ]);
+                if (!$existing) break;
+            } while (--$maxAttempts > 0);
 
             $reservation = db()->reservations->create([
                 'data' => [
@@ -234,7 +242,15 @@ function seedReservations(string $redirectUrl): void
         $endM = $endH === 23 ? min($m, 59) : $m;
         $endTime = sprintf('%02d:%02d:00', $endH, $endM);
 
-        $reservationCode = Helpers::generateReservationCode();
+        $maxAttempts = 5;
+        do {
+            $reservationCode = Helpers::generateReservationCode();
+            $existing = db()->reservations->findFirst([
+                'where' => ['reservation_code' => $reservationCode],
+                'columns' => ['id']
+            ]);
+            if (!$existing) break;
+        } while (--$maxAttempts > 0);
 
         $reservation = db()->reservations->create([
             'data' => [

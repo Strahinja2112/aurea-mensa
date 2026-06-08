@@ -429,7 +429,7 @@ $pageTitle = 'Staff Dashboard';
         }
 
         function normalizeReservationCode(value) {
-            return value.toUpperCase().replace(/[^A-F0-9]/g, '').slice(0, 8);
+            return value.toUpperCase().replace(/[^A-Z2-9]/g, '').slice(0, 8);
         }
 
         function syncCheckInCode() {

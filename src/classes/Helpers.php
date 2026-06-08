@@ -109,7 +109,12 @@ if (!class_exists('Helpers')) {
 
         public static function generateReservationCode(): string
         {
-            return strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+            $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            $code = '';
+            for ($i = 0; $i < 8; $i++) {
+                $code .= $chars[random_int(0, strlen($chars) - 1)];
+            }
+            return $code;
         }
 
         public static function isDev(): bool

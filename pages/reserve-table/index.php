@@ -82,6 +82,7 @@ $today = date('Y-m-d');
                                     name="reservation_date"
                                     class="form-control custom-input"
                                     min="<?= $today ?>"
+                                    value="<?= $today ?>"
                                     required>
                             </div>
 
@@ -211,11 +212,11 @@ $today = date('Y-m-d');
                         Greška pri komunikaciji sa serverom.
                     </div>
                 `;
-                } finally {
-                    submitBtn.disabled = false;
-                    btnText.classList.remove("d-none");
-                    btnSpinner.classList.add("d-none");
                 }
+
+                submitBtn.disabled = false;
+                btnText.classList.remove("d-none");
+                btnSpinner.classList.add("d-none");
             });
         });
     </script>

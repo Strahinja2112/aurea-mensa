@@ -717,24 +717,6 @@ function initReserve(root) {
 				'<span class="timeframe-empty">Nema slobodnih termina za izabrane stolove.</span>';
 			return;
 		}
-
-		timeframeList.innerHTML = segments
-			.map(
-				(segment) => `
-				<button type="button" class="timeframe-chip" data-start="${segment.start}" data-end="${segment.end}">
-					${formatMinutes(segment.start)} - ${formatMinutes(segment.end)}
-				</button>
-			`,
-			)
-			.join("");
-
-		timeframeList.querySelectorAll(".timeframe-chip").forEach((chip) => {
-			chip.addEventListener("click", () => {
-				const start = Number(chip.dataset.start);
-				const end = Math.min(Number(chip.dataset.end), start + 60);
-				setSelection(start, end);
-			});
-		});
 	}
 
 	function renderTimeline() {

@@ -226,12 +226,12 @@ section {
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.glass-card button {
+#submitBtn {
 	color: #4a6a6a !important;
 	transition: all 500ms;
 }
 
-.glass-card button:hover {
+#submitBtn:hover {
 	color: white !important;
 }
 

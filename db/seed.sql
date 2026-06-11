@@ -102,11 +102,11 @@ VALUES ('USER'),
        ('ADMIN');
 
 INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, email_verified)
-VALUES ('user@test.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Test', 'Korisnik',
+VALUES ('user@gmail.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Test', 'Korisnik',
         '0600000003', 1, TRUE),
-       ('staff@test.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Staff', 'Korisnik',
+       ('staff@gmail.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Staff', 'Korisnik',
         '0600000002', 2, TRUE),
-       ('admin@test.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Admin', 'Korisnik',
+       ('admin@gmail.com', '$2y$10$Wk6p.6trltuJCVddcGtscuFOkH7uX7Gj5U2n6b9d/ZDIUA0/wYjXW', 'Admin', 'Korisnik',
         '0600000001', 3, TRUE);
 
 INSERT INTO restaurant_tables

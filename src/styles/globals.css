@@ -226,6 +226,15 @@ section {
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+.glass-card button {
+	color: #4a6a6a !important;
+	transition: all 500ms;
+}
+
+.glass-card button:hover {
+	color: white !important;
+}
+
 #mainNavbar .btn-outline-light {
 	color: #e6e6e6;
 }

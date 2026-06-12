@@ -1,395 +1,359 @@
-/* ─── Masthead ─── */
-.about-masthead {
-    padding-top: 160px;
-    padding-bottom: 80px;
+.about-page {
+	width: 100%;
+	align-items: stretch;
+	justify-content: flex-start;
 }
 
-.about-tag {
-    display: inline-block;
-    font-size: 0.7rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.35);
-    margin-bottom: 20px;
-    font-weight: 500;
+.about-page h1,
+.about-page h2,
+.about-page h3,
+.about-page p {
+	margin: 0;
+	letter-spacing: 0;
 }
 
-.about-heading {
-    font-family: serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 300;
-    line-height: 1.05;
-    color: #f8f9fa;
-    margin: 0 0 24px;
+.about-page h1,
+.about-page h2,
+.about-page h3 {
+	color: var(--text);
+	font-family: "Libre Baskerville", Georgia, serif;
+	font-weight: 400;
 }
 
-.about-heading-accent {
-    color: #4a6a6a;
-    font-style: italic;
+.about-page p {
+	color: var(--muted);
+	font-family: "Poppins", sans-serif;
+	line-height: 1.75;
+}
+
+.about-page .btn {
+	display: inline-flex;
+	min-height: 52px;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	border-radius: 6px;
+	padding-inline: 24px;
+	font-weight: 700;
+}
+
+.about-page .btn-cta {
+	border-color: var(--accent-strong);
+	background: var(--accent-strong);
+	box-shadow: 0 18px 38px rgba(74, 106, 106, 0.28);
+	color: #f4f1ea !important;
+}
+
+.about-page .btn-cta:hover {
+	border-color: #5a7a7a;
+	background: #5a7a7a;
+	color: #fff !important;
+}
+
+.about-page .btn-ghost {
+	border: 1px solid var(--border);
+	background: rgba(255, 255, 255, 0.055);
+	color: var(--text);
+}
+
+.about-page .btn-ghost:hover {
+	border-color: rgba(255, 255, 255, 0.28);
+	background: rgba(255, 255, 255, 0.12);
+	color: #fff;
+}
+
+.about-kicker {
+	color: var(--accent) !important;
+	font-size: 0.82rem !important;
+	font-weight: 700 !important;
+	letter-spacing: 0.2em !important;
+	text-transform: uppercase;
+}
+
+.about-hero {
+	padding: 156px 0 72px;
+}
+
+.about-hero-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(340px, 0.72fr);
+	gap: clamp(32px, 6vw, 82px);
+	align-items: center;
+}
+
+.about-hero-copy h1 {
+	max-width: 820px;
+	margin-top: 18px;
+	font-size: clamp(3rem, 8vw, 6.8rem);
+	line-height: 0.98;
 }
 
 .about-lead {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.55);
-    max-width: 480px;
-    line-height: 1.7;
+	max-width: 650px;
+	margin-top: 28px !important;
+	color: rgba(244, 241, 234, 0.82) !important;
+	font-size: clamp(1rem, 1.6vw, 1.18rem) !important;
 }
 
-.about-hero-stat {
-    display: inline-block;
-    text-align: right;
+.about-hero-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin-top: 34px;
 }
 
-.about-hero-number {
-    display: block;
-    font-family: serif;
-    font-size: 3.5rem;
-    font-weight: 300;
-    color: #f8f9fa;
-    line-height: 1;
-    margin-bottom: 4px;
+.about-hero-visual {
+	position: relative;
+	min-height: 520px;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.045);
+	box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32);
 }
 
-.about-hero-label {
-    display: block;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.3);
+.about-hero-image {
+	position: absolute;
+	inset: 0;
+	background:
+		linear-gradient(180deg, rgba(5, 5, 5, 0.04), rgba(5, 5, 5, 0.78)),
+		url("../../public/images/landing-blur.png");
+	background-position: center;
+	background-size: cover;
 }
 
-/* ─── Mission ─── */
-.about-mission {
-    padding: 60px 0;
+.about-hero-note {
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+	left: 20px;
+	display: flex;
+	align-items: end;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 18px;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 8px;
+	background: rgba(5, 5, 5, 0.62);
+	backdrop-filter: blur(12px);
 }
 
-.about-mission-inner {
-    max-width: 720px;
-    margin: 0 auto;
-    position: relative;
-    padding: 48px 40px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.02);
+.about-hero-note span {
+	color: rgba(244, 241, 234, 0.65);
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
 }
 
-.about-quote-mark {
-    position: absolute;
-    top: 18px;
-    left: 24px;
-    font-size: 4rem;
-    line-height: 1;
-    color: #4a6a6a;
-    font-family: serif;
-    opacity: 0.3;
+.about-hero-note strong {
+	color: var(--text);
+	font-family: "Libre Baskerville", Georgia, serif;
+	font-size: 1.25rem;
+	font-weight: 400;
+	white-space: nowrap;
 }
 
-.about-mission-text {
-    font-family: serif;
-    font-size: 1.4rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.75);
-    margin: 0 0 28px;
-    font-style: italic;
+.about-section {
+	padding: clamp(58px, 8vw, 96px) 0;
 }
 
-.about-mission-author {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.about-story-panel,
+.about-cta-panel,
+.about-card,
+.about-service-list {
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.045);
 }
 
-.about-mission-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: #4a6a6a;
-    color: #e6e6e6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    flex-shrink: 0;
+.about-story-panel {
+	display: grid;
+	grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+	gap: clamp(28px, 5vw, 72px);
+	align-items: start;
+	padding: clamp(28px, 5vw, 48px);
 }
 
-.about-mission-name {
-    font-size: 0.9rem;
-    color: #f8f9fa;
-    font-weight: 500;
+.about-story-panel h2,
+.about-section-heading h2,
+.about-service-copy h2,
+.about-cta-panel h2 {
+	margin-top: 12px;
+	font-size: clamp(2rem, 5vw, 4rem);
+	line-height: 1.08;
 }
 
-.about-mission-role {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.35);
+.about-story-panel > p,
+.about-service-copy p,
+.about-cta-panel p:not(.about-kicker) {
+	color: rgba(244, 241, 234, 0.74);
+	font-size: 1.02rem;
 }
 
-/* ─── Section title ─── */
-.about-section-title {
-    font-family: serif;
-    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-    font-weight: 300;
-    color: #f8f9fa;
-    margin: 0;
-    line-height: 1.2;
+.about-section-heading {
+	max-width: 760px;
+	margin: 0 auto 38px;
+	text-align: center;
 }
 
-/* ─── Steps ─── */
-.about-steps {
-    padding: 80px 0;
+.about-card-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 18px;
 }
 
-.about-steps-grid {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr auto 1fr;
-    align-items: start;
-    gap: 0;
+.about-card {
+	padding: clamp(22px, 3vw, 32px);
+	transition:
+		border-color 220ms ease,
+		background-color 220ms ease,
+		box-shadow 220ms ease;
 }
 
-.about-step {
-    text-align: center;
-    padding: 32px 20px;
+.about-card:hover {
+	border-color: rgba(196, 171, 159, 0.34);
+	background: rgba(255, 255, 255, 0.075);
+	box-shadow: 0 20px 46px rgba(0, 0, 0, 0.22);
 }
 
-.about-step-num {
-    display: block;
-    font-family: serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #4a6a6a;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+.about-card i {
+	color: var(--accent);
+	font-size: 1.5rem;
 }
 
-.about-step-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: rgba(74, 106, 106, 0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 1.4rem;
-    color: #4a6a6a;
-    transition: background 0.3s ease;
+.about-card h3 {
+	margin-top: 24px;
+	font-size: clamp(1.22rem, 2vw, 1.62rem);
 }
 
-.about-step:hover .about-step-icon {
-    background: rgba(74, 106, 106, 0.2);
+.about-card p {
+	margin-top: 13px;
 }
 
-.about-step-title {
-    font-family: serif;
-    font-size: 1.15rem;
-    color: #f8f9fa;
-    font-weight: 400;
-    margin: 0 0 10px;
+.about-service-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(300px, 0.7fr);
+	gap: clamp(30px, 6vw, 78px);
+	align-items: center;
 }
 
-.about-step-desc {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.45);
-    line-height: 1.6;
-    margin: 0;
-    max-width: 260px;
-    margin: 0 auto;
+.about-service-list {
+	display: grid;
+	gap: 0;
+	padding: clamp(22px, 3vw, 32px);
 }
 
-.about-step-connector {
-    width: 60px;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.08);
-    align-self: center;
-    margin-top: 70px;
+.about-service-list div {
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr);
+	gap: 16px;
+	padding: 18px 0;
+	border-bottom: 1px solid var(--border);
 }
 
-/* ─── Features ─── */
-.about-features {
-    padding: 60px 0;
+.about-service-list div:first-child {
+	padding-top: 0;
 }
 
-.about-feature-row {
-    display: flex;
-    align-items: center;
-    gap: 60px;
-    padding: 48px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+.about-service-list div:last-child {
+	padding-bottom: 0;
+	border-bottom: 0;
 }
 
-.about-feature-row:last-child {
-    border-bottom: none;
+.about-service-list span {
+	color: var(--accent);
+	font-family: "Libre Baskerville", Georgia, serif;
 }
 
-.about-feature-content {
-    flex: 1;
-    min-width: 0;
+.about-service-list strong {
+	color: var(--text);
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.45;
 }
 
-.about-feature-content p {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.55);
-    margin: 16px 0 0;
-    max-width: 520px;
-}
-
-.about-feature-visual {
-    flex-shrink: 0;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: rgba(74, 106, 106, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.about-feature-icon {
-    font-size: 2.5rem;
-    color: #4a6a6a;
-}
-
-/* ─── Numbers ─── */
-.about-numbers {
-    padding: 60px 0;
-}
-
-.about-numbers-grid {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 40px 20px;
-}
-
-.about-number-item {
-    text-align: center;
-    flex: 1;
-    padding: 0 16px;
-}
-
-.about-number-value {
-    display: block;
-    font-family: serif;
-    font-size: 2.5rem;
-    font-weight: 300;
-    color: #f8f9fa;
-    line-height: 1;
-    margin-bottom: 6px;
-}
-
-.about-number-label {
-    display: block;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.3);
-}
-
-.about-number-divider {
-    width: 1px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.08);
-    flex-shrink: 0;
-}
-
-/* ─── CTA ─── */
 .about-cta {
-    padding: 80px 0 120px;
+	padding: 62px 0 112px;
 }
 
-.about-cta-inner {
-    text-align: center;
-    padding: 64px 40px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(255, 255, 255, 0.015);
+.about-cta-panel {
+	max-width: 860px;
+	margin-inline: auto;
+	padding: clamp(30px, 5vw, 54px);
+	text-align: center;
 }
 
-.about-cta-title {
-    font-family: serif;
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
-    font-weight: 300;
-    color: #f8f9fa;
-    margin: 0 0 12px;
+.about-cta-panel p:not(.about-kicker) {
+	max-width: 620px;
+	margin: 18px auto 30px;
 }
 
-.about-cta-text {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.45);
-    margin: 0 0 32px;
+@media (max-width: 1100px) {
+	.about-hero-grid,
+	.about-story-panel,
+	.about-service-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.about-hero-visual {
+		min-height: 420px;
+	}
 }
 
-/* ─── Responsive ─── */
-@media (max-width: 900px) {
-    .about-masthead {
-        padding-top: 130px;
-        padding-bottom: 50px;
-    }
+@media (max-width: 768px) {
+	.about-hero {
+		padding: 134px 0 50px;
+	}
 
-    .about-hero-stat {
-        text-align: left;
-    }
+	.about-hero-copy h1 {
+		font-size: clamp(2.8rem, 15vw, 4.8rem);
+	}
 
-    .about-steps-grid {
-        grid-template-columns: 1fr;
-    }
+	.about-hero-actions,
+	.about-card-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+	}
 
-    .about-step-connector {
-        display: none;
-    }
+	.about-page .btn {
+		width: 100%;
+	}
 
-    .about-step {
-        padding: 24px 16px;
-    }
+	.about-hero-visual {
+		min-height: 340px;
+	}
 
-    .about-feature-row {
-        flex-direction: column !important;
-        gap: 28px;
-        padding: 32px 0;
-    }
+	.about-hero-note {
+		align-items: start;
+		flex-direction: column;
+	}
+}
 
-    .about-feature-content p {
-        max-width: 100%;
-    }
+@media (max-width: 480px) {
+	.about-hero {
+		padding-top: 124px;
+	}
 
-    .about-feature-visual {
-        width: 80px;
-        height: 80px;
-    }
+	.about-story-panel,
+	.about-card,
+	.about-service-list,
+	.about-cta-panel {
+		padding: 20px;
+	}
 
-    .about-feature-icon {
-        font-size: 1.8rem;
-    }
+	.about-service-list div {
+		grid-template-columns: 1fr;
+		gap: 8px;
+	}
+}
 
-    .about-numbers-grid {
-        flex-wrap: wrap;
-        gap: 24px 0;
-        padding: 28px 16px;
-    }
-
-    .about-number-divider {
-        display: none;
-    }
-
-    .about-number-item {
-        flex: 0 0 50%;
-    }
-
-    .about-mission-inner {
-        padding: 36px 24px;
-    }
-
-    .about-mission-text {
-        font-size: 1.15rem;
-    }
-
-    .about-cta-inner {
-        padding: 40px 24px;
-    }
+@media (prefers-reduced-motion: reduce) {
+	.about-page *,
+	.about-page *::before,
+	.about-page *::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
 }

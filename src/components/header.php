@@ -2,7 +2,6 @@
 
 $user = Auth::getUser();
 $navLinks = [
-    'about' => 'O nama',
     'reserve-table' => "Rezervacija",
 ];
 

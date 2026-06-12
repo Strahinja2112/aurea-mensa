@@ -3,6 +3,7 @@
 $user = Auth::getUser();
 $navLinks = [
     'reserve-table' => "Rezervacija",
+    'jobs' => "Posao",
 ];
 
 $relativePath = Helpers::getRelativePath('pages');

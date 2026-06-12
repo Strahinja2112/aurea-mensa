@@ -4,6 +4,7 @@ USE sn;
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS reservation_tables;
 DROP TABLE IF EXISTS reservations;
+DROP TABLE IF EXISTS job_applications;
 DROP TABLE IF EXISTS auth_sessions;
 DROP TABLE IF EXISTS verification_tokens;
 DROP TABLE IF EXISTS restaurant_tables;
@@ -94,6 +95,23 @@ CREATE TABLE IF NOT EXISTS reservation_tables
 
     CONSTRAINT fk_reservation_table_reservation FOREIGN KEY (reservation_id) REFERENCES reservations (id) ON DELETE CASCADE,
     CONSTRAINT fk_reservation_table_table FOREIGN KEY (table_id) REFERENCES restaurant_tables (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS job_applications
+(
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    user_id      INT NOT NULL,
+    position     VARCHAR(120) NOT NULL,
+    availability TEXT NOT NULL,
+    experience   TEXT NOT NULL,
+    motivation   TEXT NOT NULL,
+    status       ENUM ('PENDING', 'REVIEWED', 'ACCEPTED', 'REJECTED') DEFAULT 'PENDING',
+    reviewed_at  DATETIME,
+    reviewed_by  INT,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_job_application_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_job_application_reviewer FOREIGN KEY (reviewed_by) REFERENCES users (id)
 );
 
 INSERT INTO roles (name)

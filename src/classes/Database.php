@@ -14,6 +14,7 @@ final class Database
     public ORMTable $restaurantTables;
     public ORMTable $reservations;
     public ORMTable $reservationTables;
+    public ORMTable $jobApplications;
     private PDO $pdo;
 
     /**
@@ -74,6 +75,18 @@ final class Database
             'reservation_id',
             'table_id',
         ],
+        'job_applications' => [
+            'id',
+            'user_id',
+            'position',
+            'availability',
+            'experience',
+            'motivation',
+            'status',
+            'reviewed_at',
+            'reviewed_by',
+            'created_at',
+        ],
     ];
 
     private function __construct()
@@ -105,6 +118,7 @@ final class Database
         $this->restaurantTables = new ORMTable($this->pdo, 'restaurant_tables', $this->schema['restaurant_tables']);
         $this->reservations = new ORMTable($this->pdo, 'reservations', $this->schema['reservations']);
         $this->reservationTables = new ORMTable($this->pdo, 'reservation_tables', $this->schema['reservation_tables']);
+        $this->jobApplications = new ORMTable($this->pdo, 'job_applications', $this->schema['job_applications']);
     }
 
     public static function getNewOrExistingInstance(): Database

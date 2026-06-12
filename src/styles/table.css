@@ -96,6 +96,26 @@
 	color: #ff4d4d;
 }
 
+.status-pending {
+	background: rgba(255, 193, 7, 0.15);
+	color: #ffc107;
+}
+
+.status-reviewed {
+	background: rgba(74, 106, 106, 0.15);
+	color: #7fa1a1;
+}
+
+.status-accepted {
+	background: rgba(46, 204, 113, 0.15);
+	color: #2ecc71;
+}
+
+.status-rejected {
+	background: rgba(255, 77, 77, 0.1);
+	color: #ff4d4d;
+}
+
 .rt-cell-arrival {
 	text-align: center;
 }
@@ -229,14 +249,38 @@
 	text-align: right;
 }
 
+.rt-table-applications .rt-row {
+	grid-template-columns: 1.1fr 0.8fr 2fr 0.9fr 1.1fr;
+	align-items: start;
+}
+
+.rt-table-applications .rt-cell {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+}
+
+.rt-table-applications .rt-cell span,
+.rt-table-applications .rt-cell p {
+	display: block;
+	margin: 0 0 6px;
+}
+
+.rt-table-applications .rt-cell span:last-child,
+.rt-table-applications .rt-cell p:last-child {
+	margin-bottom: 0;
+}
+
 @media (max-width: 900px) {
-	.rt-table-staff .rt-row {
+	.rt-table-staff .rt-row,
+	.rt-table-applications .rt-row {
 		grid-template-columns: 1fr 1fr;
 	}
 }
 
 @media (max-width: 500px) {
-	.rt-table-staff .rt-row {
+	.rt-table-staff .rt-row,
+	.rt-table-applications .rt-row {
 		grid-template-columns: 1fr;
 	}
 

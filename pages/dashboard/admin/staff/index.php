@@ -14,6 +14,16 @@ if (!$user || !$user->isAdmin()) {
 
 $message = null;
 $messageType = null;
+$activeTab = ($_GET['tab'] ?? 'staff') === 'applications' ? 'applications' : 'staff';
+
+$applicationStatuses = ['PENDING', 'REVIEWED', 'ACCEPTED', 'REJECTED'];
+$reviewableStatuses = ['REVIEWED', 'ACCEPTED', 'REJECTED'];
+$statusLabels = [
+    'PENDING' => 'Na čekanju',
+    'REVIEWED' => 'Pregledano',
+    'ACCEPTED' => 'Prihvaćeno',
+    'REJECTED' => 'Odbijeno',
+];
 
 if (isset($_GET['added'])) {
     $message = 'Radnik je uspešno dodat.';
@@ -25,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         if ($action === 'edit') {
+            $activeTab = 'staff';
             $updateData = [
                 'first_name' => $_POST['first_name'],
                 'last_name' => $_POST['last_name'],
@@ -45,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = 'Radnik je uspešno izmenjen.';
             $messageType = 'success';
         } elseif ($action === 'delete') {
+            $activeTab = 'staff';
             $target = db()->users->findFirst(['where' => ['id' => (int)$_POST['id']]]);
             if (!$target) {
                 throw new Exception('Korisnik ne postoji.');
@@ -55,6 +67,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             db()->users->delete(['where' => ['id' => $target['id']]]);
             $message = 'Radnik je obrisan.';
+            $messageType = 'success';
+        } elseif ($action === 'update_application_status') {
+            $activeTab = 'applications';
+            $newStatus = $_POST['status'] ?? '';
+
+            if (!in_array($newStatus, $reviewableStatuses, true)) {
+                throw new Exception('Izaberite važeći status prijave.');
+            }
+
+            $updated = db()->jobApplications->update([
+                'where' => ['id' => (int)$_POST['id']],
+                'data' => [
+                    'status' => $newStatus,
+                    'reviewed_at' => date('Y-m-d H:i:s'),
+                    'reviewed_by' => $user->id,
+                ],
+            ]);
+
+            if (!$updated) {
+                throw new Exception('Prijava ne postoji.');
+            }
+
+            $message = 'Status prijave je uspešno izmenjen.';
             $messageType = 'success';
         }
     } catch (Exception $e) {
@@ -96,7 +131,49 @@ $staffMembers = db()->users->findMany([
     'skip' => ($page - 1) * $perPage,
 ]);
 
-$relativePath = Helpers::getRelativePath('pages/dashboard/admin/');
+$applicationStatus = $_GET['app_status'] ?? 'ALL';
+if ($applicationStatus !== 'ALL' && !in_array($applicationStatus, $applicationStatuses, true)) {
+    $applicationStatus = 'ALL';
+}
+
+$applicationPage = max(1, (int)($_GET['app_page'] ?? 1));
+$applicationPerPage = 8;
+$applicationWhereSql = '';
+$applicationParams = [];
+
+if ($applicationStatus !== 'ALL') {
+    $applicationWhereSql = ' WHERE ja.status = :status';
+    $applicationParams['status'] = $applicationStatus;
+}
+
+$countStatement = db()->pdo()->prepare("SELECT COUNT(*) AS total FROM job_applications ja{$applicationWhereSql}");
+$countStatement->execute($applicationParams);
+$applicationTotal = (int)($countStatement->fetch()['total'] ?? 0);
+$applicationTotalPages = max(1, (int)ceil($applicationTotal / $applicationPerPage));
+$applicationPage = min($applicationPage, $applicationTotalPages);
+$applicationOffset = ($applicationPage - 1) * $applicationPerPage;
+
+$applicationSql = "
+    SELECT
+        ja.*,
+        applicant.email AS applicant_email,
+        applicant.first_name AS applicant_first_name,
+        applicant.last_name AS applicant_last_name,
+        applicant.phone AS applicant_phone,
+        reviewer.first_name AS reviewer_first_name,
+        reviewer.last_name AS reviewer_last_name
+    FROM job_applications ja
+    INNER JOIN users applicant ON applicant.id = ja.user_id
+    LEFT JOIN users reviewer ON reviewer.id = ja.reviewed_by
+    {$applicationWhereSql}
+    ORDER BY ja.created_at DESC, ja.id DESC
+    LIMIT {$applicationPerPage} OFFSET {$applicationOffset}
+";
+$applicationStatement = db()->pdo()->prepare($applicationSql);
+$applicationStatement->execute($applicationParams);
+$applications = $applicationStatement->fetchAll();
+
+$adminPath = Helpers::getRelativePath('pages/dashboard/admin');
 ?>
 <!doctype html>
 <html lang="en">
@@ -110,10 +187,10 @@ $relativePath = Helpers::getRelativePath('pages/dashboard/admin/');
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                 <div>
                     <h1 class="admin-title">Radnici</h1>
-                    <p class="admin-subtitle">Upravljanje nalozima osoblja restorana</p>
+                    <p class="admin-subtitle">Upravljanje osobljem i prijavama za posao</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="<?= $relativePath . '/dashboard/admin' ?>" class="btn btn-outline-light btn-lg">
+                    <a href="<?= $adminPath ?>" class="btn btn-outline-light btn-lg">
                         <i class="fa-solid fa-arrow-left me-2"></i> Nazad
                     </a>
                 </div>
@@ -126,95 +203,233 @@ $relativePath = Helpers::getRelativePath('pages/dashboard/admin/');
             <?php endif; ?>
 
             <div class="glass-card p-4 border-0" style="max-width: 100%;">
-                <form method="GET" class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <div class="d-flex align-items-end gap-2">
-                        <div style="flex: 1; min-width: 0;">
-                            <label class="form-label small opacity-50 mb-1">Pretraga (ime, email, telefon)</label>
-                            <input type="text" name="search" class="form-control custom-input" value="<?= htmlspecialchars($search) ?>" placeholder="Pretraži radnike..." style="padding-top: 6px; padding-bottom: 6px;">
-                        </div>
-                        <button type="submit" class="btn btn-cta flex-shrink-0" style="padding-top: 6px; padding-bottom: 6px;">Pretraži</button>
-                        <?php if ($search !== ''): ?>
-                            <a href="?" class="btn btn-outline-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; min-width: 38px;" title="Poništi pretragu">
-                                <i class="fa-solid fa-xmark"></i>
-                            </a>
-                        <?php endif; ?>
-                    </div>
-                </form>
-
-                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-                    <span class="opacity-50">
-                        Ukupno: <?= $total ?> radnika
-                        <?php if ($totalPages > 1): ?>
-                            (strana <?= $page ?> od <?= $totalPages ?>)
-                        <?php endif; ?>
-                    </span>
+                <div class="d-flex gap-2 mb-4 pb-4 flex-wrap" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                    <a href="?tab=staff" class="btn <?= $activeTab === 'staff' ? 'btn-light' : 'btn-outline-light' ?>">
+                        <i class="fa-solid fa-users me-2"></i> Radnici
+                    </a>
+                    <a href="?tab=applications" class="btn <?= $activeTab === 'applications' ? 'btn-light' : 'btn-outline-light' ?>">
+                        <i class="fa-solid fa-briefcase me-2"></i> Prijave
+                    </a>
                 </div>
 
-                <?php if (empty($staffMembers)): ?>
-                    <div class="text-center py-5">
-                        <i class="fa-solid fa-users-slash fa-3x mb-3 opacity-10"></i>
-                        <p class="text-white opacity-25 fw-light mb-0">Nema radnika.</p>
-                    </div>
-                <?php else: ?>
-                    <div class="reservations-table rt-table-staff">
-                        <div class="rt-head">
-                            <div class="rt-row">
-                                <div class="rt-cell">Ime i prezime</div>
-                                <div class="rt-cell">Email</div>
-                                <div class="rt-cell">Telefon</div>
-                                <div class="rt-cell">Akcije</div>
+                <?php if ($activeTab === 'staff'): ?>
+                    <form method="GET" class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                        <input type="hidden" name="tab" value="staff">
+                        <div class="d-flex align-items-end gap-2">
+                            <div style="flex: 1; min-width: 0;">
+                                <label class="form-label small opacity-50 mb-1">Pretraga (ime, email, telefon)</label>
+                                <input type="text" name="search" class="form-control custom-input" value="<?= htmlspecialchars($search) ?>" placeholder="Pretraži radnike..." style="padding-top: 6px; padding-bottom: 6px;">
                             </div>
+                            <button type="submit" class="btn btn-cta flex-shrink-0" style="padding-top: 6px; padding-bottom: 6px;">Pretraži</button>
+                            <?php if ($search !== ''): ?>
+                                <a href="?tab=staff" class="btn btn-outline-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; min-width: 38px;" title="Poništi pretragu">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
+                            <?php endif; ?>
                         </div>
-                        <div class="rt-body">
-                            <?php foreach ($staffMembers as $s): ?>
-                                <div class="rt-row">
-                                    <div class="rt-cell" data-label="Ime i prezime">
-                                        <?= htmlspecialchars($s['first_name'] . ' ' . $s['last_name']) ?>
-                                    </div>
-                                    <div class="rt-cell" data-label="Email">
-                                        <?= htmlspecialchars($s['email']) ?>
-                                    </div>
-                                    <div class="rt-cell" data-label="Telefon">
-                                        <?= htmlspecialchars($s['phone'] ?? '—') ?>
-                                    </div>
-                                    <div class="rt-cell" data-label="Akcije">
-                                        <button class="btn btn-sm btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#editStaffModal<?= $s['id'] ?>" title="Izmeni">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </button>
-                                        <?php if ((int)$s['id'] !== $user->id): ?>
-                                            <form method="POST" class="d-inline" onsubmit="return confirm('Obrisati radnika?')">
-                                                <input type="hidden" name="action" value="delete">
-                                                <input type="hidden" name="id" value="<?= $s['id'] ?>">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
+                    </form>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                        <span class="opacity-50">
+                            Ukupno: <?= $total ?> radnika
+                            <?php if ($totalPages > 1): ?>
+                                (strana <?= $page ?> od <?= $totalPages ?>)
+                            <?php endif; ?>
+                        </span>
                     </div>
 
-                    <?php if ($totalPages > 1): ?>
-                        <div class="pagination-wrap">
-                            <?php if ($page > 1): ?>
-                                <a href="?search=<?= urlencode($search) ?>&page=<?= $page - 1 ?>" class="page-btn">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </a>
-                            <?php endif; ?>
-                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                <a href="?search=<?= urlencode($search) ?>&page=<?= $i ?>"
-                                    class="page-btn <?= $i === $page ? 'active' : '' ?>">
-                                    <?= $i ?>
-                                </a>
-                            <?php endfor; ?>
-                            <?php if ($page < $totalPages): ?>
-                                <a href="?search=<?= urlencode($search) ?>&page=<?= $page + 1 ?>" class="page-btn">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </a>
-                            <?php endif; ?>
+                    <?php if (empty($staffMembers)): ?>
+                        <div class="text-center py-5">
+                            <i class="fa-solid fa-users-slash fa-3x mb-3 opacity-10"></i>
+                            <p class="text-white opacity-25 fw-light mb-0">Nema radnika.</p>
                         </div>
+                    <?php else: ?>
+                        <div class="reservations-table rt-table-staff">
+                            <div class="rt-head">
+                                <div class="rt-row">
+                                    <div class="rt-cell">Ime i prezime</div>
+                                    <div class="rt-cell">Email</div>
+                                    <div class="rt-cell">Telefon</div>
+                                    <div class="rt-cell">Akcije</div>
+                                </div>
+                            </div>
+                            <div class="rt-body">
+                                <?php foreach ($staffMembers as $s): ?>
+                                    <div class="rt-row">
+                                        <div class="rt-cell" data-label="Ime i prezime">
+                                            <?= htmlspecialchars($s['first_name'] . ' ' . $s['last_name']) ?>
+                                        </div>
+                                        <div class="rt-cell" data-label="Email">
+                                            <?= htmlspecialchars($s['email']) ?>
+                                        </div>
+                                        <div class="rt-cell" data-label="Telefon">
+                                            <?= htmlspecialchars($s['phone'] ?? '—') ?>
+                                        </div>
+                                        <div class="rt-cell" data-label="Akcije">
+                                            <button class="btn btn-sm btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#editStaffModal<?= $s['id'] ?>" title="Izmeni">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                            <?php if ((int)$s['id'] !== $user->id): ?>
+                                                <form method="POST" class="d-inline" onsubmit="return confirm('Obrisati radnika?')">
+                                                    <input type="hidden" name="action" value="delete">
+                                                    <input type="hidden" name="id" value="<?= $s['id'] ?>">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+
+                        <?php if ($totalPages > 1): ?>
+                            <div class="pagination-wrap">
+                                <?php if ($page > 1): ?>
+                                    <a href="?tab=staff&search=<?= urlencode($search) ?>&page=<?= $page - 1 ?>" class="page-btn">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </a>
+                                <?php endif; ?>
+                                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                    <a href="?tab=staff&search=<?= urlencode($search) ?>&page=<?= $i ?>"
+                                        class="page-btn <?= $i === $page ? 'active' : '' ?>">
+                                        <?= $i ?>
+                                    </a>
+                                <?php endfor; ?>
+                                <?php if ($page < $totalPages): ?>
+                                    <a href="?tab=staff&search=<?= urlencode($search) ?>&page=<?= $page + 1 ?>" class="page-btn">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <form method="GET" class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                        <input type="hidden" name="tab" value="applications">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label small opacity-50 mb-1">Status prijave</label>
+                                <select name="app_status" class="form-control custom-input" style="padding-top: 6px; padding-bottom: 6px;">
+                                    <option value="ALL" <?= $applicationStatus === 'ALL' ? 'selected' : '' ?>>Svi statusi</option>
+                                    <?php foreach ($applicationStatuses as $status): ?>
+                                        <option value="<?= $status ?>" <?= $applicationStatus === $status ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($statusLabels[$status]) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3 d-flex gap-2">
+                                <button type="submit" class="btn btn-cta flex-fill" style="padding-top: 6px; padding-bottom: 6px;">Prikaži</button>
+                                <?php if ($applicationStatus !== 'ALL'): ?>
+                                    <a href="?tab=applications" class="btn btn-outline-light rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px; min-width: 38px;" title="Poništi filter">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                        <span class="opacity-50">
+                            Ukupno: <?= $applicationTotal ?> prijava
+                            <?php if ($applicationTotalPages > 1): ?>
+                                (strana <?= $applicationPage ?> od <?= $applicationTotalPages ?>)
+                            <?php endif; ?>
+                        </span>
+                    </div>
+
+                    <?php if (empty($applications)): ?>
+                        <div class="text-center py-5">
+                            <i class="fa-solid fa-folder-open fa-3x mb-3 opacity-10"></i>
+                            <p class="text-white opacity-25 fw-light mb-0">Nema prijava za izabrani filter.</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="reservations-table rt-table-applications">
+                            <div class="rt-head">
+                                <div class="rt-row">
+                                    <div class="rt-cell">Kandidat</div>
+                                    <div class="rt-cell">Pozicija</div>
+                                    <div class="rt-cell">Odgovori</div>
+                                    <div class="rt-cell">Status</div>
+                                    <div class="rt-cell">Akcija</div>
+                                </div>
+                            </div>
+                            <div class="rt-body">
+                                <?php foreach ($applications as $application):
+                                    $applicantName = trim(($application['applicant_first_name'] ?? '') . ' ' . ($application['applicant_last_name'] ?? ''));
+                                    $applicantName = $applicantName !== '' ? $applicantName : $application['applicant_email'];
+                                    $reviewerName = trim(($application['reviewer_first_name'] ?? '') . ' ' . ($application['reviewer_last_name'] ?? ''));
+                                ?>
+                                    <div class="rt-row">
+                                        <div class="rt-cell" data-label="Kandidat">
+                                            <strong><?= htmlspecialchars($applicantName) ?></strong>
+                                            <span><?= htmlspecialchars($application['applicant_email']) ?></span>
+                                            <span><?= htmlspecialchars($application['applicant_phone'] ?? '—') ?></span>
+                                            <span><?= date('d.m.Y. H:i', strtotime($application['created_at'])) ?></span>
+                                        </div>
+                                        <div class="rt-cell" data-label="Pozicija">
+                                            <?= htmlspecialchars($application['position']) ?>
+                                        </div>
+                                        <div class="rt-cell" data-label="Odgovori">
+                                            <p><strong>Dostupnost:</strong> <?= nl2br(htmlspecialchars($application['availability'])) ?></p>
+                                            <p><strong>Iskustvo:</strong> <?= nl2br(htmlspecialchars($application['experience'])) ?></p>
+                                            <p><strong>Motivacija:</strong> <?= nl2br(htmlspecialchars($application['motivation'])) ?></p>
+                                        </div>
+                                        <div class="rt-cell" data-label="Status">
+                                            <span class="status-badge status-<?= strtolower($application['status']) ?>">
+                                                <?= htmlspecialchars($statusLabels[$application['status']] ?? $application['status']) ?>
+                                            </span>
+                                            <?php if ($application['reviewed_at']): ?>
+                                                <span>Pregledao: <?= htmlspecialchars($reviewerName !== '' ? $reviewerName : 'Admin') ?></span>
+                                                <span><?= date('d.m.Y. H:i', strtotime($application['reviewed_at'])) ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="rt-cell" data-label="Akcija">
+                                            <form method="POST" class="d-flex gap-2 align-items-center">
+                                                <input type="hidden" name="action" value="update_application_status">
+                                                <input type="hidden" name="id" value="<?= $application['id'] ?>">
+                                                <select name="status" class="form-control custom-input form-control-sm" required>
+                                                    <?php if ($application['status'] === 'PENDING'): ?>
+                                                        <option value="" selected disabled>Izaberi</option>
+                                                    <?php endif; ?>
+                                                    <?php foreach ($reviewableStatuses as $status): ?>
+                                                        <option value="<?= $status ?>" <?= $application['status'] === $status ? 'selected' : '' ?>>
+                                                            <?= htmlspecialchars($statusLabels[$status]) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                                <button type="submit" class="btn btn-sm btn-outline-light" title="Sačuvaj status">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+
+                        <?php if ($applicationTotalPages > 1): ?>
+                            <div class="pagination-wrap">
+                                <?php if ($applicationPage > 1): ?>
+                                    <a href="?tab=applications&app_status=<?= urlencode($applicationStatus) ?>&app_page=<?= $applicationPage - 1 ?>" class="page-btn">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </a>
+                                <?php endif; ?>
+                                <?php for ($i = 1; $i <= $applicationTotalPages; $i++): ?>
+                                    <a href="?tab=applications&app_status=<?= urlencode($applicationStatus) ?>&app_page=<?= $i ?>"
+                                        class="page-btn <?= $i === $applicationPage ? 'active' : '' ?>">
+                                        <?= $i ?>
+                                    </a>
+                                <?php endfor; ?>
+                                <?php if ($applicationPage < $applicationTotalPages): ?>
+                                    <a href="?tab=applications&app_status=<?= urlencode($applicationStatus) ?>&app_page=<?= $applicationPage + 1 ?>" class="page-btn">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>

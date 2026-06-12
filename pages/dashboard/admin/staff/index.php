@@ -203,12 +203,12 @@ $adminPath = Helpers::getRelativePath('pages/dashboard/admin');
             <?php endif; ?>
 
             <div class="glass-card p-4 border-0" style="max-width: 100%;">
-                <div class="d-flex gap-2 mb-4 pb-4 flex-wrap" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <a href="?tab=staff" class="btn <?= $activeTab === 'staff' ? 'btn-light' : 'btn-outline-light' ?>">
-                        <i class="fa-solid fa-users me-2"></i> Radnici
+                <div class="filter-buttons mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                    <a href="?tab=staff" class="btn btn-filter <?= $activeTab === 'staff' ? 'active' : '' ?>">
+                        <i class="fa-solid fa-users"></i> Radnici
                     </a>
-                    <a href="?tab=applications" class="btn <?= $activeTab === 'applications' ? 'btn-light' : 'btn-outline-light' ?>">
-                        <i class="fa-solid fa-briefcase me-2"></i> Prijave
+                    <a href="?tab=applications" class="btn btn-filter <?= $activeTab === 'applications' ? 'active' : '' ?>">
+                        <i class="fa-solid fa-briefcase"></i> Prijave
                     </a>
                 </div>
 
@@ -350,8 +350,8 @@ $adminPath = Helpers::getRelativePath('pages/dashboard/admin');
                             <div class="rt-head">
                                 <div class="rt-row">
                                     <div class="rt-cell">Kandidat</div>
-                                    <div class="rt-cell">Pozicija</div>
-                                    <div class="rt-cell">Odgovori</div>
+                                    <div class="rt-cell">Dostupnost</div>
+                                    <div class="rt-cell">Iskustvo i motivacija</div>
                                     <div class="rt-cell">Status</div>
                                     <div class="rt-cell">Akcija</div>
                                 </div>
@@ -363,31 +363,30 @@ $adminPath = Helpers::getRelativePath('pages/dashboard/admin');
                                     $reviewerName = trim(($application['reviewer_first_name'] ?? '') . ' ' . ($application['reviewer_last_name'] ?? ''));
                                 ?>
                                     <div class="rt-row">
-                                        <div class="rt-cell" data-label="Kandidat">
+                                        <div class="rt-cell rt-cell-applicant" data-label="Kandidat">
                                             <strong><?= htmlspecialchars($applicantName) ?></strong>
-                                            <span><?= htmlspecialchars($application['applicant_email']) ?></span>
-                                            <span><?= htmlspecialchars($application['applicant_phone'] ?? '—') ?></span>
-                                            <span><?= date('d.m.Y. H:i', strtotime($application['created_at'])) ?></span>
+                                            <span><i class="fa-regular fa-envelope"></i><?= htmlspecialchars($application['applicant_email']) ?></span>
+                                            <span><i class="fa-solid fa-phone"></i><?= htmlspecialchars($application['applicant_phone'] ?? '—') ?></span>
+                                            <span><i class="fa-regular fa-calendar"></i><?= date('d.m.Y. H:i', strtotime($application['created_at'])) ?></span>
                                         </div>
-                                        <div class="rt-cell" data-label="Pozicija">
-                                            <?= htmlspecialchars($application['position']) ?>
+                                        <div class="rt-cell rt-cell-application-text" data-label="Dostupnost">
+                                            <?= nl2br(htmlspecialchars($application['availability'])) ?>
                                         </div>
-                                        <div class="rt-cell" data-label="Odgovori">
-                                            <p><strong>Dostupnost:</strong> <?= nl2br(htmlspecialchars($application['availability'])) ?></p>
-                                            <p><strong>Iskustvo:</strong> <?= nl2br(htmlspecialchars($application['experience'])) ?></p>
-                                            <p><strong>Motivacija:</strong> <?= nl2br(htmlspecialchars($application['motivation'])) ?></p>
+                                        <div class="rt-cell rt-cell-application-text" data-label="Iskustvo i motivacija">
+                                            <p><strong>Iskustvo</strong><?= nl2br(htmlspecialchars($application['experience'])) ?></p>
+                                            <p><strong>Motivacija</strong><?= nl2br(htmlspecialchars($application['motivation'])) ?></p>
                                         </div>
-                                        <div class="rt-cell" data-label="Status">
+                                        <div class="rt-cell rt-cell-application-status" data-label="Status">
                                             <span class="status-badge status-<?= strtolower($application['status']) ?>">
                                                 <?= htmlspecialchars($statusLabels[$application['status']] ?? $application['status']) ?>
                                             </span>
                                             <?php if ($application['reviewed_at']): ?>
-                                                <span>Pregledao: <?= htmlspecialchars($reviewerName !== '' ? $reviewerName : 'Admin') ?></span>
-                                                <span><?= date('d.m.Y. H:i', strtotime($application['reviewed_at'])) ?></span>
+                                                <small>Pregledao: <?= htmlspecialchars($reviewerName !== '' ? $reviewerName : 'Admin') ?></small>
+                                                <small><?= date('d.m.Y. H:i', strtotime($application['reviewed_at'])) ?></small>
                                             <?php endif; ?>
                                         </div>
-                                        <div class="rt-cell" data-label="Akcija">
-                                            <form method="POST" class="d-flex gap-2 align-items-center">
+                                        <div class="rt-cell rt-cell-application-action" data-label="Akcija">
+                                            <form method="POST">
                                                 <input type="hidden" name="action" value="update_application_status">
                                                 <input type="hidden" name="id" value="<?= $application['id'] ?>">
                                                 <select name="status" class="form-control custom-input form-control-sm" required>
@@ -401,7 +400,7 @@ $adminPath = Helpers::getRelativePath('pages/dashboard/admin');
                                                     <?php endforeach; ?>
                                                 </select>
                                                 <button type="submit" class="btn btn-sm btn-outline-light" title="Sačuvaj status">
-                                                    <i class="fa-solid fa-check"></i>
+                                                    <i class="fa-solid fa-check me-1"></i> Sačuvaj
                                                 </button>
                                             </form>
                                         </div>

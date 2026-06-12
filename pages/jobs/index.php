@@ -15,7 +15,7 @@ $statusLabels = [
     'REJECTED' => 'Odbijeno',
 ];
 
-$oldPosition = trim($_POST['position'] ?? '');
+$oldPosition = trim($_POST['position'] ?? 'Opšta prijava');
 $oldAvailability = trim($_POST['availability'] ?? '');
 $oldExperience = trim($_POST['experience'] ?? '');
 $oldMotivation = trim($_POST['motivation'] ?? '');
@@ -35,7 +35,7 @@ if ($user && $_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception('Već imate prijavu koja čeka pregled.');
         }
 
-        if ($oldPosition === '' || $oldAvailability === '' || $oldExperience === '' || $oldMotivation === '') {
+        if ($oldAvailability === '' || $oldExperience === '' || $oldMotivation === '') {
             throw new Exception('Popunite sva obavezna polja.');
         }
 
@@ -51,7 +51,7 @@ if ($user && $_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $success = 'Prijava je uspešno poslata.';
-        $oldPosition = '';
+        $oldPosition = 'Opšta prijava';
         $oldAvailability = '';
         $oldExperience = '';
         $oldMotivation = '';
@@ -87,16 +87,18 @@ $relativePath = Helpers::getRelativePath('pages');
         <div class="container-fluid container-lg row justify-content-center g-4 w-100">
             <div class="col-12 col-lg-5">
                 <div class="glass-card h-100" style="max-width: 1000px !important;">
-                    <p class="small opacity-50 text-uppercase mb-2" style="letter-spacing: 1px;">Karijera</p>
+                    <p class="small opacity-50 text-uppercase mb-2" style="letter-spacing: 1px;">Opis posla</p>
                     <h1 class="admin-title mb-3" style="font-size: 42px;">Rad u Aurea Mensa</h1>
                     <p class="admin-subtitle mb-4">
-                        Tražimo odgovorne ljude za rad u sali, kuhinji i podršci restorana. Pošaljite prijavu sa dostupnošću,
-                        prethodnim iskustvom i kratkim obrazloženjem zašto želite da radite sa nama.
+                        Član tima učestvuje u svakodnevnom radu restorana, vodi računa o urednosti prostora,
+                        preciznoj komunikaciji sa gostima i kolegama, poštovanju dogovorenih procedura i mirnom
+                        rešavanju situacija tokom smene.
                     </p>
                     <div class="d-flex flex-column gap-3 text-white-50">
-                        <div><i class="fa-solid fa-utensils me-2"></i> Pozicije u sali i kuhinji</div>
-                        <div><i class="fa-solid fa-clock me-2"></i> Smene po dogovoru</div>
-                        <div><i class="fa-solid fa-user-check me-2"></i> Pregled prijava u admin panelu</div>
+                        <div><i class="fa-solid fa-circle-check me-2"></i> Odgovoran i tačan pristup poslu</div>
+                        <div><i class="fa-solid fa-comments me-2"></i> Jasna komunikacija sa timom i gostima</div>
+                        <div><i class="fa-solid fa-clock me-2"></i> Dostupnost za rad u smenama po dogovoru</div>
+                        <div><i class="fa-solid fa-handshake me-2"></i> Profesionalan odnos prema gostima i prostoru</div>
                     </div>
                 </div>
             </div>
@@ -137,9 +139,8 @@ $relativePath = Helpers::getRelativePath('pages');
                             <i class="fa-solid fa-hourglass-half fa-3x mb-3 opacity-25"></i>
                             <h3 class="text-white fw-light mb-3">Prijava je poslata</h3>
                             <p class="text-white opacity-50 mb-4">
-                                Vaša prijava za poziciju
-                                <strong><?= htmlspecialchars($currentPendingApplication['position']) ?></strong>
-                                je trenutno: <?= htmlspecialchars($statusLabels[$currentPendingApplication['status']] ?? $currentPendingApplication['status']) ?>.
+                                Vaša prijava je trenutno:
+                                <?= htmlspecialchars($statusLabels[$currentPendingApplication['status']] ?? $currentPendingApplication['status']) ?>.
                             </p>
                             <span class="status-badge status-pending">
                                 <?= htmlspecialchars($statusLabels[$currentPendingApplication['status']] ?? $currentPendingApplication['status']) ?>
@@ -147,11 +148,7 @@ $relativePath = Helpers::getRelativePath('pages');
                         </div>
                     <?php else: ?>
                         <form method="POST">
-                            <div class="form-group mb-3">
-                                <label class="form-label small opacity-50">Pozicija</label>
-                                <input type="text" name="position" class="form-control custom-input"
-                                    value="<?= htmlspecialchars($oldPosition) ?>" placeholder="Konobar, kuvar, pomoćni radnik..." required>
-                            </div>
+                            <input type="hidden" name="position" value="Opšta prijava">
 
                             <div class="form-group mb-3">
                                 <label class="form-label small opacity-50">Dostupnost</label>

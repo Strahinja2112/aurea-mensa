@@ -250,14 +250,17 @@
 }
 
 .rt-table-applications .rt-row {
-	grid-template-columns: 1.1fr 0.8fr 2fr 0.9fr 1.1fr;
+	grid-template-columns: minmax(210px, 1.05fr) minmax(170px, 0.9fr) minmax(320px, 1.8fr) minmax(150px, 0.75fr) minmax(180px, 0.9fr);
 	align-items: start;
+	gap: 18px;
+	padding: 18px 20px;
 }
 
 .rt-table-applications .rt-cell {
 	white-space: normal;
 	overflow: visible;
 	text-overflow: clip;
+	line-height: 1.45;
 }
 
 .rt-table-applications .rt-cell span,
@@ -269,6 +272,77 @@
 .rt-table-applications .rt-cell span:last-child,
 .rt-table-applications .rt-cell p:last-child {
 	margin-bottom: 0;
+}
+
+.rt-table-applications .rt-cell-applicant strong {
+	display: block;
+	color: #f8f9fa;
+	font-size: 0.98rem;
+	margin-bottom: 8px;
+}
+
+.rt-table-applications .rt-cell-applicant span {
+	color: rgba(255, 255, 255, 0.58);
+	font-size: 0.8rem;
+	overflow-wrap: anywhere;
+}
+
+.rt-table-applications .rt-cell-applicant i {
+	width: 18px;
+	color: rgba(255, 255, 255, 0.35);
+	margin-right: 8px;
+	text-align: center;
+}
+
+.rt-table-applications .rt-cell-application-text {
+	color: rgba(255, 255, 255, 0.72);
+	font-size: 0.86rem;
+}
+
+.rt-table-applications .rt-cell-application-text strong {
+	display: block;
+	color: rgba(255, 255, 255, 0.42);
+	font-size: 0.67rem;
+	font-weight: 700;
+	letter-spacing: 0.8px;
+	text-transform: uppercase;
+	margin-bottom: 3px;
+}
+
+.rt-table-applications .rt-cell-application-text p + p {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rt-table-applications .rt-cell-application-status {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 7px;
+}
+
+.rt-table-applications .rt-cell-application-status small {
+	color: rgba(255, 255, 255, 0.48);
+	font-size: 0.74rem;
+	line-height: 1.25;
+}
+
+.rt-table-applications .rt-cell-application-action form {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 8px;
+}
+
+.rt-table-applications .rt-cell-application-action .custom-input {
+	min-height: 36px;
+	padding: 6px 10px;
+	font-size: 0.82rem;
+}
+
+.rt-table-applications .rt-cell-application-action .btn {
+	width: 100%;
+	min-height: 34px;
 }
 
 @media (max-width: 900px) {

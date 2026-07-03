@@ -481,7 +481,7 @@ function initAdmin(root) {
 	);
 	controls.increase.addEventListener("click", () =>
 		updateSelected((table) => {
-			table.seats = Math.min(12, table.seats + 1);
+			table.seats = Math.min(20, table.seats + 1);
 		}),
 	);
 	controls.shapeButtons.forEach((button) => {

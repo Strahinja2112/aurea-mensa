@@ -267,7 +267,14 @@ if ($isEditMode) {
                                             id="submitBtn"
                                             class="btn btn-light w-100">
 
-                                        <?= $isEditMode ? 'Sačuvaj izmene' : 'Rezerviši' ?>
+                                        <span id="btnText">
+                                            <?= $isEditMode ? 'Sačuvaj izmene' : 'Rezerviši' ?>
+                                        </span>
+
+                                        <span
+                                                id="btnSpinner"
+                                                class="spinner-border spinner-border-sm d-none ms-2">
+                                        </span>
 
                                     </button>
 
@@ -365,20 +372,48 @@ if ($isEditMode) {
                 const result = await response.json();
 
                 if (result.success) {
-                    messageBox.innerHTML = `
-                        <div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 text-center">
-                            <i class="fa-solid fa-check-circle me-2"></i>
-                            ${result.message}<br>
-                            Kod rezervacije:
-                            <strong class="d-block mt-2 fs-5">${result.reservation_code}</strong>
-                        </div>
-                    `;
+                    let html = `
+<div class="alert alert-success bg-success bg-opacity-20 border-0 text-white small rounded-3 text-center">
 
-                    form.reset();
+    <i class="fa-solid fa-check-circle me-2"></i>
 
-                    if (window.AureaTableLayouts?.reserve) {
-                        window.AureaTableLayouts.reserve.clearSelection();
-                        window.AureaTableLayouts.reserve.refreshAvailability();
+    ${result.message}
+`;
+
+                    if (result.reservation_code) {
+
+                        html += `
+        <br>
+
+        Kod rezervacije:
+
+        <strong class="d-block mt-2 fs-5">
+
+            ${result.reservation_code}
+
+        </strong>
+    `;
+                    }
+
+                    html += "</div>";
+
+                    messageBox.innerHTML = html;
+
+                    if (!payload.edit_mode) {
+
+                        form.reset();
+
+                        if (window.AureaTableLayouts?.reserve) {
+                            window.AureaTableLayouts.reserve.clearSelection();
+                            window.AureaTableLayouts.reserve.refreshAvailability();
+                        }
+
+                    } else {
+
+                        setTimeout(() => {
+                            window.location.href = "<?= Helpers::getRelativePath('pages/profile') ?>";
+                        }, 1500);
+
                     }
                 } else {
                     messageBox.innerHTML = `

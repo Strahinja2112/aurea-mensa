@@ -1122,6 +1122,18 @@ function initReserve(root) {
 		input.addEventListener("change", refreshTimeframes);
 	});
 
+    const editDataElement = document.getElementById("reservationEditData");
+
+    const editData = editDataElement
+        ? JSON.parse(editDataElement.textContent)
+        : {
+            editMode: false,
+            reservationId: null,
+            selectedTables: [],
+            startTime: "",
+            duration: 1
+        };
+
 	window.AureaTableLayouts = window.AureaTableLayouts || {};
 	window.AureaTableLayouts.reserve = {
 		clearSelection() {
@@ -1138,17 +1150,6 @@ function initReserve(root) {
 		refreshAvailability: refreshTimeframes,
 		refreshTimeframes,
 	};
-    const editDataElement = document.getElementById("reservationEditData");
-
-    const editData = editDataElement
-        ? JSON.parse(editDataElement.textContent)
-        : {
-            editMode: false,
-            reservationId: null,
-            selectedTables: [],
-            startTime: "",
-            duration: 1
-        };
 
     if (editData.editMode) {
 

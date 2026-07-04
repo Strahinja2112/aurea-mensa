@@ -177,68 +177,101 @@ if ($isEditMode) {
 
                         <aside class="reserve-table-info-panel" id="reserveTableInfoPanel">
 
-                            <h5 class="mb-3">
-                                <?= $isEditMode ? 'Izmena rezervacije' : 'Rezervacija' ?>
-                            </h5>
+                            <div id="reserveTableInfoEmpty" class="reserve-empty-state">
 
-                            <div class="mb-3">
-                                <label class="form-label">Broj osoba</label>
+                                <div class="reserve-empty-icon">
+                                    <i class="fa-solid fa-hand-pointer"></i>
+                                </div>
 
-                                <input
-                                        type="number"
-                                        class="form-control custom-input"
-                                        id="peopleCount"
-                                        min="1"
-                                        max="20"
-                                        value="<?= $reservation['number_of_people'] ?? 2 ?>">
-                            </div>
+                                <h5>Izaberite sto</h5>
 
-                            <div class="mb-3">
-                                <label class="form-label">Pušačka zona</label>
-
-                                <select class="form-control custom-input" id="smokingPreference">
-                                    <option value="">Sve</option>
-                                    <option value="0">Nepušačka</option>
-                                    <option value="1">Pušačka</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-
-                                <label class="form-label">
-                                    Trajanje
-                                </label>
-
-                                <select
-                                        id="durationSelect"
-                                        class="form-control custom-input">
-
-                                    <?php
-                                    for ($i=1;$i<=6;$i++):
-                                        ?>
-
-                                        <option
-                                                value="<?= $i ?>"
-                                                <?= $selectedDuration==$i?'selected':'' ?>>
-                                            <?= $i ?> sat<?= $i>1?'a':'' ?>
-                                        </option>
-
-                                    <?php endfor; ?>
-
-                                </select>
+                                <p>
+                                    Kliknite na sto na mapi kako biste videli njegove informacije
+                                    i rezervisali termin.
+                                </p>
 
                             </div>
 
-                            <div class="mt-4">
+                            <div id="reserveTableInfo" class="d-none">
 
-                                <button
-                                        type="submit"
-                                        id="submitBtn"
-                                        class="btn btn-light w-100">
+                                <div class="layout-control-group">
 
-                                    <?= $isEditMode ? 'Sačuvaj izmene' : 'Rezerviši' ?>
+                                    <label class="layout-field-label">Naziv stola</label>
 
-                                </button>
+                                    <input
+                                            id="reserveInfoName"
+                                            class="form-control custom-input"
+                                            disabled>
+
+                                    <label class="layout-field-label mt-3">Lokacija</label>
+
+                                    <input
+                                            id="reserveInfoLocation"
+                                            class="form-control custom-input"
+                                            disabled>
+
+                                </div>
+
+                                <div class="layout-control-group">
+
+                                    <div class="layout-group-title">
+                                        <i class="fa-solid fa-chair"></i>
+                                        <span>Kapacitet</span>
+                                    </div>
+
+                                    <input
+                                            id="reserveInfoSeats"
+                                            class="form-control custom-input"
+                                            disabled>
+
+                                </div>
+
+                                <div class="layout-control-group">
+
+                                    <div class="layout-group-title">
+                                        <i class="fa-solid fa-shapes"></i>
+                                        <span>Izgled</span>
+                                    </div>
+
+                                    <input
+                                            id="reserveInfoShape"
+                                            class="form-control custom-input mb-2"
+                                            disabled>
+
+                                    <input
+                                            id="reserveInfoSmoking"
+                                            class="form-control custom-input"
+                                            disabled>
+
+                                </div>
+
+                                <div class="layout-control-group">
+
+                                    <label class="layout-field-label">
+
+                                        Status
+
+                                    </label>
+
+                                    <input
+                                            id="reserveInfoStatus"
+                                            class="form-control custom-input"
+                                            disabled>
+
+                                </div>
+
+                                <div class="mt-4">
+
+                                    <button
+                                            type="submit"
+                                            id="submitBtn"
+                                            class="btn btn-light w-100">
+
+                                        <?= $isEditMode ? 'Sačuvaj izmene' : 'Rezerviši' ?>
+
+                                    </button>
+
+                                </div>
 
                             </div>
 

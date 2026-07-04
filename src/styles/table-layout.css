@@ -985,6 +985,75 @@
 	font-size: 13px;
 }
 
+.reserve-empty-state{
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    min-height:520px;
+
+    padding:2rem;
+
+    color:rgba(255,255,255,.85);
+
+}
+
+.reserve-empty-icon{
+
+    width:72px;
+    height:72px;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    margin-bottom:1.5rem;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(12px);
+
+}
+
+.reserve-empty-icon i{
+
+    font-size:30px;
+
+    color:#cfd8dc;
+
+}
+
+.reserve-empty-state h5{
+
+    font-size:1.35rem;
+
+    font-weight:600;
+
+    margin-bottom:.8rem;
+
+}
+
+.reserve-empty-state p{
+
+    max-width:240px;
+
+    line-height:1.6;
+
+    color:rgba(255,255,255,.6);
+
+    margin:0;
+
+}
+
+
 @media (max-width: 992px) {
 	.reserve-map-grid {
 		grid-template-columns: 1fr;

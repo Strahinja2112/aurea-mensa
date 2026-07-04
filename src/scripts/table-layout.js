@@ -594,16 +594,25 @@ function initReserve(root) {
 	const timelineSummary = document.getElementById("reservationTimelineSummary");
 	const startInput = document.getElementById("reservationStartTime");
 	const durationInput = document.getElementById("reservationDurationHours");
-	const tableInfo = {
-		empty: document.getElementById("reserveTableInfoEmpty"),
-		panel: document.getElementById("reserveTableInfo"),
-		name: document.getElementById("reserveInfoName"),
-		status: document.getElementById("reserveInfoStatus"),
-		seats: document.getElementById("reserveInfoSeats"),
-		location: document.getElementById("reserveInfoLocation"),
-		smoking: document.getElementById("reserveInfoSmoking"),
-		shape: document.getElementById("reserveInfoShape"),
-	};
+    const tableInfo = {
+
+        empty: document.getElementById("reserveTableInfoEmpty"),
+
+        panel: document.getElementById("reserveTableInfo"),
+
+        name: document.getElementById("reserveInfoName"),
+
+        location: document.getElementById("reserveInfoLocation"),
+
+        seats: document.getElementById("reserveInfoSeats"),
+
+        shape: document.getElementById("reserveInfoShape"),
+
+        smoking: document.getElementById("reserveInfoSmoking"),
+
+        status: document.getElementById("reserveInfoStatus")
+
+    };
 	const workingHours = parseWorkingHours(workingHoursElement);
 	const tables = parseTables(dataElement);
 	let busyIntervals = [];
@@ -646,6 +655,7 @@ function initReserve(root) {
 	}
 
     function updateTableInfo() {
+
         const table = focusedTable();
 
         if (!tableInfo.empty || !tableInfo.panel) {
@@ -653,31 +663,35 @@ function initReserve(root) {
         }
 
         if (!table) {
+
             tableInfo.empty.classList.remove("d-none");
             tableInfo.panel.classList.add("d-none");
+
             return;
         }
 
         tableInfo.empty.classList.add("d-none");
         tableInfo.panel.classList.remove("d-none");
 
-        tableInfo.name.textContent = table.name;
-        tableInfo.status.textContent = table.unavailable ? "Zauzet" : "Dostupan";
-        tableInfo.status.dataset.state = table.unavailable ? "busy" : "available";
-        tableInfo.seats.textContent = `${table.seats} mesta`;
-        tableInfo.location.textContent =
+        tableInfo.name.value = table.name;
+        tableInfo.location.value =
             table.location_description || "Nije navedeno";
-        tableInfo.smoking.textContent = table.is_smoking
-            ? "Pušačka zona"
-            : "Nepušačka zona";
-        tableInfo.shape.textContent = tableShapeLabel(table.table_shape);
 
-        // sakrij dugme ako nije edit
-        const submitWrap = document.querySelector(".reserve-submit-wrap");
+        tableInfo.seats.value =
+            table.seats + " mesta";
 
-        if (submitWrap) {
-            submitWrap.style.display = editData.editMode ? "block" : "none";
-        }
+        tableInfo.shape.value =
+            tableShapeLabel(table.table_shape);
+
+        tableInfo.smoking.value =
+            table.is_smoking
+                ? "Pušačka zona"
+                : "Nepušačka zona";
+
+        tableInfo.status.value =
+            table.unavailable
+                ? "Zauzet"
+                : "Dostupan";
     }
 
 	function updateInputs() {

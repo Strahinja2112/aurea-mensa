@@ -27,6 +27,7 @@ try {
     $reservationDate = (string)($data['reservation_date'] ?? '');
     $startTime = (string)($data['start_time'] ?? '');
     $durationHours = (int)($data['duration_hours'] ?? 0);
+    $ignoreReservationId = (int)($data['reservation_id'] ?? 0);
 
     if ($reservationDate === '' || $startTime === '') {
         throw new Exception('Datum i vreme su obavezni.');
@@ -60,6 +61,12 @@ try {
     $reservationIds = [];
 
     foreach ($reservations as $reservation) {
+        if (
+            $ignoreReservationId > 0 &&
+            (int)$reservation['id'] === $ignoreReservationId
+        ) {
+            continue;
+        }
         $existingStart = strtotime($reservation['start_time']);
         $existingEnd = strtotime($reservation['end_time']);
 

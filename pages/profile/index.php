@@ -267,16 +267,24 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'table.css']); ?>
                                         </div>
                                         <div class="rt-cell rt-cell-arrival" data-label="Akcije">
                                             <?php if ($canCancel): ?>
+
+                                                <a href="<?= Helpers::getRelativePath('pages/reserve-table') ?>?id=<?= $res['id'] ?>"
+                                                   class="btn btn-sm btn-outline-warning mb-1">
+                                                    <i class="fa-solid fa-pen me-1"></i>
+                                                    Izmeni
+                                                </a>
+
                                                 <button onclick="cancelReservation(<?= $res['id'] ?>)"
-                                                    class="btn btn-sm btn-outline-danger">
+                                                        class="btn btn-sm btn-outline-danger">
                                                     <i class="fa-solid fa-xmark me-1"></i>
                                                     <span>Otkaži</span>
-                                                    <span style="font-size: 9px;">(<?= $timerText ?>)</span>
+                                                    <span style="font-size:9px;">(<?= $timerText ?>)</span>
                                                 </button>
+
                                             <?php else: ?>
-                                                <span class="opacity-25" style="font-size: 0.65rem;">
-                                                    <?= $res['status'] === 'ACTIVE' ? 'Isteklo vreme' : '—' ?>
-                                                </span>
+                                                <span class="opacity-25" style="font-size:0.65rem;">
+                                            <?= $res['status'] === 'ACTIVE' ? 'Isteklo vreme' : '—' ?>
+                                             </span>
                                             <?php endif; ?>
                                         </div>
                                     </div>

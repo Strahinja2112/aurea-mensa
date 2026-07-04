@@ -427,3 +427,54 @@
 	color: #e6e6e6;
 	border-color: #4a6a6a;
 }
+
+.reservation-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.reservation-column {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px;
+    padding: 1rem;
+    min-height: 450px;
+}
+
+.reservation-column-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.reservation-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.reservation-card:last-child {
+    margin-bottom: 0;
+}
+
+.reservation-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .75rem;
+}
+
+.reservation-code {
+    font-weight: 600;
+    color: #fff;
+}
+
+.reservation-card-body {
+    line-height: 1.6;
+    font-size: .95rem;
+}

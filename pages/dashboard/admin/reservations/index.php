@@ -133,26 +133,47 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                     </span>
                 </div>
 
+                <?php
+
+                $statusGroups = [
+                        'ACTIVE' => [],
+                        'COMPLETED' => [],
+                        'CANCELLED' => []
+                ];
+
+                foreach ($reservations as $reservation) {
+                    $statusGroups[$reservation['status']][] = $reservation;
+                }
+
+                ?>
+
                 <?php if (empty($reservations)): ?>
                     <div class="text-center py-5">
                         <i class="fa-solid fa-calendar-xmark fa-3x mb-3 opacity-10"></i>
                         <p class="text-white opacity-25 fw-light mb-0">Nema rezervacija za ovaj datum.</p>
                     </div>
                 <?php else: ?>
-                    <div class="reservations-table">
-                        <div class="rt-head">
-                            <div class="rt-row">
-                                <div class="rt-cell rt-cell-code">Kod</div>
-                                <div class="rt-cell rt-cell-time">Vreme</div>
-                                <div class="rt-cell rt-cell-guest">Gost</div>
-                                <div class="rt-cell rt-cell-email">Email</div>
-                                <div class="rt-cell rt-cell-tables">Stolovi</div>
-                                <div class="rt-cell rt-cell-status">Status</div>
-                                <div class="rt-cell rt-cell-arrival">Dolazak</div>
+                <div class="reservation-board">
+
+                    <?php
+                    $labels = [
+                            'ACTIVE' => 'Aktivne',
+                            'COMPLETED' => 'Realizovane',
+                            'CANCELLED' => 'Otkazane'
+                    ];
+                    ?>
+
+                    <?php foreach ($statusGroups as $status => $items): ?>
+
+                        <div class="reservation-column"
+                                data-status="<?= $status ?>">
+
+                            <div class="reservation-column-title">
+                                <?= $labels[$status] ?>
                             </div>
-                        </div>
-                        <div class="rt-body">
-                            <?php foreach ($reservations as $res):
+
+                            <?php foreach ($items as $res):
+
                                 $u = $reservationUsers[$res['id']] ?? null;
                                 $tables = $reservationTables[$res['id']] ?? [];
 
@@ -162,43 +183,58 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                                     'CANCELLED' => 'Otkazana',
                                     default => $res['status'],
                                 };
-                            ?>
-                                <div class="rt-row">
-                                    <div class="rt-cell rt-cell-code" data-label="Kod">
-                                        <code><?= htmlspecialchars($res['reservation_code']) ?></code>
-                                    </div>
-                                    <div class="rt-cell rt-cell-time" data-label="Vreme">
-                                        <?= substr($res['start_time'], 0, 5) ?> – <?= substr($res['end_time'], 0, 5) ?>
-                                    </div>
-                                    <div class="rt-cell rt-cell-guest" data-label="Gost">
-                                        <?php if ($u): ?>
-                                            <?= htmlspecialchars($u['first_name'] . ' ' . $u['last_name']) ?>
-                                        <?php else: ?>
-                                            <span class="opacity-25">Nepoznat</span>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="rt-cell rt-cell-email" data-label="Email">
-                                        <?= $u ? htmlspecialchars($u['email']) : '—' ?>
-                                    </div>
-                                    <div class="rt-cell rt-cell-tables" data-label="Stolovi">
-                                        <?= !empty($tables) ? htmlspecialchars(implode(', ', $tables)) : '—' ?>
-                                    </div>
-                                    <div class="rt-cell rt-cell-status" data-label="Status">
+                                ?>
+
+                                <div class="reservation-card"
+                                        draggable="true"
+                                        data-reservation-id="<?= $res['id'] ?>"
+                                        data-status="<?= $res['status'] ?>">
+
+                                    <div class="reservation-card-header">
+
+                    <span class="reservation-code">
+                        <?= htmlspecialchars($res['reservation_code']) ?>
+                    </span>
+
                                         <span class="status-badge status-<?= strtolower($res['status']) ?>">
-                                            <?= $statusLabel ?>
-                                        </span>
+                        <?= $statusLabel ?>
+                    </span>
+
                                     </div>
-                                    <div class="rt-cell rt-cell-arrival" data-label="Dolazak">
-                                        <?php if ($res['arrived']): ?>
-                                            <i class="fa-solid fa-check-circle" style="color: #2ecc71;"></i>
-                                        <?php else: ?>
-                                            <span class="opacity-25">—</span>
-                                        <?php endif; ?>
+
+                                    <div class="reservation-card-body">
+
+                                        <strong>Gost</strong><br>
+                                        <?= $u
+                                                ? htmlspecialchars($u['first_name'] . ' ' . $u['last_name'])
+                                                : 'Nepoznat'; ?>
+
+                                        <br><br>
+
+                                        <strong>Vreme</strong><br>
+                                        <?= substr($res['start_time'],0,5) ?>
+                                        -
+                                        <?= substr($res['end_time'],0,5) ?>
+
+                                        <br><br>
+
+                                        <strong>Stolovi</strong><br>
+                                        <?= !empty($tables)
+                                                ? htmlspecialchars(implode(', ', $tables))
+                                                : '—'; ?>
+
                                     </div>
+
                                 </div>
+
                             <?php endforeach; ?>
+
                         </div>
-                    </div>
+
+                    <?php endforeach; ?>
+
+                </div>
+
 
                     <?php if ($totalPages > 1): ?>
                         <div class="pagination-wrap">

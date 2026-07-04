@@ -116,6 +116,7 @@ Helpers::renderHead("Home") ?>
     <?php
     include Helpers::getRelativePath("src/components/footer.php") ?>
 
-</body>
+    <script src="<?= Helpers::getRelativePath('src/scripts/reservation-board.js') ?>"></script>
 
+</body>
 </html>

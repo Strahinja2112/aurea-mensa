@@ -276,6 +276,23 @@ function initAdmin(root) {
 	const dataElement = document.getElementById(root.dataset.tablesSource);
 	const saveUrl = root.dataset.saveUrl;
 	const tables = parseTables(dataElement);
+    const editDataElement = document.getElementById("reservationEditData");
+
+    let editData = {
+        editMode: false,
+        reservationId: null,
+        selectedTables: [],
+        startTime: "",
+        duration: 1
+    };
+
+    if (editDataElement) {
+        try {
+            editData = JSON.parse(editDataElement.textContent);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 	const deletedIds = [];
 	let selectedId = null;
 	let nextTemporaryId = -1;
@@ -628,32 +645,40 @@ function initReserve(root) {
 		);
 	}
 
-	function updateTableInfo() {
-		const table = focusedTable();
+    function updateTableInfo() {
+        const table = focusedTable();
 
-		if (!tableInfo.empty || !tableInfo.panel) {
-			return;
-		}
+        if (!tableInfo.empty || !tableInfo.panel) {
+            return;
+        }
 
-		if (!table) {
-			tableInfo.empty.classList.remove("d-none");
-			tableInfo.panel.classList.add("d-none");
-			return;
-		}
+        if (!table) {
+            tableInfo.empty.classList.remove("d-none");
+            tableInfo.panel.classList.add("d-none");
+            return;
+        }
 
-		tableInfo.empty.classList.add("d-none");
-		tableInfo.panel.classList.remove("d-none");
-		tableInfo.name.textContent = table.name;
-		tableInfo.status.textContent = table.unavailable ? "Zauzet" : "Dostupan";
-		tableInfo.status.dataset.state = table.unavailable ? "busy" : "available";
-		tableInfo.seats.textContent = `${table.seats} ${table.seats === 1 ? "mesto" : "mesta"}`;
-		tableInfo.location.textContent =
-			table.location_description || "Nije navedeno";
-		tableInfo.smoking.textContent = table.is_smoking
-			? "Pušačka zona"
-			: "Nepušačka zona";
-		tableInfo.shape.textContent = tableShapeLabel(table.table_shape);
-	}
+        tableInfo.empty.classList.add("d-none");
+        tableInfo.panel.classList.remove("d-none");
+
+        tableInfo.name.textContent = table.name;
+        tableInfo.status.textContent = table.unavailable ? "Zauzet" : "Dostupan";
+        tableInfo.status.dataset.state = table.unavailable ? "busy" : "available";
+        tableInfo.seats.textContent = `${table.seats} mesta`;
+        tableInfo.location.textContent =
+            table.location_description || "Nije navedeno";
+        tableInfo.smoking.textContent = table.is_smoking
+            ? "Pušačka zona"
+            : "Nepušačka zona";
+        tableInfo.shape.textContent = tableShapeLabel(table.table_shape);
+
+        // sakrij dugme ako nije edit
+        const submitWrap = document.querySelector(".reserve-submit-wrap");
+
+        if (submitWrap) {
+            submitWrap.style.display = editData.editMode ? "block" : "none";
+        }
+    }
 
 	function updateInputs() {
 		selectedInputs.innerHTML = "";
@@ -1043,9 +1068,12 @@ function initReserve(root) {
 			const response = await fetch(timeframesUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					reservation_date: reservationDate,
-					table_ids: ids,
+                body: JSON.stringify({
+                    reservation_date: reservationDate,
+                    table_ids: ids,
+                    reservation_id: editData.reservationId,
+                    start_time: startInput.value,
+                    duration: durationInput.value
 				}),
 			});
 			const result = await response.json();
@@ -1096,14 +1124,86 @@ function initReserve(root) {
 		refreshAvailability: refreshTimeframes,
 		refreshTimeframes,
 	};
+    const editDataElement = document.getElementById("reservationEditData");
 
-	updateInputs();
-	updateTableInfo();
-	render();
-	renderTimeline();
+    const editData = editDataElement
+        ? JSON.parse(editDataElement.textContent)
+        : {
+            editMode: false,
+            reservationId: null,
+            selectedTables: [],
+            startTime: "",
+            duration: 1
+        };
+
+    if (editData.editMode) {
+
+        tables.forEach(table => {
+            if (editData.selectedTables.includes(table.id)) {
+                table.selected = true;
+            }
+        });
+
+        focusedTableId = editData.selectedTables[0] ?? null;
+
+        if (editData.startTime) {
+            startInput.value = editData.startTime;
+        }
+
+        durationInput.value = editData.duration;
+    }
+
+    updateInputs();
+    render();
+    updateTableInfo();
+    refreshTimeframes();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const durationSelect=document.getElementById("durationSelect");
+
+    if(durationSelect){
+
+        durationSelect.addEventListener("change",()=>{
+
+            document.getElementById("reservationDurationHours").value=
+                durationSelect.value;
+
+            if(window.AureaTableLayouts?.reserve){
+
+                window.AureaTableLayouts.reserve.refreshTimeframes();
+
+            }
+
+        });
+
+    }
+
+    const people=document.getElementById("peopleCount");
+
+    if(people){
+
+        people.addEventListener("input",()=>{
+
+            document.getElementById("numberOfPeople").value=
+                people.value;
+
+        });
+
+    }
+
+    const smoking=document.getElementById("smokingPreference");
+
+    if(smoking){
+
+        smoking.addEventListener("change",()=>{
+
+            document.getElementById("isSmoking").value=
+                smoking.value;
+
+        });
+
+    }
 	document.querySelectorAll("[data-table-layout]").forEach((root) => {
 		if (root.dataset.mode === "admin") {
 			initAdmin(root);

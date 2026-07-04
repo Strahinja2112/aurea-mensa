@@ -118,6 +118,22 @@ if ($isEditMode) {
                         name="duration_hours"
                         id="reservationDurationHours"
                         value="<?= $selectedDuration ?>">
+                <input
+                        type="hidden"
+                        name="number_of_people"
+                        id="numberOfPeople"
+                        value="<?= $reservation['number_of_people'] ?? 2 ?>">
+
+                <input
+                        type="hidden"
+                        name="is_smoking"
+                        id="isSmoking"
+                        value="">
+                <input
+                        type="hidden"
+                        name="people"
+                        id="reservationPeople"
+                        value="1">
 
                 <section class="reservation-timeline-panel mb-1">
                     <div class="reserve-time-header">
@@ -159,51 +175,71 @@ if ($isEditMode) {
                             <div class="table-layout-map reserve-map" aria-label="Mapa stolova za rezervaciju"></div>
                         </div>
 
-                        <aside class="reserve-table-info-panel" id="reserveTableInfoPanel" aria-live="polite">
-                            <div class="reserve-table-info-empty" id="reserveTableInfoEmpty">
-                                <i class="fa-solid fa-utensils" style="font-size: 3rem;"></i>
-                                <h5>Izaberite sto</h5>
-                                <p>Detalji izabranog stola će se prikazati ovde.</p>
+                        <aside class="reserve-table-info-panel" id="reserveTableInfoPanel">
+
+                            <h5 class="mb-3">
+                                <?= $isEditMode ? 'Izmena rezervacije' : 'Rezervacija' ?>
+                            </h5>
+
+                            <div class="mb-3">
+                                <label class="form-label">Broj osoba</label>
+
+                                <input
+                                        type="number"
+                                        class="form-control custom-input"
+                                        id="peopleCount"
+                                        min="1"
+                                        max="20"
+                                        value="<?= $reservation['number_of_people'] ?? 2 ?>">
                             </div>
 
-                            <div class="reserve-table-info d-none" id="reserveTableInfo">
-                                <div class="reserve-table-info-head">
-                                    <span class="layout-kicker">Izabrani sto</span>
-                                    <strong id="reserveInfoName"></strong>
-                                    <span class="reserve-info-status" id="reserveInfoStatus"></span>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Pušačka zona</label>
 
-                                <dl class="reserve-info-list">
-                                    <div>
-                                        <dt>Kapacitet</dt>
-                                        <dd id="reserveInfoSeats"></dd>
-                                    </div>
-                                    <div>
-                                        <dt>Zona</dt>
-                                        <dd id="reserveInfoLocation"></dd>
-                                    </div>
-                                    <div>
-                                        <dt>Pušenje</dt>
-                                        <dd id="reserveInfoSmoking"></dd>
-                                    </div>
-                                    <div>
-                                        <dt>Oblik</dt>
-                                        <dd id="reserveInfoShape"></dd>
-                                    </div>
-                                </dl>
-                                <div class="register-btn-wrapper reserve-submit-wrap reserve-table-info-footer p-2">
-                                    <div class="button">
-                                        <button type="submit" id="submitBtn">
-                                                <span id="btnText">
-<?= $isEditMode ? 'SAČUVAJ IZMENE' : 'REZERVIŠI' ?>
-</span>
-                                            <span id="btnSpinner" class="d-none">
-                                                    <span class="spinner-border spinner-border-sm me-2"></span>
-                                                    SLANJE...
-                                                </span>
-                                        </button>
-                                    </div>
-                                </div>
+                                <select class="form-control custom-input" id="smokingPreference">
+                                    <option value="">Sve</option>
+                                    <option value="0">Nepušačka</option>
+                                    <option value="1">Pušačka</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    Trajanje
+                                </label>
+
+                                <select
+                                        id="durationSelect"
+                                        class="form-control custom-input">
+
+                                    <?php
+                                    for ($i=1;$i<=6;$i++):
+                                        ?>
+
+                                        <option
+                                                value="<?= $i ?>"
+                                                <?= $selectedDuration==$i?'selected':'' ?>>
+                                            <?= $i ?> sat<?= $i>1?'a':'' ?>
+                                        </option>
+
+                                    <?php endfor; ?>
+
+                                </select>
+
+                            </div>
+
+                            <div class="mt-4">
+
+                                <button
+                                        type="submit"
+                                        id="submitBtn"
+                                        class="btn btn-light w-100">
+
+                                    <?= $isEditMode ? 'Sačuvaj izmene' : 'Rezerviši' ?>
+
+                                </button>
+
                             </div>
 
                         </aside>

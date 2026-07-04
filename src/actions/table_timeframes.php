@@ -26,6 +26,9 @@ try {
 
     $tableIds = $data['table_ids'] ?? [];
     $reservationDate = (string)($data['reservation_date'] ?? '');
+    $currentReservationId = isset($data['reservation_id'])
+        ? (int)$data['reservation_id']
+        : 0;
 
     if (!is_array($tableIds) || empty($tableIds)) {
         throw new Exception('Morate izabrati bar jedan sto.');
@@ -63,9 +66,9 @@ try {
     $tablesByReservation = [];
 
     foreach ($reservationTables as $reservationTable) {
-        $reservationId = (int)$reservationTable['reservation_id'];
+        $resId = (int)$reservationTable['reservation_id'];
         $tableId = (int)$reservationTable['table_id'];
-        $tablesByReservation[$reservationId][] = $tableId;
+        $tablesByReservation[$resId][] = $tableId;
     }
 
     $reservationIds = array_values(array_unique(array_map(
@@ -81,12 +84,19 @@ try {
     }
 
     if (!empty($reservationIds)) {
+
+        $where = [
+            'id' => ['in' => $reservationIds],
+            'reservation_date' => $reservationDate,
+            'status' => 'ACTIVE'
+        ];
+
+        if ($currentReservationId > 0) {
+            $where['id']['not'] = $currentReservationId;
+        }
+
         $reservations = db()->reservations->findMany([
-            'where' => [
-                'id' => ['in' => $reservationIds],
-                'reservation_date' => $reservationDate,
-                'status' => 'ACTIVE'
-            ],
+            'where' => $where,
             'select' => ['id', 'start_time', 'end_time'],
             'orderBy' => ['start_time' => 'ASC']
         ]);

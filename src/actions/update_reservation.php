@@ -26,6 +26,8 @@ try {
         throw new Exception('Neispravan JSON zahtev.');
     }
 
+    Auth::verifyCsrfToken($data['csrf_token'] ?? null);
+
     $tableIds = $data['table_ids'] ?? [];
     $reservationDate = $data['reservation_date'] ?? '';
     $startTime = $data['start_time'] ?? '';

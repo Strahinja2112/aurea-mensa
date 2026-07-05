@@ -553,9 +553,17 @@ function initAdmin(root) {
 			const response = await fetch(saveUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ tables, deleted_ids: deletedIds }),
-			});
-			const result = await response.json();
+                body: JSON.stringify({
+                    tables,
+                    deleted_ids: deletedIds,
+                    csrf_token: document.getElementById("csrfToken").value
+                }),
+			});0
+            if (!response.ok) {
+                throw new Error("Server error");
+            }
+
+            const result = await response.json();
 
 			setStatus(
 				result.message || "Raspored je sačuvan.",
@@ -1083,12 +1091,12 @@ function initReserve(root) {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
+                    table_ids: selectedIds(),
                     reservation_date: reservationDate,
-                    table_ids: ids,
-                    reservation_id: editData.reservationId,
                     start_time: startInput.value,
-                    duration: durationInput.value
-				}),
+                    duration_hours: durationInput.value,
+                    csrf_token: document.getElementById("csrfToken").value
+                }),
 			});
 			const result = await response.json();
 			busyIntervals = (result.busy_intervals || []).map((interval) => ({

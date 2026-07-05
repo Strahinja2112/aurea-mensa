@@ -14,6 +14,9 @@ $oldLastName = $_POST['last_name'] ?? $user->lastName;
 $oldPhone = $_POST['phone'] ?? ($user->phone ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
+
+    Auth::verifyCsrfToken($_POST['csrf_token'] ?? null);
+
     try {
         db()->beginTransaction();
 
@@ -134,6 +137,10 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'table.css']); ?>
                     endif; ?>
 
                     <form method="POST" action="">
+                        <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="<?= htmlspecialchars(Auth::generateCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
                         <div class="form-group mb-3">
                             <label class="form-label small opacity-50">Email</label>
                             <input type="text" class="form-control custom-input opacity-50"
@@ -346,7 +353,8 @@ Helpers::renderHead("Moj Profil", ['auth.css', 'table.css']); ?>
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        id: id
+                        id: id,
+                        csrf_token: "<?= Auth::generateCsrfToken() ?>"
                     })
                 });
 

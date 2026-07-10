@@ -154,6 +154,48 @@ final class Mailer
         return self::send($email, "Resetovanje vaše lozinke - Aurea Mensa", $body);
     }
 
+    public static function sendJobApplicationStatusEmail(
+        string $email,
+        string $status,
+        string $firstName = ''
+    ): bool {
+        $baseUrl = self::getAppUrl();
+        $jobsUrl = "{$baseUrl}/pages/jobs";
+        $statusLabels = [
+            'PENDING' => 'Na cekanju',
+            'REVIEWED' => 'Pregledano',
+            'ACCEPTED' => 'Prihvaceno',
+            'REJECTED' => 'Odbijeno',
+        ];
+
+        $normalizedStatus = strtoupper($status);
+        $statusLabel = $statusLabels[$normalizedStatus] ?? $normalizedStatus;
+        $recipientName = trim($firstName);
+        $title = "Status prijave je azuriran";
+        $subtitle = "Prijavu mozete pogledati na stranici za posao.";
+
+        $description = match ($normalizedStatus) {
+            'REVIEWED' => ($recipientName !== '' ? "Zdravo {$recipientName}," : 'Zdravo,')
+                . " vasa prijava za posao je pregledana. Trenutni status prijave je: {$statusLabel}.",
+            'ACCEPTED' => ($recipientName !== '' ? "Zdravo {$recipientName}," : 'Zdravo,')
+                . " vasa prijava za posao je prihvacena. Kontaktiracemo vas uskoro sa narednim koracima.",
+            'REJECTED' => ($recipientName !== '' ? "Zdravo {$recipientName}," : 'Zdravo,')
+                . " hvala vam na prijavi. Trenutno ne nastavljamo proces za ovu prijavu, a status je: {$statusLabel}.",
+            default => ($recipientName !== '' ? "Zdravo {$recipientName}," : 'Zdravo,')
+                . " status vase prijave za posao je azuriran na: {$statusLabel}.",
+        };
+
+        $body = self::getEmailTemplate(
+            $title,
+            $subtitle,
+            $description,
+            "Pogledaj prijavu",
+            $jobsUrl
+        );
+
+        return self::send($email, "Promena statusa prijave - Aurea Mensa", $body);
+    }
+
     public static function sendReservationConfirmationEmail(
         string $email,
         string $reservationCode,

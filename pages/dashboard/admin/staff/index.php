@@ -70,27 +70,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messageType = 'success';
         } elseif ($action === 'update_application_status') {
             $activeTab = 'applications';
+            $applicationId = (int)($_POST['id'] ?? 0);
             $newStatus = $_POST['status'] ?? '';
 
             if (!in_array($newStatus, $reviewableStatuses, true)) {
                 throw new Exception('Izaberite važeći status prijave.');
             }
 
-            $updated = db()->jobApplications->update([
-                'where' => ['id' => (int)$_POST['id']],
-                'data' => [
-                    'status' => $newStatus,
-                    'reviewed_at' => date('Y-m-d H:i:s'),
-                    'reviewed_by' => $user->id,
-                ],
-            ]);
+            $applicationStatement = db()->pdo()->prepare("
+                SELECT
+                    ja.id,
+                    ja.status,
+                    applicant.email AS applicant_email,
+                    applicant.first_name AS applicant_first_name
+                FROM job_applications ja
+                INNER JOIN users applicant ON applicant.id = ja.user_id
+                WHERE ja.id = :id
+                LIMIT 1
+            ");
+            $applicationStatement->execute(['id' => $applicationId]);
+            $application = $applicationStatement->fetch();
 
-            if (!$updated) {
+            if (!$application) {
                 throw new Exception('Prijava ne postoji.');
             }
 
-            $message = 'Status prijave je uspešno izmenjen.';
-            $messageType = 'success';
+            if (($application['status'] ?? '') === $newStatus) {
+                $message = 'Izabrani status je već postavljen.';
+                $messageType = 'warning';
+            } else {
+                $updated = db()->jobApplications->update([
+                    'where' => ['id' => $applicationId],
+                    'data' => [
+                        'status' => $newStatus,
+                        'reviewed_at' => date('Y-m-d H:i:s'),
+                        'reviewed_by' => $user->id,
+                    ],
+                ]);
+
+                if (!$updated) {
+                    throw new Exception('Prijava ne postoji.');
+                }
+
+                $mailSent = Mailer::sendJobApplicationStatusEmail(
+                    $application['applicant_email'],
+                    $newStatus,
+                    $application['applicant_first_name'] ?? ''
+                );
+
+                if ($mailSent) {
+                    $message = 'Status prijave je uspešno izmenjen i kandidat je obavešten mejlom.';
+                    $messageType = 'success';
+                } else {
+                    $message = 'Status prijave je izmenjen, ali slanje mejla nije uspelo.';
+                    $messageType = 'warning';
+                }
+            }
         }
     } catch (Exception $e) {
         $message = $e->getMessage();

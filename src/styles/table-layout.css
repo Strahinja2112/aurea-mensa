@@ -1050,7 +1050,7 @@
 	}
 
 	.admin-table-map-overflow .table-layout-map {
-		min-width: 700px;
+		min-width: 900px;
 	}
 
 	.reserve-map-overflow {
@@ -1067,7 +1067,7 @@
 	}
 
 	.reserve-map {
-		min-width: 700px;
+		min-width: 900px;
 		min-height: 420px;
 	}
 

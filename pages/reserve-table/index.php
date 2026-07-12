@@ -165,6 +165,7 @@ if ($isEditMode) {
                     <section class="reserve-map-section">
                         <div class="reserve-map-grid">
                             <div
+                                class="reserve-map-overflow"
                                 data-table-layout
                                 data-mode="reserve"
                                 data-tables-source="reserveTableLayoutData"

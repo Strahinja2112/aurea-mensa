@@ -71,7 +71,9 @@ $relativePath = Helpers::getRelativePath("/pages/dashboard/admin/");
                     <div class="d-flex justify-content-between align-items-center gap-3 mb-3 flex-wrap">
                         <h5 class="text-white mb-0">Mapa restorana</h5>
                     </div>
-                    <div class="table-layout-map" aria-label="Mapa stolova za uređivanje"></div>
+                    <div class="admin-table-map-overflow">
+                        <div class="table-layout-map" aria-label="Mapa stolova za uređivanje"></div>
+                    </div>
                 </section>
 
                 <aside class="table-layout-panel">

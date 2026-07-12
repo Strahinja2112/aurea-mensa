@@ -52,7 +52,7 @@ final class Auth
                 'data' => [
                     'user_id' => $user['id'],
                     'token' => $token,
-                    'expires_at' => date('Y-m-d H:i:s', strtotime('+10 minutes'))
+                    'expires_at' => date('Y-m-d H:i:s', strtotime('+30 minutes'))
                 ]
             ]);
 

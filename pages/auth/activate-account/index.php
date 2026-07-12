@@ -13,32 +13,39 @@ $token = $_GET['token'] ?? null;
 if (!$token) {
     $error = "Nevažeći zahtev. Token nedostaje.";
 } else {
-    $verificationRecord = db()->verificationTokens->findFirst([
-        'where' => [
-            'token' => $token,
-            'expires_at' => ['gt' => date('Y-m-d H:i:s')]
-        ]
-    ]);
+    $tokens = db()->verificationTokens->findMany();
+    $foundToken = null;
+    foreach ($tokens as $tokenRecord) {
+        if ($tokenRecord['token'] == $token) {
+            $foundToken = $tokenRecord;
+        }
+    }
 
-    if (!$verificationRecord) {
+    if (!$foundToken) {
         $error = "Link je nevažeći ili je istekao (važi 10 minuta).";
     } else {
-        db()->beginTransaction();
-        try {
-            db()->users->update([
-                'where' => ['id' => $verificationRecord['user_id']],
-                'data' => ['email_verified' => 1]
-            ]);
+        $isBefore = new DateTime($foundToken['expires_at']) < new DateTime();
+        if ($isBefore) {
+            $error = "Link je istekao!";
+            return;
+        } else {
+            db()->beginTransaction();
+            try {
+                db()->users->update([
+                    'where' => ['id' => $foundToken['user_id']],
+                    'data' => ['email_verified' => 1]
+                ]);
 
-            db()->verificationTokens->delete([
-                'where' => ['id' => $verificationRecord['id']]
-            ]);
+                // db()->verificationTokens->delete([
+                //     'where' => ['id' => $verificationRecord['id']]
+                // ]);
 
-            db()->commit();
-            $success = "Nalog je uspešno aktiviran! Sada se možete prijaviti.";
-        } catch (Exception $e) {
-            db()->rollBack();
-            $error = "Greška prilikom aktivacije. Pokušajte ponovo kasnije.";
+                db()->commit();
+                $success = "Nalog je uspešno aktiviran! Sada se možete prijaviti.";
+            } catch (Exception $e) {
+                db()->rollBack();
+                $error = "Greška prilikom aktivacije. Pokušajte ponovo kasnije.";
+            }
         }
     }
 }
@@ -78,7 +85,9 @@ Helpers::renderHead("Aktivacija naloga", ['auth.css']); ?>
                     </div>
                     <div class="register-btn-wrapper">
                         <div class="button">
-                            <a href="../login">PRIJAVI SE</a>
+                            <button type="submit" id="submitBtn">
+                                <a href="../login/" id="btnText">Prijavi se</a>
+                            </button>
                         </div>
                     </div>
                 <?php

@@ -23,8 +23,6 @@ try {
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
 
-    Auth::verifyCsrfToken($data['csrf_token'] ?? null);
-
     $reservationId = (int)($data['reservation_id'] ?? 0);
     $comment = trim($data['comment'] ?? '');
 

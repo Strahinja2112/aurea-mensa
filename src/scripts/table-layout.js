@@ -555,8 +555,7 @@ function initAdmin(root) {
 				headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     tables,
-                    deleted_ids: deletedIds,
-                    csrf_token: document.getElementById("csrfToken").value
+                    deleted_ids: deletedIds
                 }),
 			});0
             if (!response.ok) {
@@ -1094,8 +1093,7 @@ function initReserve(root) {
                     table_ids: selectedIds(),
                     reservation_date: reservationDate,
                     start_time: startInput.value,
-                    duration_hours: durationInput.value,
-                    csrf_token: document.getElementById("csrfToken").value
+                    duration_hours: durationInput.value
                 }),
 			});
 			const result = await response.json();

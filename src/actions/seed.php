@@ -17,8 +17,6 @@ try {
         exit;
     }
 
-    Auth::verifyCsrfToken($_POST['csrf_token'] ?? null);
-
     $seedType = $_POST['seed'] ?? '';
 
     $redirectUrl = Helpers::getRelativePath('pages/dashboard/admin/seed');

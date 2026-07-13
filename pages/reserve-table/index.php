@@ -106,11 +106,6 @@ if ($isEditMode) {
                 <form id="reservationForm">
                     <input
                         type="hidden"
-                        id="csrfToken"
-                        name="csrf_token"
-                        value="<?= htmlspecialchars(Auth::generateCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
-                    <input
-                        type="hidden"
                         name="start_time"
                         id="reservationStartTime"
                         value="<?= htmlspecialchars($selectedStartTime, ENT_QUOTES, 'UTF-8') ?>">
@@ -343,8 +338,7 @@ if ($isEditMode) {
                     table_ids: selectedTables,
                     reservation_date: formData.get("reservation_date"),
                     start_time: formData.get("start_time"),
-                    duration_hours: Number(formData.get("duration_hours")),
-                    csrf_token: formData.get("csrf_token")
+                    duration_hours: Number(formData.get("duration_hours"))
                 };
                 if (!payload.start_time || !payload.duration_hours) {
                     messageBox.innerHTML = `

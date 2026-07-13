@@ -244,23 +244,4 @@ final class Auth
         db()->verificationTokens->delete(['where' => ['id' => $tokenData['id']]]);
     }
 
-    public static function generateCsrfToken(): string
-    {
-        if (empty($_SESSION['csrf_token'])) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        }
-
-        return $_SESSION['csrf_token'];
-    }
-
-    public static function verifyCsrfToken(?string $token): void
-    {
-        if (
-            empty($_SESSION['csrf_token']) ||
-            !is_string($token) ||
-            !hash_equals($_SESSION['csrf_token'], $token)
-        ) {
-            throw new Exception('Neispravan CSRF token.');
-        }
-    }
 }

@@ -24,13 +24,6 @@ try {
         throw new Exception('Neispravan JSON zahtev.');
     }
 
-    if (
-        !isset($data['csrf_token']) ||
-        !Auth::validateCsrfToken($data['csrf_token'])
-    ) {
-        throw new Exception('Neispravan CSRF token.');
-    }
-
     $tableIds = $data['table_ids'] ?? [];
     $reservationDate = (string)($data['reservation_date'] ?? '');
     $currentReservationId = isset($data['reservation_id'])

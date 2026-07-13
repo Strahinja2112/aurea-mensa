@@ -242,7 +242,8 @@ function renderTable(map, table, mode) {
 	if (table.is_smoking) {
 		const smokingIcon = document.createElement("span");
 		smokingIcon.className = "table-smoking-icon";
-		smokingIcon.innerHTML = '<i class="fa-solid fa-smoking" aria-hidden="true"></i>';
+		smokingIcon.innerHTML =
+			'<i class="fa-solid fa-smoking" aria-hidden="true"></i>';
 		surface.appendChild(smokingIcon);
 	}
 
@@ -276,23 +277,23 @@ function initAdmin(root) {
 	const dataElement = document.getElementById(root.dataset.tablesSource);
 	const saveUrl = root.dataset.saveUrl;
 	const tables = parseTables(dataElement);
-    const editDataElement = document.getElementById("reservationEditData");
+	const editDataElement = document.getElementById("reservationEditData");
 
-    let editData = {
-        editMode: false,
-        reservationId: null,
-        selectedTables: [],
-        startTime: "",
-        duration: 1
-    };
+	let editData = {
+		editMode: false,
+		reservationId: null,
+		selectedTables: [],
+		startTime: "",
+		duration: 1,
+	};
 
-    if (editDataElement) {
-        try {
-            editData = JSON.parse(editDataElement.textContent);
-        } catch (e) {
-            console.error(e);
-        }
-    }
+	if (editDataElement) {
+		try {
+			editData = JSON.parse(editDataElement.textContent);
+		} catch (e) {
+			console.error(e);
+		}
+	}
 	const deletedIds = [];
 	let selectedId = null;
 	let nextTemporaryId = -1;
@@ -553,16 +554,17 @@ function initAdmin(root) {
 			const response = await fetch(saveUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    tables,
-                    deleted_ids: deletedIds
-                }),
-			});0
-            if (!response.ok) {
-                throw new Error("Server error");
-            }
+				body: JSON.stringify({
+					tables,
+					deleted_ids: deletedIds,
+				}),
+			});
+			0;
+			if (!response.ok) {
+				throw new Error("Server error");
+			}
 
-            const result = await response.json();
+			const result = await response.json();
 
 			setStatus(
 				result.message || "Raspored je sačuvan.",
@@ -601,25 +603,23 @@ function initReserve(root) {
 	const timelineSummary = document.getElementById("reservationTimelineSummary");
 	const startInput = document.getElementById("reservationStartTime");
 	const durationInput = document.getElementById("reservationDurationHours");
-    const tableInfo = {
+	const tableInfo = {
+		empty: document.getElementById("reserveTableInfoEmpty"),
 
-        empty: document.getElementById("reserveTableInfoEmpty"),
+		panel: document.getElementById("reserveTableInfo"),
 
-        panel: document.getElementById("reserveTableInfo"),
+		name: document.getElementById("reserveInfoName"),
 
-        name: document.getElementById("reserveInfoName"),
+		location: document.getElementById("reserveInfoLocation"),
 
-        location: document.getElementById("reserveInfoLocation"),
+		seats: document.getElementById("reserveInfoSeats"),
 
-        seats: document.getElementById("reserveInfoSeats"),
+		shape: document.getElementById("reserveInfoShape"),
 
-        shape: document.getElementById("reserveInfoShape"),
+		smoking: document.getElementById("reserveInfoSmoking"),
 
-        smoking: document.getElementById("reserveInfoSmoking"),
-
-        status: document.getElementById("reserveInfoStatus")
-
-    };
+		status: document.getElementById("reserveInfoStatus"),
+	};
 	const workingHours = parseWorkingHours(workingHoursElement);
 	const tables = parseTables(dataElement);
 	let busyIntervals = [];
@@ -661,45 +661,36 @@ function initReserve(root) {
 		);
 	}
 
-    function updateTableInfo() {
+	function updateTableInfo() {
+		const table = focusedTable();
 
-        const table = focusedTable();
+		if (!tableInfo.empty || !tableInfo.panel) {
+			return;
+		}
 
-        if (!tableInfo.empty || !tableInfo.panel) {
-            return;
-        }
+		if (!table) {
+			tableInfo.empty.classList.remove("d-none");
+			tableInfo.panel.classList.add("d-none");
 
-        if (!table) {
+			return;
+		}
 
-            tableInfo.empty.classList.remove("d-none");
-            tableInfo.panel.classList.add("d-none");
+		tableInfo.empty.classList.add("d-none");
+		tableInfo.panel.classList.remove("d-none");
 
-            return;
-        }
+		tableInfo.name.value = table.name;
+		tableInfo.location.value = table.location_description || "Nije navedeno";
 
-        tableInfo.empty.classList.add("d-none");
-        tableInfo.panel.classList.remove("d-none");
+		tableInfo.seats.value = table.seats + " mesta";
 
-        tableInfo.name.value = table.name;
-        tableInfo.location.value =
-            table.location_description || "Nije navedeno";
+		tableInfo.shape.value = tableShapeLabel(table.table_shape);
 
-        tableInfo.seats.value =
-            table.seats + " mesta";
+		tableInfo.smoking.value = table.is_smoking
+			? "Pušačka zona"
+			: "Nepušačka zona";
 
-        tableInfo.shape.value =
-            tableShapeLabel(table.table_shape);
-
-        tableInfo.smoking.value =
-            table.is_smoking
-                ? "Pušačka zona"
-                : "Nepušačka zona";
-
-        tableInfo.status.value =
-            table.unavailable
-                ? "Zauzet"
-                : "Dostupan";
-    }
+		tableInfo.status.value = table.unavailable ? "Zauzet" : "Dostupan";
+	}
 
 	function updateInputs() {
 		selectedInputs.innerHTML = "";
@@ -1089,12 +1080,12 @@ function initReserve(root) {
 			const response = await fetch(timeframesUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    table_ids: selectedIds(),
-                    reservation_date: reservationDate,
-                    start_time: startInput.value,
-                    duration_hours: durationInput.value
-                }),
+				body: JSON.stringify({
+					table_ids: selectedIds(),
+					reservation_date: reservationDate,
+					start_time: startInput.value,
+					duration_hours: durationInput.value,
+				}),
 			});
 			const result = await response.json();
 			busyIntervals = (result.busy_intervals || []).map((interval) => ({
@@ -1128,17 +1119,17 @@ function initReserve(root) {
 		input.addEventListener("change", refreshTimeframes);
 	});
 
-    const editDataElement = document.getElementById("reservationEditData");
+	const editDataElement = document.getElementById("reservationEditData");
 
-    const editData = editDataElement
-        ? JSON.parse(editDataElement.textContent)
-        : {
-            editMode: false,
-            reservationId: null,
-            selectedTables: [],
-            startTime: "",
-            duration: 1
-        };
+	const editData = editDataElement
+		? JSON.parse(editDataElement.textContent)
+		: {
+				editMode: false,
+				reservationId: null,
+				selectedTables: [],
+				startTime: "",
+				duration: 1,
+			};
 
 	window.AureaTableLayouts = window.AureaTableLayouts || {};
 	window.AureaTableLayouts.reserve = {
@@ -1157,74 +1148,57 @@ function initReserve(root) {
 		refreshTimeframes,
 	};
 
-    if (editData.editMode) {
+	if (editData.editMode) {
+		tables.forEach((table) => {
+			if (editData.selectedTables.includes(table.id)) {
+				table.selected = true;
+			}
+		});
 
-        tables.forEach(table => {
-            if (editData.selectedTables.includes(table.id)) {
-                table.selected = true;
-            }
-        });
+		focusedTableId = editData.selectedTables[0] ?? null;
 
-        focusedTableId = editData.selectedTables[0] ?? null;
+		if (editData.startTime) {
+			startInput.value = editData.startTime;
+		}
 
-        if (editData.startTime) {
-            startInput.value = editData.startTime;
-        }
+		durationInput.value = editData.duration;
+	}
 
-        durationInput.value = editData.duration;
-    }
-
-    updateInputs();
-    render();
-    updateTableInfo();
-    refreshTimeframes();
+	updateInputs();
+	render();
+	updateTableInfo();
+	refreshTimeframes();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const durationSelect=document.getElementById("durationSelect");
+	const durationSelect = document.getElementById("durationSelect");
 
-    if(durationSelect){
+	if (durationSelect) {
+		durationSelect.addEventListener("change", () => {
+			document.getElementById("reservationDurationHours").value =
+				durationSelect.value;
 
-        durationSelect.addEventListener("change",()=>{
+			if (window.AureaTableLayouts?.reserve) {
+				window.AureaTableLayouts.reserve.refreshTimeframes();
+			}
+		});
+	}
 
-            document.getElementById("reservationDurationHours").value=
-                durationSelect.value;
+	const people = document.getElementById("peopleCount");
 
-            if(window.AureaTableLayouts?.reserve){
+	if (people) {
+		people.addEventListener("input", () => {
+			document.getElementById("numberOfPeople").value = people.value;
+		});
+	}
 
-                window.AureaTableLayouts.reserve.refreshTimeframes();
+	const smoking = document.getElementById("smokingPreference");
 
-            }
-
-        });
-
-    }
-
-    const people=document.getElementById("peopleCount");
-
-    if(people){
-
-        people.addEventListener("input",()=>{
-
-            document.getElementById("numberOfPeople").value=
-                people.value;
-
-        });
-
-    }
-
-    const smoking=document.getElementById("smokingPreference");
-
-    if(smoking){
-
-        smoking.addEventListener("change",()=>{
-
-            document.getElementById("isSmoking").value=
-                smoking.value;
-
-        });
-
-    }
+	if (smoking) {
+		smoking.addEventListener("change", () => {
+			document.getElementById("isSmoking").value = smoking.value;
+		});
+	}
 	document.querySelectorAll("[data-table-layout]").forEach((root) => {
 		if (root.dataset.mode === "admin") {
 			initAdmin(root);
